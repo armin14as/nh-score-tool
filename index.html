@@ -49,7 +49,7 @@
     pointer-events: none;
   }
 
-  /* Enhanced Progress Bar with Mini Categories */
+  /* Enhanced Progress Bar */
   .progress-container {
     position: fixed;
     top: 0;
@@ -632,7 +632,7 @@
     100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
   }
 
-  /* Save/Load Notification */
+  /* Notification */
   .notification {
     position: fixed;
     top: 100px;
@@ -662,7 +662,7 @@
     box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
   }
 
-  /* Responsive Enhancements */
+  /* Responsive */
   @media (max-width: 768px) {
     .container {
       padding: 1rem;
@@ -745,25 +745,6 @@
     }
   }
 
-  /* High contrast mode support */
-  @media (prefers-contrast: high) {
-    :root {
-      --glass-bg: rgba(255, 255, 255, 0.1);
-      --glass-border: rgba(255, 255, 255, 0.3);
-      --text-secondary: rgba(255, 255, 255, 0.9);
-    }
-  }
-
-  /* Reduced motion support */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
-
-  /* Focus styles for accessibility */
   .radio-group label:focus-within {
     outline: 2px solid var(--secondary-gradient);
     outline-offset: 2px;
@@ -815,30 +796,6 @@
   </div>
 
   <header>
-    <div class="b2bxsund-branding">
-      <div class="b2bxsund-logo">
-        <svg width="120" height="32" viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- b2bXsund Logo Recreation -->
-          <g fill="white">
-            <!-- b2b -->
-            <path d="M20 20 L20 80 L40 80 Q50 80 50 70 L50 55 Q50 50 45 50 Q50 50 50 45 L50 30 Q50 20 40 20 Z M30 30 L40 30 Q40 30 40 35 L40 40 Q40 45 35 45 L30 45 Z M30 55 L40 55 Q40 55 40 60 L40 65 Q40 70 35 70 L30 70 Z"/>
-            <path d="M70 20 L70 50 L90 20 L100 20 L100 80 L90 80 L90 50 L70 80 L60 80 L60 20 Z"/>
-            <path d="M120 20 L120 80 L140 80 Q150 80 150 70 L150 55 Q150 50 145 50 Q150 50 150 45 L150 30 Q150 20 140 20 Z M130 30 L140 30 Q140 30 140 35 L140 40 Q140 45 135 45 L130 45 Z M130 55 L140 55 Q140 55 140 60 L140 65 Q140 70 135 70 L130 70 Z"/>
-            
-            <!-- X with highlight box -->
-            <rect x="170" y="35" width="30" height="30" rx="5" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-            <path d="M175 40 L195 60 M195 40 L175 60" stroke="white" stroke-width="3" stroke-linecap="round"/>
-            
-            <!-- sund -->
-            <path d="M220 40 Q220 30 230 30 Q240 30 240 40 L240 45 L230 45 Q225 45 225 50 Q225 55 230 55 L240 55 L240 65 Q240 75 230 75 Q220 75 220 65 Z"/>
-            <path d="M260 30 L260 75 L270 75 L270 65 Q270 75 280 75 Q290 75 290 65 L290 40 Q290 30 280 30 Q270 30 270 40 L270 30 Z M270 40 Q270 40 275 40 Q280 40 280 45 L280 60 Q280 65 275 65 Q270 65 270 60 Z"/>
-            <path d="M310 30 L310 75 L320 75 L320 65 Q320 75 330 75 Q340 75 340 65 L340 40 Q340 30 330 30 Q320 30 320 40 L320 30 Z M320 40 Q320 40 325 40 Q330 40 330 45 L330 60 Q330 65 325 65 Q320 65 320 60 Z"/>
-            <path d="M360 30 L360 75 L370 75 L370 65 Q370 75 380 75 Q390 75 390 65 L390 30 L380 30 L380 60 Q380 65 375 65 Q370 65 370 60 L370 30 Z"/>
-          </g>
-        </svg>
-        <span class="brand-text">powered by b2bXsund</span>
-      </div>
-    </div>
     <h1 class="main-title">NH Score</h1>
     <p class="subtitle">Wissenschaftlich fundiertes 100-Punkte-System für umfassende Gesundheit & Leistungsfähigkeit</p>
     <div class="hero-stats">
@@ -873,6 +830,7 @@
         Starten Sie mit der ersten Kategorie
       </div>
       <div class="score-breakdown">
+      <div class="score-breakdown">
         <div class="breakdown-item">
           <div class="breakdown-value" id="completedQuestions">0</div>
           <div class="breakdown-label">Beantwortet</div>
@@ -899,7 +857,7 @@
   <div class="notification" id="notification"></div>
 
   <script>
-    // Enhanced Chart Configuration
+    // Simple working version
     const ctx = document.getElementById('scoreRing').getContext('2d');
     const scoreChart = new Chart(ctx, {
       type: 'doughnut',
@@ -907,44 +865,21 @@
         labels: ['Erreichte Punkte', 'Verbleibende Punkte'],
         datasets: [{
           data: [0, 100],
-          backgroundColor: [
-            'rgba(0, 198, 255, 0.8)',
-            'rgba(255, 255, 255, 0.1)'
-          ],
-          borderColor: [
-            'rgba(0, 198, 255, 1)',
-            'rgba(255, 255, 255, 0.2)'
-          ],
+          backgroundColor: ['rgba(0, 198, 255, 0.8)', 'rgba(255, 255, 255, 0.1)'],
+          borderColor: ['rgba(0, 198, 255, 1)', 'rgba(255, 255, 255, 0.2)'],
           borderWidth: 2,
         }]
       },
       options: {
         cutout: '75%',
-        plugins: { 
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return context.label + ': ' + context.parsed + ' Punkte';
-              }
-            }
-          }
-        },
-        animation: {
-          animateRotate: true,
-          duration: 1500,
-          easing: 'easeInOutCubic'
-        }
+        plugins: { legend: { display: false } },
+        animation: { animateRotate: true, duration: 1500 }
       }
     });
 
     const categories = [
       {
         title: 'Schlaf & Erholung',
-        icon: '🌙',
-        iconSvg: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>`,
         questions: [
           'Schläfst du mindestens 7–8 Stunden pro Nacht?',
           'Hast du einen regelmäßigen Schlaf-Wach-Rhythmus?',
@@ -960,14 +895,6 @@
       },
       {
         title: 'Ernährung & Supplements',
-        icon: '🥗',
-        iconSvg: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
-          <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
-          <line x1="6" y1="1" x2="6" y2="4"/>
-          <line x1="10" y1="1" x2="10" y2="4"/>
-          <line x1="14" y1="1" x2="14" y2="4"/>
-        </svg>`,
         questions: [
           'Verzichtest du weitgehend auf raffinierten Zucker?',
           'Isst du täglich mindestens 5 Portionen Gemüse/Obst?',
@@ -983,14 +910,6 @@
       },
       {
         title: 'Training & Bewegung',
-        icon: '💪',
-        iconSvg: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M6.5 6.5h.01"/>
-          <path d="M6.5 17.5h.01"/>
-          <path d="M17.5 6.5h.01"/>
-          <path d="M17.5 17.5h.01"/>
-          <rect x="9" y="7" width="6" height="10" rx="1"/>
-        </svg>`,
         questions: [
           'Bewegst du dich täglich mindestens 30 Minuten?',
           'Trainierst du 3-4x pro Woche strukturiert?',
@@ -1006,12 +925,6 @@
       },
       {
         title: 'Mindset & Stressmanagement',
-        icon: '🧠',
-        iconSvg: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9.663 17h4.673M12 3a6.364 6.364 0 0 0 6.364 6.364 6.364 6.364 0 0 1-6.364 6.364 6.364 6.364 0 0 1-6.364-6.364A6.364 6.364 0 0 0 12 3z"/>
-          <path d="M9 9h.01"/>
-          <path d="M15 15h.01"/>
-        </svg>`,
         questions: [
           'Fühlst du dich selten überwältigt oder gestresst?',
           'Praktizierst du regelmäßig Meditation oder Achtsamkeit?',
@@ -1027,11 +940,6 @@
       },
       {
         title: 'Lifestyle & Umwelt',
-        icon: '🌱',
-        iconSvg: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="M9 12l2 2 4-4"/>
-        </svg>`,
         questions: [
           'Rauchst du nicht und meidest Passivrauchen?',
           'Trinkst du maximal 1-2 Gläser Alkohol pro Woche?',
@@ -1049,15 +957,13 @@
 
     const categoriesEl = document.getElementById('categories');
     const answers = [];
-    let completedCategories = 0;
     let currentActiveCategory = 0;
 
-    // Initialize answers array
+    // Initialize
     categories.forEach((cat, catIdx) => {
       answers[catIdx] = Array(cat.questions.length).fill(null);
     });
 
-    // Create mini navigation
     function createMiniNav() {
       const miniNav = document.getElementById('miniNav');
       categories.forEach((cat, idx) => {
@@ -1069,7 +975,6 @@
       });
     }
 
-    // Create categories
     function createCategories() {
       categories.forEach((cat, catIdx) => {
         const catEl = document.createElement('section');
@@ -1079,41 +984,18 @@
         const headerEl = document.createElement('div');
         headerEl.className = 'category-header';
         
-        const titleContainer = document.createElement('div');
-        titleContainer.style.cssText = 'display: flex; align-items: center; gap: 1rem;';
-        
-        // Create professional icon container
-        const iconContainer = document.createElement('div');
-        iconContainer.style.cssText = `
-          width: 44px;
-          height: 44px;
-          background: var(--primary-gradient);
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-          flex-shrink: 0;
-          box-shadow: 0 4px 12px rgba(120, 119, 198, 0.3);
-        `;
-        iconContainer.innerHTML = cat.iconSvg;
-        
         const title = document.createElement('h2');
         title.textContent = cat.title;
-        
-        titleContainer.appendChild(iconContainer);
-        titleContainer.appendChild(title);
         
         const scoreEl = document.createElement('div');
         scoreEl.className = 'category-score';
         scoreEl.id = `score-${catIdx}`;
         scoreEl.textContent = '0 / 20';
         
-        headerEl.appendChild(titleContainer);
+        headerEl.appendChild(title);
         headerEl.appendChild(scoreEl);
         catEl.appendChild(headerEl);
         
-        // Category progress bar
         const progressContainer = document.createElement('div');
         progressContainer.className = 'category-progress';
         const progressFill = document.createElement('div');
@@ -1161,29 +1043,15 @@
       });
     }
 
-    // Handle answer changes with enhanced feedback
     function handleAnswerChange(catIdx, qIdx, value) {
       answers[catIdx][qIdx] = value;
-      
-      // Mark question as answered
       const questionEl = document.getElementById(`question-${catIdx}-${qIdx}`);
       questionEl.classList.add('answered');
-      
-      // Add subtle animation
-      questionEl.style.transform = 'scale(1.02)';
-      setTimeout(() => {
-        questionEl.style.transform = 'scale(1)';
-      }, 200);
-      
       updateScores();
       updateMiniNav();
       checkCategoryCompletion(catIdx);
-      
-      // Auto-save progress
-      saveProgress(true);
     }
 
-    // Enhanced score updates with professional interpretation
     function updateScores() {
       let total = 0;
       let answeredQuestions = 0;
@@ -1200,44 +1068,35 @@
         
         if (answered === group.length) completedCats++;
         
-        // Update category score and progress
         document.getElementById(`score-${i}`).textContent = `${sum} / 20`;
         document.getElementById(`progress-${i}`).style.width = percentage + '%';
       });
       
       const overallPercentage = totalQuestions > 0 ? Math.round((total / (totalQuestions * 2)) * 100) : 0;
       
-      // Update main score display
       document.getElementById('totalScore').textContent = total;
       document.getElementById('scorePercentage').textContent = overallPercentage + '%';
       document.getElementById('completedQuestions').textContent = `${answeredQuestions}/${totalQuestions}`;
       document.getElementById('completedCategories').textContent = `${completedCats}/5`;
       document.getElementById('averageScore').textContent = overallPercentage + '%';
       
-      // Update score interpretation
       updateScoreInterpretation(total, overallPercentage, answeredQuestions, totalQuestions);
-      
-      // Update date
       document.getElementById('scoreDate').textContent = `Stand: ${new Date().toLocaleDateString('de-DE')}`;
       
-      // Update chart with smooth animation
       scoreChart.data.datasets[0].data = [total, 100 - total];
-      scoreChart.update('active');
+      scoreChart.update();
       
-      // Update progress bar
       const progress = (answeredQuestions / totalQuestions) * 100;
       document.getElementById('progressBar').style.width = progress + '%';
       
-      // Update chart colors based on score
-      let chartColor = 'rgba(239, 68, 68, 0.8)'; // Red for low scores
-      if (overallPercentage >= 40) chartColor = 'rgba(245, 158, 11, 0.8)'; // Orange for medium
-      if (overallPercentage >= 70) chartColor = 'rgba(16, 185, 129, 0.8)'; // Green for high
+      let chartColor = 'rgba(239, 68, 68, 0.8)';
+      if (overallPercentage >= 40) chartColor = 'rgba(245, 158, 11, 0.8)';
+      if (overallPercentage >= 70) chartColor = 'rgba(16, 185, 129, 0.8)';
       
       scoreChart.data.datasets[0].backgroundColor[0] = chartColor;
       scoreChart.update();
     }
 
-    // Professional score interpretation
     function updateScoreInterpretation(total, percentage, answered, totalQuestions) {
       const interpretationEl = document.getElementById('scoreInterpretation');
       
@@ -1277,7 +1136,6 @@
       interpretationEl.style.background = bgColor;
     }
 
-    // Update mini navigation
     function updateMiniNav() {
       const dots = document.querySelectorAll('.nav-dot');
       answers.forEach((group, i) => {
@@ -1290,7 +1148,6 @@
       });
     }
 
-    // Enhanced category completion check
     function checkCategoryCompletion(catIdx) {
       const category = answers[catIdx];
       const isComplete = category.every(answer => answer !== null);
@@ -1299,26 +1156,15 @@
       if (isComplete) {
         categoryEl.classList.add('completed');
         showSuccessMessage();
-        
-        // Update active category to next incomplete one
         updateActiveCategory();
         
-        // Auto-scroll to next category after delay
         const nextCategory = findNextIncompleteCategory(catIdx);
         if (nextCategory !== -1) {
-          setTimeout(() => {
-            scrollToCategory(nextCategory);
-          }, 2000);
-        } else {
-          // All categories completed - show final celebration
-          setTimeout(() => {
-            showFinalCelebration();
-          }, 2000);
+          setTimeout(() => scrollToCategory(nextCategory), 2000);
         }
       }
     }
 
-    // Find next incomplete category
     function findNextIncompleteCategory(currentIdx) {
       for (let i = currentIdx + 1; i < answers.length; i++) {
         if (!answers[i].every(answer => answer !== null)) {
@@ -1328,10 +1174,8 @@
       return -1;
     }
 
-    // Update active category
     function updateActiveCategory() {
       document.querySelectorAll('.category').forEach(cat => cat.classList.remove('active'));
-      
       const nextIncomplete = findNextIncompleteCategory(-1);
       if (nextIncomplete !== -1) {
         currentActiveCategory = nextIncomplete;
@@ -1339,366 +1183,85 @@
       }
     }
 
-    // Enhanced success message
     function showSuccessMessage() {
       const msg = document.getElementById('successMessage');
       msg.classList.add('show');
-      
-      // Add confetti effect (simple version)
-      createConfetti();
-      
-      setTimeout(() => {
-        msg.classList.remove('show');
-      }, 3000);
+      setTimeout(() => msg.classList.remove('show'), 3000);
     }
 
-    // Simple confetti effect
-    function createConfetti() {
-      const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'];
-      for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.style.cssText = `
-          position: fixed;
-          width: 10px;
-          height: 10px;
-          background: ${colors[Math.floor(Math.random() * colors.length)]};
-          left: ${Math.random() * 100}vw;
-          top: -10px;
-          border-radius: 50%;
-          animation: confettiFall ${Math.random() * 2 + 1}s linear forwards;
-          z-index: 1003;
-        `;
-        document.body.appendChild(confetti);
-        
-        setTimeout(() => confetti.remove(), 3000);
-      }
-    }
-
-    // Add confetti animation to CSS
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes confettiFall {
-        to {
-          transform: translateY(100vh) rotate(360deg);
-          opacity: 0;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Final celebration
-    function showFinalCelebration() {
-      const finalMsg = document.createElement('div');
-      finalMsg.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 3rem;
-        border-radius: 30px;
-        text-align: center;
-        z-index: 1004;
-        box-shadow: 0 30px 100px rgba(102, 126, 234, 0.4);
-        backdrop-filter: blur(20px);
-        animation: finalCelebration 1s cubic-bezier(0.4, 0, 0.2, 1);
-      `;
-      finalMsg.innerHTML = `
-        <h2 style="margin: 0 0 1rem 0; font-size: 2.5rem; display: flex; align-items: center; justify-content: center; gap: 1rem;">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          Fantastisch!
-        </h2>
-        <p style="margin: 0; font-size: 1.2rem;">Du hast alle Kategorien abgeschlossen!<br>
-        Dein NH Score zeigt deinen aktuellen Gesundheitsstatus.</p>
-      `;
-      
-      document.body.appendChild(finalMsg);
-      createConfetti();
-      
-      setTimeout(() => finalMsg.remove(), 5000);
-    }
-
-    // Scroll functions
     function scrollToCategory(index) {
       currentActiveCategory = index;
       updateMiniNav();
-      document.getElementById(`category-${index}`).scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'center' 
-      });
+      document.getElementById(`category-${index}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Save/Load functionality
-    function saveProgress(silent = false) {
-      try {
-        const data = {
-          answers: answers,
-          timestamp: Date.now(),
-          version: '2.0'
-        };
-        const savedData = JSON.stringify(data);
-        
-        // Create a download link
-        const blob = new Blob([savedData], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `nh-score-${new Date().toISOString().split('T')[0]}.json`;
-        
-        if (!silent) {
-          a.click();
-          showNotification('Fortschritt erfolgreich gespeichert!', 'success');
-        }
-        
-        URL.revokeObjectURL(url);
-      } catch (error) {
-        showNotification('Fehler beim Speichern!', 'error');
-      }
-    }
-
-    function loadProgress() {
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = '.json';
-      input.onchange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            try {
-              const data = JSON.parse(e.target.result);
-              if (data.answers && data.version) {
-                answers.splice(0, answers.length, ...data.answers);
-                restoreAnswers();
-                updateScores();
-                updateMiniNav();
-                showNotification('Fortschritt erfolgreich geladen!', 'success');
-              }
-            } catch (error) {
-              showNotification('Fehler beim Laden der Datei!', 'error');
-            }
-          };
-          reader.readAsText(file);
-        }
-      };
-      input.click();
-    }
-
-    function restoreAnswers() {
-      answers.forEach((group, catIdx) => {
-        group.forEach((answer, qIdx) => {
-          if (answer !== null) {
-            const radio = document.getElementById(`cat${catIdx}_q${qIdx}_v${answer}`);
-            if (radio) {
-              radio.checked = true;
-              const questionEl = document.getElementById(`question-${catIdx}-${qIdx}`);
-              questionEl.classList.add('answered');
-            }
-          }
-        });
-      });
+    function saveProgress() {
+      const data = { answers: answers, timestamp: Date.now(), version: '2.0' };
+      const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `nh-score-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showNotification('Fortschritt gespeichert!', 'success');
     }
 
     function resetAll() {
-      if (confirm('Möchtest du wirklich alle Antworten zurücksetzen?')) {
-        answers.forEach((group, i) => {
-          group.fill(null);
-        });
-        
-        // Reset all radio buttons
-        document.querySelectorAll('input[type="radio"]').forEach(radio => {
-          radio.checked = false;
-        });
-        
-        // Reset visual states
-        document.querySelectorAll('.question').forEach(q => {
-          q.classList.remove('answered');
-        });
-        
-        document.querySelectorAll('.category').forEach(cat => {
-          cat.classList.remove('completed', 'active');
-        });
-        
+      if (confirm('Alle Antworten zurücksetzen?')) {
+        answers.forEach(group => group.fill(null));
+        document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+        document.querySelectorAll('.question').forEach(q => q.classList.remove('answered'));
+        document.querySelectorAll('.category').forEach(cat => cat.classList.remove('completed', 'active'));
         currentActiveCategory = 0;
         document.getElementById('category-0').classList.add('active');
-        
         updateScores();
         updateMiniNav();
-        showNotification('Alle Antworten zurückgesetzt!', 'success');
-        scrollToTop();
+        showNotification('Zurückgesetzt!', 'success');
       }
     }
 
-    // PDF Export functionality
     function exportToPDF() {
-      const exportData = generateExportData();
-      const printWindow = window.open('', '_blank');
+      const total = answers.reduce((sum, group) => sum + group.reduce((a, b) => a + (b !== null ? b : 0), 0), 0);
+      const percentage = Math.round((total / 100) * 100);
+      const date = new Date().toLocaleDateString('de-DE');
       
+      const printWindow = window.open('', '_blank');
       printWindow.document.write(`
         <!DOCTYPE html>
         <html>
-        <head>
-          <title>NH Score Auswertung</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
-            .header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid #7877c6; padding-bottom: 20px; }
-            .score-summary { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
-            .category { margin-bottom: 25px; page-break-inside: avoid; }
-            .category h3 { color: #7877c6; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-            .question { margin: 10px 0; padding: 8px; background: #f8f9fa; border-radius: 5px; }
-            .answer { font-weight: bold; }
-            .answer.ja { color: #10b981; }
-            .answer.teilweise { color: #f59e0b; }
-            .answer.nein { color: #ef4444; }
-            .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #666; }
-            @media print { body { margin: 20px; } }
-          </style>
+        <head><title>NH Score Auswertung</title>
+        <style>body{font-family:Arial,sans-serif;margin:40px;color:#333}.header{text-align:center;margin-bottom:40px;border-bottom:2px solid #7877c6;padding-bottom:20px}</style>
         </head>
         <body>
-          ${exportData}
-        </body>
-        </html>
+        <div class="header"><h1>NH Score Auswertung</h1><p>Datum: ${date}</p><h2>Ergebnis: ${total}/100 Punkte (${percentage}%)</h2></div>
+        </body></html>
       `);
-      
       printWindow.document.close();
-      setTimeout(() => {
-        printWindow.print();
-      }, 500);
+      setTimeout(() => printWindow.print(), 500);
     }
 
-    function generateExportData() {
-      const total = answers.reduce((sum, group) => sum + group.reduce((a, b) => a + (b !== null ? b : 0), 0), 0);
-      const totalQuestions = categories.reduce((sum, cat) => sum + cat.questions.length, 0);
-      const percentage = Math.round((total / (totalQuestions * 2)) * 100);
-      const date = new Date().toLocaleDateString('de-DE');
-      
-      let html = `
-        <div class="header">
-          <h1>NH Score Gesundheitsauswertung</h1>
-          <p>Datum: ${date}</p>
-          <h2>Gesamtergebnis: ${total}/100 Punkte (${percentage}%)</h2>
-        </div>
-        
-        <div class="score-summary">
-          <h3>Zusammenfassung</h3>
-          <p><strong>Gesamtpunkte:</strong> ${total} von 100</p>
-          <p><strong>Prozentualer Wert:</strong> ${percentage}%</p>
-          <p><strong>Beantwortete Fragen:</strong> ${answers.reduce((sum, group) => sum + group.filter(a => a !== null).length, 0)} von ${totalQuestions}</p>
-        </div>
-      `;
-      
-      categories.forEach((cat, catIdx) => {
-        const categorySum = answers[catIdx].reduce((a, b) => a + (b !== null ? b : 0), 0);
-        const categoryPercentage = Math.round((categorySum / 20) * 100);
-        
-        html += `
-          <div class="category">
-            <h3>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7877c6" stroke-width="2" style="margin-right: 8px; vertical-align: middle;">
-                ${cat.iconSvg.match(/<path[^>]*d="[^"]*"/g)?.join('') || ''}
-              </svg>
-              ${cat.title} - ${categorySum}/20 Punkte (${categoryPercentage}%)
-            </h3>
-        `;
-        
-        cat.questions.forEach((question, qIdx) => {
-          const answer = answers[catIdx][qIdx];
-          let answerText = 'Nicht beantwortet';
-          let answerClass = '';
-          
-          if (answer === 2) { answerText = 'Ja'; answerClass = 'ja'; }
-          else if (answer === 1) { answerText = 'Teilweise'; answerClass = 'teilweise'; }
-          else if (answer === 0) { answerText = 'Nein'; answerClass = 'nein'; }
-          
-          html += `
-            <div class="question">
-              <strong>${qIdx + 1}. ${question}</strong><br>
-              <span class="answer ${answerClass}">Antwort: ${answerText}</span>
-            </div>
-          `;
-        });
-        
-        html += '</div>';
-      });
-      
-      html += `
-        <div class="footer">
-          <p>Erstellt mit NH Score - Gesundheitsbewertungssystem</p>
-          <p>Diese Auswertung dient der Selbsteinschätzung und ersetzt keine professionelle medizinische Beratung.</p>
-        </div>
-      `;
-      
-      return html;
-    }
-
-    // Notification system
-    function showNotification(message, type = 'success') {
+    function showNotification(message, type) {
       const notification = document.getElementById('notification');
       notification.textContent = message;
       notification.className = `notification ${type}`;
       notification.classList.add('show');
-      
-      setTimeout(() => {
-        notification.classList.remove('show');
-      }, 3000);
+      setTimeout(() => notification.classList.remove('show'), 3000);
     }
 
-    // Keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        switch (e.key) {
-          case 's':
-            e.preventDefault();
-            saveProgress();
-            break;
-          case 'o':
-            e.preventDefault();
-            loadProgress();
-            break;
-          case 'r':
-            e.preventDefault();
-            if (e.shiftKey) resetAll();
-            break;
-        }
-      }
-    });
-
-    // Initialize everything
+    // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       createMiniNav();
       createCategories();
       updateActiveCategory();
       updateMiniNav();
-      
-      // Auto-scroll to first category after a short delay
-      setTimeout(() => {
-        scrollToCategory(0);
-      }, 1000);
-      
-      // Add load functionality to FAB
-      const fabContainer = document.querySelector('.fab-container');
-      const loadFab = document.createElement('button');
-      loadFab.className = 'fab';
-      loadFab.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-          <polyline points="14,2 14,8 20,8"/>
-          <line x1="12" y1="11" x2="12" y2="17"/>
-          <polyline points="9,14 12,17 15,14"/>
-        </svg>
-      `;
-      loadFab.title = 'Fortschritt laden';
-      loadFab.onclick = loadProgress;
-      loadFab.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
-      fabContainer.insertBefore(loadFab, fabContainer.children[1]);
+      setTimeout(() => scrollToCategory(0), 1000);
     });
   </script>
 </body>
-</html>
+</html>item">
+          <div class="breakdown-
