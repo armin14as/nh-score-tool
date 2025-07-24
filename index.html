@@ -256,8 +256,7 @@
     padding: 2.5rem;
     margin-bottom: 3rem;
     box-shadow: var(--shadow-primary);
-    position: sticky;
-    top: 80px;
+    position: relative;
     z-index: 100;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -692,8 +691,6 @@
     
     .total-score-box {
       padding: 2rem;
-      position: relative;
-      top: unset;
     }
     
     .total-score-ring {
@@ -742,6 +739,42 @@
     
     .breakdown-item {
       padding: 0.5rem;
+    }
+  }
+
+  /* Desktop optimization */
+  @media (min-width: 1024px) {
+    .container {
+      max-width: 1200px;
+      padding: 2rem;
+    }
+    
+    .total-score-box {
+      position: sticky;
+      top: 20px;
+      padding: 3rem;
+    }
+    
+    .total-score-ring {
+      width: 220px;
+      height: 220px;
+    }
+    
+    .score-value {
+      font-size: 3.2rem;
+    }
+    
+    .score-percentage {
+      font-size: 1.4rem;
+    }
+    
+    .category {
+      padding: 3rem;
+    }
+    
+    .radio-group {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
     }
   }
 
