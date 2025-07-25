@@ -717,10 +717,10 @@
       
       <div class="action-buttons">
         <button class="btn" onclick="window.exportPDF()" title="Als PDF exportieren" aria-label="Ergebnisse als PDF exportieren">
-          <span>📄</span> Export
+          Export
         </button>
         <button class="btn primary" onclick="window.resetAll()" title="Alle Antworten zurücksetzen" aria-label="Assessment zurücksetzen">
-          🔄 Reset
+          Reset
         </button>
       </div>
     </div>
@@ -1511,7 +1511,7 @@
             printWindow.print();
           }, 800);
           
-          this.showNotification('📄 PDF wird erstellt...', 'success');
+          this.showNotification('PDF wird erstellt...', 'success');
           
         } catch (error) {
           console.error('Export error:', error);
@@ -1605,14 +1605,14 @@
           this.startAutosave();
           this.updateTimeSpent();
           
-          this.showNotification('✅ Alle Daten wurden erfolgreich zurückgesetzt', 'success');
+          this.showNotification('Alle Daten wurden erfolgreich zurückgesetzt', 'success');
           
           // Scroll to top
           window.scrollTo({ top: 0, behavior: 'smooth' });
           
         } catch (error) {
           console.error('Reset error:', error);
-          this.showNotification('❌ Fehler beim Zurücksetzen der Daten', 'error');
+          this.showNotification('Fehler beim Zurücksetzen der Daten', 'error');
         }
       }
       
@@ -1635,10 +1635,10 @@
         if (container) {
           container.innerHTML = `
             <div class="error-state">
-              <h3>⚠️ Fehler aufgetreten</h3>
+              <h3>Fehler aufgetreten</h3>
               <p>${message}</p>
               <button class="btn primary" onclick="location.reload()">
-                🔄 Seite neu laden
+                Seite neu laden
               </button>
             </div>
           `;
@@ -1716,10 +1716,10 @@
         if (container) {
           container.innerHTML = `
             <div class="error-state">
-              <h3>⚠️ Anwendung konnte nicht geladen werden</h3>
+              <h3>Anwendung konnte nicht geladen werden</h3>
               <p>Es ist ein technischer Fehler aufgetreten. Bitte laden Sie die Seite neu.</p>
               <button class="btn primary" onclick="location.reload()">
-                🔄 Seite neu laden
+                Seite neu laden
               </button>
             </div>
           `;
