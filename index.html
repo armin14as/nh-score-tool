@@ -45,10 +45,11 @@
     position: sticky;
     top: 0;
     background: var(--glass-bg);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border-color);
     z-index: 100;
     padding: 1rem 0;
+    box-shadow: var(--shadow);
   }
   
   .progress-content {
@@ -67,68 +68,104 @@
     gap: 1rem;
     font-size: 0.875rem;
     color: var(--text-secondary);
+    min-width: 200px;
   }
   
   .progress-bar-container {
     flex: 1;
     max-width: 400px;
-    height: 8px;
+    height: 10px;
     background: var(--gray-800);
-    border-radius: 4px;
+    border-radius: 5px;
     overflow: hidden;
+    position: relative;
   }
   
   .progress-bar {
     height: 100%;
     background: linear-gradient(90deg, var(--primary), var(--success));
-    border-radius: 4px;
-    transition: width 0.3s ease;
+    border-radius: 5px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     width: 0%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100px;
+    width: 100px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { left: -100px; }
+    100% { left: 100%; }
   }
 
   /* Category Navigation */
   .category-nav {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
     align-items: center;
   }
   
   .category-dot {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     background: var(--gray-600);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
+    position: relative;
+    border: 2px solid transparent;
   }
   
-  .category-dot.completed { background: var(--success); }
-  .category-dot.active { background: var(--primary); transform: scale(1.2); }
-  .category-dot:hover { transform: scale(1.1); }
+  .category-dot.completed { 
+    background: var(--success); 
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  }
+  .category-dot.active { 
+    background: var(--primary); 
+    transform: scale(1.3); 
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+  .category-dot:hover { 
+    transform: scale(1.2); 
+    box-shadow: 0 0 8px rgba(255,255,255,0.2);
+  }
 
   /* Action Buttons */
   .action-buttons {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
   
   .btn {
-    padding: 0.5rem 1rem;
+    padding: 0.625rem 1.25rem;
     border: 1px solid var(--border-color);
     background: var(--glass-bg);
     color: var(--text-primary);
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 0.875rem;
-    transition: all 0.15s ease;
+    font-weight: 500;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    backdrop-filter: blur(8px);
   }
   
   .btn:hover {
     background: var(--gray-700);
     border-color: var(--gray-600);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
   }
   
   .btn.primary {
@@ -138,6 +175,7 @@
   
   .btn.primary:hover {
     background: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
   }
 
   /* Main Layout */
@@ -146,55 +184,58 @@
     margin: 0 auto;
     padding: 2rem 1rem;
     display: grid;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1fr 320px;
     gap: 2rem;
   }
 
-  /* Score Panel */
+  /* Score Panel - Enhanced */
   .score-panel {
     background: var(--glass-bg);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 1.5rem;
-    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 2rem;
+    backdrop-filter: blur(16px);
     height: fit-content;
     position: sticky;
-    top: 120px;
+    top: 140px;
+    box-shadow: var(--shadow-lg);
   }
   
   .score-header h3 {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     margin-bottom: 0.5rem;
+    font-weight: 600;
   }
   
   .score-date {
     font-size: 0.875rem;
     color: var(--text-secondary);
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
   
   .score-ring {
     position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 1rem;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 1.5rem;
   }
   
   .score-circle {
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
     background: conic-gradient(var(--primary) 0deg, var(--gray-700) 0deg);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    transition: all 0.5s ease;
   }
   
   .score-circle::before {
     content: '';
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     background: var(--bg-secondary);
     border-radius: 50%;
     position: absolute;
@@ -203,7 +244,7 @@
   .score-value {
     position: relative;
     z-index: 1;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     font-weight: 700;
     text-align: center;
     line-height: 1.2;
@@ -212,14 +253,15 @@
   .score-percentage {
     font-size: 0.875rem;
     color: var(--text-secondary);
+    font-weight: 500;
   }
   
   .score-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
     border-top: 1px solid var(--border-color);
   }
   
@@ -228,9 +270,10 @@
   }
   
   .stat-value {
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: 700;
     color: var(--success);
+    margin-bottom: 0.25rem;
   }
   
   .stat-label {
@@ -238,26 +281,42 @@
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 500;
   }
 
-  /* Hero Section */
+  /* Hero Section - Enhanced */
   .hero-section {
     text-align: center;
-    padding: 3rem 0 2rem;
+    padding: 4rem 0 3rem;
     margin-bottom: 2rem;
     border-bottom: 1px solid var(--border-color);
+    position: relative;
+  }
+
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1), transparent);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    z-index: -1;
   }
   
   .main-title {
-    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-size: clamp(3rem, 8vw, 5rem);
     font-weight: 900;
     background: linear-gradient(135deg, var(--primary), #8b5cf6, #06b6d4);
-    background-size: 200% 200%;
+    background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 1rem;
-    animation: gradientShift 6s ease-in-out infinite;
+    margin-bottom: 1.5rem;
+    animation: gradientShift 8s ease-in-out infinite;
+    letter-spacing: -0.02em;
   }
   
   @keyframes gradientShift {
@@ -266,14 +325,15 @@
   }
   
   .subtitle {
-    font-size: clamp(1rem, 3vw, 1.25rem);
+    font-size: clamp(1.125rem, 3vw, 1.375rem);
     color: var(--text-secondary);
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
-    line-height: 1.5;
+    line-height: 1.6;
+    font-weight: 400;
   }
 
-  /* Categories */
+  /* Categories - Enhanced */
   .categories {
     display: flex;
     flex-direction: column;
@@ -283,15 +343,34 @@
   .category {
     background: var(--glass-bg);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 2rem;
-    backdrop-filter: blur(12px);
-    transition: all 0.2s ease;
+    backdrop-filter: blur(16px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .category::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--success));
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
   
   .category.active {
     border-color: var(--primary);
-    box-shadow: 0 0 0 1px var(--primary);
+    box-shadow: 0 0 0 1px var(--primary), var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .category.active::before {
+    opacity: 1;
   }
   
   .category-header {
@@ -303,48 +382,52 @@
   }
   
   .category-title {
-    font-size: 1.25rem;
+    font-size: 1.375rem;
     font-weight: 600;
     flex: 1;
   }
   
   .category-score {
     background: var(--gray-800);
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
+    padding: 0.625rem 1.25rem;
+    border-radius: 25px;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--text-secondary);
+    border: 1px solid var(--border-color);
   }
   
   .category-progress {
     width: 100%;
-    height: 4px;
+    height: 6px;
     background: var(--gray-800);
-    border-radius: 2px;
-    margin-bottom: 1.5rem;
+    border-radius: 3px;
+    margin-bottom: 2rem;
     overflow: hidden;
   }
   
   .category-progress-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--primary), var(--success));
-    border-radius: 2px;
-    transition: width 0.3s ease;
+    border-radius: 3px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     width: 0%;
+    position: relative;
   }
 
-  /* Questions */
+  /* Questions - Enhanced */
   .question {
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    transition: all 0.2s ease;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.01);
   }
   
   .question:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--border-color);
   }
   
   .question.answered {
@@ -354,22 +437,24 @@
   
   .question-label {
     display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 1.0625rem;
+    line-height: 1.5;
   }
   
   .question-number {
-    color: var(--text-secondary);
-    font-weight: 400;
-    margin-right: 0.5rem;
+    color: var(--primary);
+    font-weight: 600;
+    margin-right: 0.75rem;
+    font-size: 0.875rem;
   }
 
-  /* Radio Groups */
+  /* Radio Groups - Enhanced */
   .radio-group {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0.75rem;
+    gap: 1rem;
   }
   
   .radio-option {
@@ -386,45 +471,68 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.25rem;
     background: var(--gray-800);
     border: 2px solid var(--gray-700);
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.15s ease;
-    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    font-size: 0.9375rem;
     font-weight: 500;
     text-align: center;
-    min-height: 48px;
+    min-height: 52px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .radio-option label::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s ease;
   }
   
   .radio-option label:hover {
     border-color: var(--gray-600);
     background: var(--gray-700);
+    transform: translateY(-1px);
+  }
+
+  .radio-option label:hover::before {
+    left: 100%;
   }
   
   .radio-option input:checked + label {
     border-color: var(--primary);
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(99, 102, 241, 0.15);
     color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
   }
   
   .radio-option:nth-child(1) input:checked + label {
     border-color: var(--error);
-    background: rgba(239, 68, 68, 0.1);
+    background: rgba(239, 68, 68, 0.15);
     color: var(--error);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
   }
   
   .radio-option:nth-child(2) input:checked + label {
     border-color: var(--warning);
-    background: rgba(245, 158, 11, 0.1);
+    background: rgba(245, 158, 11, 0.15);
     color: var(--warning);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
   }
   
   .radio-option:nth-child(3) input:checked + label {
     border-color: var(--success);
-    background: rgba(16, 185, 129, 0.1);
+    background: rgba(16, 185, 129, 0.15);
     color: var(--success);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
   }
 
   /* Keyboard Navigation */
@@ -433,7 +541,7 @@
     outline-offset: 2px;
   }
 
-  /* Notifications */
+  /* Notifications - Enhanced */
   .notification {
     position: fixed;
     top: 1rem;
@@ -441,11 +549,13 @@
     padding: 1rem 1.5rem;
     background: var(--success);
     color: white;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 500;
     z-index: 1000;
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   .notification.show {
@@ -456,13 +566,14 @@
     background: var(--error);
   }
 
-  /* Auto-save indicator */
+  /* Auto-save indicator - Enhanced */
   .autosave-indicator {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     color: var(--text-secondary);
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-weight: 500;
   }
   
   .autosave-indicator.saving {
@@ -473,11 +584,42 @@
     color: var(--success);
   }
 
+  .autosave-indicator .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* Loading states */
+  .loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* Error states */
+  .error-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--error);
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--error);
+    border-radius: 8px;
+    margin: 1rem 0;
+  }
+
   /* Responsive Design */
   @media (max-width: 1024px) {
     .container {
       grid-template-columns: 1fr;
-      gap: 1rem;
+      gap: 1.5rem;
+      padding: 1.5rem 1rem;
     }
     
     .score-panel {
@@ -486,18 +628,19 @@
     }
     
     .hero-section {
-      padding: 1rem 0 1.5rem;
+      padding: 2rem 0 2rem;
     }
   }
   
   @media (max-width: 768px) {
     .progress-content {
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 1rem;
     }
     
     .progress-info {
       order: 1;
+      min-width: auto;
     }
     
     .action-buttons {
@@ -506,19 +649,19 @@
     
     .radio-group {
       grid-template-columns: 1fr;
-      gap: 0.5rem;
+      gap: 0.75rem;
     }
     
     .hero-section {
-      padding: 0.5rem 0 1rem;
+      padding: 1rem 0 1.5rem;
     }
     
     .main-title {
-      font-size: clamp(1.75rem, 10vw, 2.5rem);
+      font-size: clamp(2rem, 10vw, 3rem);
     }
     
     .subtitle {
-      font-size: clamp(0.8rem, 3.5vw, 0.95rem);
+      font-size: clamp(0.9375rem, 3.5vw, 1.125rem);
     }
     
     .category {
@@ -528,12 +671,14 @@
     .container {
       padding: 1rem;
     }
-  }
 
-  /* Loading states */
-  .loading {
-    opacity: 0.6;
-    pointer-events: none;
+    .score-panel {
+      padding: 1.5rem;
+    }
+
+    .question {
+      padding: 1.25rem;
+    }
   }
 
   /* Accessibility improvements */
@@ -544,6 +689,13 @@
       transition-duration: 0.01ms !important;
     }
   }
+
+  @media (prefers-contrast: high) {
+    :root {
+      --border-color: rgba(148, 163, 184, 0.3);
+      --text-secondary: #e2e8f0;
+    }
+  }
 </style>
 </head>
 <body>
@@ -552,7 +704,7 @@
       <div class="progress-info">
         <span id="progressText">Frage 0 von 50</span>
         <div class="autosave-indicator" id="autosaveIndicator">
-          <span>●</span>
+          <div class="status-dot"></div>
           <span>Automatisch gespeichert</span>
         </div>
       </div>
@@ -561,14 +713,14 @@
         <div class="progress-bar" id="progressBar"></div>
       </div>
       
-      <div class="category-nav" id="categoryNav"></div>
+      <div class="category-nav" id="categoryNav" role="navigation" aria-label="Kategorien Navigation"></div>
       
       <div class="action-buttons">
-        <button class="btn" onclick="window.exportPDF()" title="Als PDF exportieren">
+        <button class="btn" onclick="window.exportPDF()" title="Als PDF exportieren" aria-label="Ergebnisse als PDF exportieren">
           <span>📄</span> Export
         </button>
-        <button class="btn primary" onclick="window.resetAll()" title="Zurücksetzen">
-          Reset
+        <button class="btn primary" onclick="window.resetAll()" title="Alle Antworten zurücksetzen" aria-label="Assessment zurücksetzen">
+          🔄 Reset
         </button>
       </div>
     </div>
@@ -582,17 +734,17 @@
         <p class="subtitle">Wissenschaftlich fundiertes 100-Punkte-System für umfassende Gesundheit & Leistungsfähigkeit</p>
       </header>
 
-      <main class="categories" id="categories"></main>
+      <main class="categories" id="categories" role="main"></main>
     </div>
     
-    <aside class="score-panel">
+    <aside class="score-panel" role="complementary" aria-label="Aktueller Gesundheitsscore">
       <div class="score-header">
         <h3>Gesundheitsscore</h3>
         <div class="score-date" id="scoreDate"></div>
       </div>
       
       <div class="score-ring">
-        <div class="score-circle" id="scoreCircle">
+        <div class="score-circle" id="scoreCircle" role="img" aria-label="Score Kreis">
           <div class="score-value">
             <div id="totalScore">0</div>
             <div class="score-percentage" id="scorePercentage">0%</div>
@@ -621,10 +773,10 @@
     </aside>
   </div>
 
-  <div class="notification" id="notification"></div>
+  <div class="notification" id="notification" role="alert"></div>
 
   <script>
-    // Modern ES6+ Implementation with enterprise patterns
+    // Enhanced ES6+ Implementation with enterprise patterns
     class HealthAssessment {
       constructor() {
         this.categories = [
@@ -708,6 +860,8 @@
         this.answers = this.loadData() || this.initializeAnswers();
         this.startTime = Date.now();
         this.autosaveInterval = null;
+        this.updateTimeInterval = null;
+        this.isInitialized = false;
         
         this.init();
       }
@@ -717,16 +871,24 @@
       }
       
       init() {
-        this.renderCategories();
-        this.renderCategoryNav();
-        this.updateUI();
-        this.setupKeyboardNavigation();
-        this.startAutosave();
-        this.updateTimeSpent();
+        try {
+          this.renderCategories();
+          this.renderCategoryNav();
+          this.updateUI();
+          this.setupKeyboardNavigation();
+          this.startAutosave();
+          this.updateTimeSpent();
+          this.isInitialized = true;
+        } catch (error) {
+          console.error('Initialization error:', error);
+          this.showError('Fehler beim Laden der Anwendung. Bitte laden Sie die Seite neu.');
+        }
       }
       
       renderCategories() {
         const container = document.getElementById('categories');
+        if (!container) throw new Error('Categories container not found');
+        
         container.innerHTML = '';
         
         this.categories.forEach((category, catIdx) => {
@@ -739,13 +901,14 @@
         const categoryEl = document.createElement('section');
         categoryEl.className = 'category';
         categoryEl.id = `category-${catIdx}`;
+        categoryEl.setAttribute('aria-labelledby', `category-title-${catIdx}`);
         
         categoryEl.innerHTML = `
           <div class="category-header">
-            <h2 class="category-title">${category.title}</h2>
-            <div class="category-score" id="score-${catIdx}">0 / 20</div>
+            <h2 class="category-title" id="category-title-${catIdx}">${category.title}</h2>
+            <div class="category-score" id="score-${catIdx}" aria-label="Aktuelle Punkte">0 / 20</div>
           </div>
-          <div class="category-progress">
+          <div class="category-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
             <div class="category-progress-fill" id="progress-${catIdx}"></div>
           </div>
           <div class="questions">
@@ -760,90 +923,158 @@
       
       createQuestionHTML(question, catIdx, qIdx) {
         const isAnswered = this.answers[catIdx][qIdx] !== null;
+        const fieldsetId = `cat${catIdx}_q${qIdx}`;
+        
         return `
           <div class="question ${isAnswered ? 'answered' : ''}" id="question-${catIdx}-${qIdx}">
-            <label class="question-label">
-              <span class="question-number">${qIdx + 1}.</span>
-              ${question}
-            </label>
-            <div class="radio-group">
-              ${['Nein', 'Teilweise', 'Ja'].map((text, val) => `
-                <div class="radio-option">
-                  <input type="radio" 
-                         name="cat${catIdx}_q${qIdx}" 
-                         value="${val}" 
-                         id="cat${catIdx}_q${qIdx}_v${val}"
-                         ${this.answers[catIdx][qIdx] === val ? 'checked' : ''}
-                         onchange="window.healthApp.handleAnswer(${catIdx}, ${qIdx}, ${val})">
-                  <label for="cat${catIdx}_q${qIdx}_v${val}">${text}</label>
-                </div>
-              `).join('')}
-            </div>
+            <fieldset>
+              <legend class="question-label">
+                <span class="question-number">${qIdx + 1}.</span>
+                ${question}
+              </legend>
+              <div class="radio-group" role="radiogroup" aria-labelledby="legend-${fieldsetId}">
+                ${['Nein', 'Teilweise', 'Ja'].map((text, val) => `
+                  <div class="radio-option">
+                    <input type="radio" 
+                           name="${fieldsetId}" 
+                           value="${val}" 
+                           id="${fieldsetId}_v${val}"
+                           ${this.answers[catIdx][qIdx] === val ? 'checked' : ''}
+                           onchange="window.healthApp.handleAnswer(${catIdx}, ${qIdx}, ${val})"
+                           aria-describedby="question-${catIdx}-${qIdx}">
+                    <label for="${fieldsetId}_v${val}">${text}</label>
+                  </div>
+                `).join('')}
+              </div>
+            </fieldset>
           </div>
         `;
       }
       
       renderCategoryNav() {
         const nav = document.getElementById('categoryNav');
+        if (!nav) return;
+        
         nav.innerHTML = '';
         
         this.categories.forEach((cat, idx) => {
           const dot = document.createElement('div');
           dot.className = 'category-dot';
           dot.title = cat.title;
+          dot.setAttribute('role', 'button');
+          dot.setAttribute('aria-label', `Springe zu ${cat.title}`);
           dot.onclick = () => this.scrollToCategory(idx);
+          dot.onkeydown = (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.scrollToCategory(idx);
+            }
+          };
+          dot.tabIndex = 0;
           nav.appendChild(dot);
         });
       }
       
       handleAnswer(catIdx, qIdx, value) {
-        this.answers[catIdx][qIdx] = parseInt(value);
+        if (!this.isInitialized) return;
         
-        // Update question state
-        const questionEl = document.getElementById(`question-${catIdx}-${qIdx}`);
-        questionEl.classList.add('answered');
-        
+        try {
+          this.answers[catIdx][qIdx] = parseInt(value);
+          
+          // Update question state with smooth transition
+          const questionEl = document.getElementById(`question-${catIdx}-${qIdx}`);
+          if (questionEl) {
+            questionEl.classList.add('answered');
+          }
+          
+          // Debounced UI update for better performance
+          this.debouncedUpdateUI();
+          this.saveData();
+          this.showAutosaveIndicator('saving');
+          
+          // Auto-advance to next question
+          setTimeout(() => this.focusNextQuestion(catIdx, qIdx), 150);
+          
+        } catch (error) {
+          console.error('Answer handling error:', error);
+          this.showNotification('Fehler beim Speichern der Antwort', 'error');
+        }
+      }
+      
+      // Debounced UI update for better performance
+      debouncedUpdateUI = this.debounce(() => {
         this.updateUI();
-        this.saveData();
-        this.showAutosaveIndicator('saving');
-        
-        // Auto-advance to next question
-        setTimeout(() => this.focusNextQuestion(catIdx, qIdx), 100);
+      }, 100);
+      
+      debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
       }
       
       focusNextQuestion(catIdx, qIdx) {
-        // Find next unanswered question
+        // Find next unanswered question with improved logic
         for (let c = catIdx; c < this.categories.length; c++) {
           const startQ = (c === catIdx) ? qIdx + 1 : 0;
           for (let q = startQ; q < this.categories[c].questions.length; q++) {
             if (this.answers[c][q] === null) {
               const nextQuestion = document.getElementById(`question-${c}-${q}`);
               if (nextQuestion) {
-                nextQuestion.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                // Focus first radio button
-                const firstRadio = nextQuestion.querySelector('input[type="radio"]');
-                if (firstRadio) firstRadio.focus();
+                // Smooth scroll with better positioning
+                nextQuestion.scrollIntoView({ 
+                  behavior: 'smooth', 
+                  block: 'center',
+                  inline: 'nearest'
+                });
+                
+                // Focus first radio button after scroll completes
+                setTimeout(() => {
+                  const firstRadio = nextQuestion.querySelector('input[type="radio"]');
+                  if (firstRadio) firstRadio.focus();
+                }, 300);
               }
               return;
             }
           }
         }
+        
+        // If all questions are answered, show completion notification
+        this.showNotification('🎉 Alle Fragen beantwortet! Sie können jetzt Ihr Ergebnis exportieren.', 'success');
       }
       
       updateUI() {
-        this.updateProgress();
-        this.updateScorePanel();
-        this.updateCategoryNav();
-        this.updateCategoryStates();
+        try {
+          this.updateProgress();
+          this.updateScorePanel();
+          this.updateCategoryNav();
+          this.updateCategoryStates();
+        } catch (error) {
+          console.error('UI update error:', error);
+        }
       }
       
       updateProgress() {
         const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
         const answeredQuestions = this.answers.flat().filter(answer => answer !== null).length;
-        const progress = (answeredQuestions / totalQuestions) * 100;
+        const progress = totalQuestions > 0 ? (answeredQuestions / totalQuestions) * 100 : 0;
         
-        document.getElementById('progressBar').style.width = `${progress}%`;
-        document.getElementById('progressText').textContent = `Frage ${answeredQuestions} von ${totalQuestions}`;
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        if (progressBar) {
+          progressBar.style.width = `${progress}%`;
+          progressBar.setAttribute('aria-valuenow', progress.toFixed(1));
+        }
+        
+        if (progressText) {
+          progressText.textContent = `Frage ${answeredQuestions} von ${totalQuestions}`;
+        }
       }
       
       updateScorePanel() {
@@ -856,28 +1087,41 @@
           catAnswers.every(answer => answer !== null)
         ).length;
         
-        // Update score circle
+        // Update score circle with smooth animation
         const scoreCircle = document.getElementById('scoreCircle');
-        const degrees = (percentage / 100) * 360;
-        scoreCircle.style.background = `conic-gradient(var(--primary) ${degrees}deg, var(--gray-700) ${degrees}deg)`;
+        if (scoreCircle) {
+          const degrees = (percentage / 100) * 360;
+          scoreCircle.style.background = `conic-gradient(var(--primary) ${degrees}deg, var(--gray-700) ${degrees}deg)`;
+        }
         
-        // Update values
-        document.getElementById('totalScore').textContent = totalScore;
-        document.getElementById('scorePercentage').textContent = `${percentage}%`;
-        document.getElementById('answeredCount').textContent = `${answeredCount}/${totalQuestions}`;
-        document.getElementById('completedCategories').textContent = `${completedCategories}/5`;
-        document.getElementById('averageScore').textContent = `${percentage}%`;
-        document.getElementById('scoreDate').textContent = `Stand: ${new Date().toLocaleDateString('de-DE')}`;
+        // Update values with null checks
+        this.updateElementText('totalScore', totalScore);
+        this.updateElementText('scorePercentage', `${percentage}%`);
+        this.updateElementText('answeredCount', `${answeredCount}/${totalQuestions}`);
+        this.updateElementText('completedCategories', `${completedCategories}/5`);
+        this.updateElementText('averageScore', `${percentage}%`);
+        this.updateElementText('scoreDate', `Stand: ${new Date().toLocaleDateString('de-DE')}`);
+      }
+      
+      updateElementText(id, text) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = text;
       }
       
       updateCategoryNav() {
         const dots = document.querySelectorAll('.category-dot');
         this.answers.forEach((categoryAnswers, idx) => {
-          const isCompleted = categoryAnswers.every(answer => answer !== null);
-          const hasAnswers = categoryAnswers.some(answer => answer !== null);
-          
-          dots[idx].classList.toggle('completed', isCompleted);
-          dots[idx].classList.toggle('active', hasAnswers && !isCompleted);
+          if (dots[idx]) {
+            const isCompleted = categoryAnswers.every(answer => answer !== null);
+            const hasAnswers = categoryAnswers.some(answer => answer !== null);
+            
+            dots[idx].classList.toggle('completed', isCompleted);
+            dots[idx].classList.toggle('active', hasAnswers && !isCompleted);
+            
+            // Update aria-label for screen readers
+            const status = isCompleted ? 'abgeschlossen' : hasAnswers ? 'teilweise beantwortet' : 'nicht beantwortet';
+            dots[idx].setAttribute('aria-label', `${this.categories[idx].title} - ${status}`);
+          }
         });
       }
       
@@ -887,15 +1131,32 @@
           const categoryAnswers = this.answers[catIdx];
           const answered = categoryAnswers.filter(answer => answer !== null).length;
           const score = categoryAnswers.reduce((sum, answer) => sum + (answer || 0), 0);
-          const progress = (answered / category.questions.length) * 100;
+          const progress = category.questions.length > 0 ? (answered / category.questions.length) * 100 : 0;
           
-          // Update category score and progress
-          document.getElementById(`score-${catIdx}`).textContent = `${score} / 20`;
-          document.getElementById(`progress-${catIdx}`).style.width = `${progress}%`;
+          // Update category score and progress with null checks
+          const scoreEl = document.getElementById(`score-${catIdx}`);
+          const progressEl = document.getElementById(`progress-${catIdx}`);
+          const progressContainer = progressEl?.parentElement;
+          
+          if (scoreEl) {
+            scoreEl.textContent = `${score} / 20`;
+            scoreEl.setAttribute('aria-label', `${score} von 20 Punkten erreicht`);
+          }
+          
+          if (progressEl) {
+            progressEl.style.width = `${progress}%`;
+          }
+          
+          if (progressContainer) {
+            progressContainer.setAttribute('aria-valuenow', progress.toFixed(1));
+            progressContainer.setAttribute('aria-label', `Fortschritt: ${progress.toFixed(1)}%`);
+          }
           
           // Update category visual state
-          const isCompleted = answered === category.questions.length;
-          categoryEl.classList.toggle('active', answered > 0 && !isCompleted);
+          if (categoryEl) {
+            const isCompleted = answered === category.questions.length;
+            categoryEl.classList.toggle('active', answered > 0 && !isCompleted);
+          }
         });
       }
       
@@ -906,12 +1167,27 @@
       scrollToCategory(index) {
         const categoryEl = document.getElementById(`category-${index}`);
         if (categoryEl) {
-          categoryEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          categoryEl.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+          });
+          
+          // Focus first unanswered question in category
+          setTimeout(() => {
+            const firstUnanswered = this.answers[index].findIndex(answer => answer === null);
+            if (firstUnanswered !== -1) {
+              const questionEl = document.getElementById(`question-${index}-${firstUnanswered}`);
+              const firstRadio = questionEl?.querySelector('input[type="radio"]');
+              if (firstRadio) firstRadio.focus();
+            }
+          }, 500);
         }
       }
       
       setupKeyboardNavigation() {
         document.addEventListener('keydown', (e) => {
+          // Enhanced keyboard navigation for radio buttons
           if (e.target.type === 'radio') {
             const name = e.target.name;
             const radios = document.querySelectorAll(`input[name="${name}"]`);
@@ -921,12 +1197,16 @@
               case 'ArrowLeft':
               case 'ArrowUp':
                 e.preventDefault();
-                if (currentIndex > 0) radios[currentIndex - 1].focus();
+                if (currentIndex > 0) {
+                  radios[currentIndex - 1].focus();
+                }
                 break;
               case 'ArrowRight':
               case 'ArrowDown':
                 e.preventDefault();
-                if (currentIndex < radios.length - 1) radios[currentIndex + 1].focus();
+                if (currentIndex < radios.length - 1) {
+                  radios[currentIndex + 1].focus();
+                }
                 break;
               case 'Enter':
               case ' ':
@@ -946,7 +1226,9 @@
                 break;
               case 'r':
                 e.preventDefault();
-                this.resetData();
+                if (confirm('Alle Daten zurücksetzen?')) {
+                  this.resetData();
+                }
                 break;
             }
           }
@@ -954,6 +1236,11 @@
       }
       
       startAutosave() {
+        // Clear existing interval
+        if (this.autosaveInterval) {
+          clearInterval(this.autosaveInterval);
+        }
+        
         this.autosaveInterval = setInterval(() => {
           this.saveData();
           this.showAutosaveIndicator('saved');
@@ -961,32 +1248,44 @@
       }
       
       updateTimeSpent() {
-        setInterval(() => {
+        // Clear existing interval
+        if (this.updateTimeInterval) {
+          clearInterval(this.updateTimeInterval);
+        }
+        
+        this.updateTimeInterval = setInterval(() => {
           const elapsed = Math.floor((Date.now() - this.startTime) / 60000);
-          document.getElementById('timeSpent').textContent = `${elapsed}m`;
+          this.updateElementText('timeSpent', `${elapsed}m`);
         }, 60000); // Update every minute
       }
       
       showAutosaveIndicator(state) {
         const indicator = document.getElementById('autosaveIndicator');
+        if (!indicator) return;
+        
         indicator.className = `autosave-indicator ${state}`;
         
         if (state === 'saving') {
-          indicator.innerHTML = '<span>●</span><span>Speichere...</span>';
+          indicator.innerHTML = '<div class="status-dot"></div><span>Speichere...</span>';
           setTimeout(() => this.showAutosaveIndicator('saved'), 1000);
         } else if (state === 'saved') {
-          indicator.innerHTML = '<span>●</span><span>Automatisch gespeichert</span>';
+          indicator.innerHTML = '<div class="status-dot"></div><span>Automatisch gespeichert</span>';
         }
       }
       
       saveData() {
-        const data = {
-          answers: this.answers,
-          timestamp: Date.now(),
-          version: '3.0',
-          startTime: this.startTime
-        };
-        localStorage.setItem('nh-score-data', JSON.stringify(data));
+        try {
+          const data = {
+            answers: this.answers,
+            timestamp: Date.now(),
+            version: '3.1',
+            startTime: this.startTime
+          };
+          localStorage.setItem('nh-score-data', JSON.stringify(data));
+        } catch (error) {
+          console.error('Save error:', error);
+          this.showNotification('Fehler beim Speichern', 'error');
+        }
       }
       
       loadData() {
@@ -994,183 +1293,294 @@
           const saved = localStorage.getItem('nh-score-data');
           if (saved) {
             const data = JSON.parse(saved);
-            if (data.version === '3.0' && data.answers) {
+            if (this.validateDataStructure(data)) {
               this.startTime = data.startTime || Date.now();
               return data.answers;
             }
           }
         } catch (e) {
           console.warn('Failed to load saved data:', e);
+          this.showNotification('Gespeicherte Daten konnten nicht geladen werden', 'error');
         }
         return null;
       }
       
-      exportData() {
-        const totalScore = this.calculateTotalScore();
-        const maxScore = this.categories.reduce((sum, cat) => sum + cat.questions.length * 2, 0);
-        const percentage = Math.round((totalScore / maxScore) * 100);
-        const date = new Date().toLocaleDateString('de-DE');
-        const answeredQuestions = this.answers.flat().filter(answer => answer !== null).length;
-        const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
+      validateDataStructure(data) {
+        if (!data || !data.answers || !Array.isArray(data.answers)) {
+          return false;
+        }
         
-        // Generate category breakdown
-        const categoryBreakdown = this.categories.map((cat, idx) => {
-          const score = this.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0);
-          const answered = this.answers[idx].filter(answer => answer !== null).length;
-          const catPercentage = answered > 0 ? Math.round((score / (cat.questions.length * 2)) * 100) : 0;
-          return `
-            <tr>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd;">${cat.title}</td>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${score}/20</td>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${catPercentage}%</td>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${answered}/${cat.questions.length}</td>
-            </tr>
-          `;
-        }).join('');
+        // Check if structure matches current categories
+        if (data.answers.length !== this.categories.length) {
+          return false;
+        }
         
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>NH Score Auswertung</title>
-            <meta charset="UTF-8">
-            <style>
-              body { 
-                font-family: Arial, sans-serif; 
-                margin: 40px; 
-                color: #333; 
-                line-height: 1.6;
-              }
-              .header { 
-                text-align: center; 
-                margin-bottom: 40px; 
-                border-bottom: 3px solid #6366f1; 
-                padding-bottom: 20px; 
-              }
-              .score-circle {
-                width: 150px;
-                height: 150px;
-                border-radius: 50%;
-                background: conic-gradient(#6366f1 ${(percentage/100)*360}deg, #e5e7eb ${(percentage/100)*360}deg);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 20px auto;
-                position: relative;
-              }
-              .score-circle::before {
-                content: '';
-                width: 100px;
-                height: 100px;
-                background: white;
-                border-radius: 50%;
-                position: absolute;
-              }
-              .score-text {
-                position: relative;
-                z-index: 1;
-                text-align: center;
-                font-weight: bold;
-              }
-              table { 
-                width: 100%; 
-                border-collapse: collapse; 
-                margin-top: 30px; 
-              }
-              th { 
-                background: #f8f9fa; 
-                padding: 12px; 
-                border-bottom: 2px solid #6366f1; 
-                text-align: left; 
-              }
-              .summary {
-                background: #f8f9fa;
-                padding: 20px;
-                border-radius: 8px;
-                margin: 20px 0;
-              }
-              .recommendation {
-                background: #e0e7ff;
-                padding: 15px;
-                border-left: 4px solid #6366f1;
-                margin: 20px 0;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <h1>NH Score Gesundheitsauswertung</h1>
-              <p><strong>Datum:</strong> ${date}</p>
-              <div class="score-circle">
-                <div class="score-text">
-                  <div style="font-size: 24px;">${totalScore}</div>
-                  <div style="font-size: 14px; color: #666;">${percentage}%</div>
-                </div>
-              </div>
-              <h2>Gesamtergebnis: ${totalScore} von 100 Punkten</h2>
-            </div>
-            
-            <div class="summary">
-              <h3>Zusammenfassung</h3>
-              <p><strong>Beantwortete Fragen:</strong> ${answeredQuestions} von ${totalQuestions}</p>
-              <p><strong>Gesamtscore:</strong> ${percentage}% (${totalScore}/100 Punkte)</p>
-              <p><strong>Bewertung:</strong> ${
-                percentage >= 85 ? 'Ausgezeichnet - Vorbildlicher Gesundheitsstatus' :
-                percentage >= 70 ? 'Sehr gut - Solide Gesundheitsbasis' :
-                percentage >= 55 ? 'Gut - Optimierungspotential vorhanden' :
-                percentage >= 40 ? 'Verbesserungswürdig - Fokus auf Schlüsselbereiche' :
-                'Handlungsbedarf - Professionelle Beratung empfohlen'
-              }</p>
-            </div>
-            
-            <h3>Detailauswertung nach Kategorien</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Kategorie</th>
-                  <th style="text-align: center;">Punkte</th>
-                  <th style="text-align: center;">Prozent</th>
-                  <th style="text-align: center;">Beantwortet</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${categoryBreakdown}
-              </tbody>
-            </table>
-            
-            <div class="recommendation">
-              <h3>Empfehlung</h3>
-              <p>${
-                percentage >= 70 ? 'Großartig! Halten Sie Ihre guten Gewohnheiten bei und optimieren Sie gezielt die schwächeren Bereiche.' :
-                percentage >= 40 ? 'Sie haben eine gute Basis. Konzentrieren Sie sich auf 1-2 Bereiche und implementieren Sie schrittweise Verbesserungen.' :
-                'Beginnen Sie mit den Grundlagen: Regelmäßiger Schlaf und ausgewogene Ernährung bilden das Fundament für alle anderen Verbesserungen.'
-              }</p>
-            </div>
-            
-            <div style="margin-top: 40px; text-align: center; color: #666; font-size: 12px;">
-              <p>NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</p>
-              <p>Erstellt am ${date}</p>
-            </div>
-          </body>
-          </html>
-        `);
-        printWindow.document.close();
-        
-        // Wait a moment for content to load, then print
-        setTimeout(() => {
-          printWindow.print();
-        }, 500);
-        
-        this.showNotification('PDF wird erstellt...', 'success');
+        return data.answers.every((catAnswers, idx) => 
+          Array.isArray(catAnswers) && 
+          catAnswers.length === this.categories[idx].questions.length
+        );
       }
       
-      importData() {
-        // Removed - Import functionality not needed
+      exportData() {
+        try {
+          const totalScore = this.calculateTotalScore();
+          const maxScore = this.categories.reduce((sum, cat) => sum + cat.questions.length * 2, 0);
+          const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
+          const date = new Date().toLocaleDateString('de-DE');
+          const answeredQuestions = this.answers.flat().filter(answer => answer !== null).length;
+          const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
+          
+          // Enhanced category breakdown with insights
+          const categoryBreakdown = this.categories.map((cat, idx) => {
+            const score = this.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0);
+            const answered = this.answers[idx].filter(answer => answer !== null).length;
+            const catPercentage = answered > 0 ? Math.round((score / (cat.questions.length * 2)) * 100) : 0;
+            const status = catPercentage >= 80 ? '🟢 Sehr gut' : 
+                          catPercentage >= 60 ? '🟡 Gut' : 
+                          catPercentage >= 40 ? '🟠 Verbesserbar' : '🔴 Handlungsbedarf';
+            
+            return `
+              <tr>
+                <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: 500;">${cat.title}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: center; font-weight: 600;">${score}/20</td>
+                <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: center; font-weight: 600;">${catPercentage}%</td>
+                <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: center;">${answered}/${cat.questions.length}</td>
+                <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: center;">${status}</td>
+              </tr>
+            `;
+          }).join('');
+          
+          const recommendations = this.generateRecommendations(percentage);
+          
+          const printWindow = window.open('', '_blank');
+          printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <title>NH Score Auswertung - ${date}</title>
+              <meta charset="UTF-8">
+              <style>
+                body { 
+                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+                  margin: 40px; 
+                  color: #1f2937; 
+                  line-height: 1.6;
+                  background: #f9fafb;
+                }
+                .header { 
+                  text-align: center; 
+                  margin-bottom: 40px; 
+                  background: white;
+                  padding: 30px;
+                  border-radius: 12px;
+                  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                }
+                .score-circle {
+                  width: 160px;
+                  height: 160px;
+                  border-radius: 50%;
+                  background: conic-gradient(#6366f1 ${(percentage/100)*360}deg, #e5e7eb ${(percentage/100)*360}deg);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  margin: 20px auto;
+                  position: relative;
+                  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
+                }
+                .score-circle::before {
+                  content: '';
+                  width: 110px;
+                  height: 110px;
+                  background: white;
+                  border-radius: 50%;
+                  position: absolute;
+                }
+                .score-text {
+                  position: relative;
+                  z-index: 1;
+                  text-align: center;
+                  font-weight: bold;
+                  color: #1f2937;
+                }
+                table { 
+                  width: 100%; 
+                  border-collapse: collapse; 
+                  margin: 30px 0;
+                  background: white;
+                  border-radius: 8px;
+                  overflow: hidden;
+                  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                }
+                th { 
+                  background: #6366f1; 
+                  color: white;
+                  padding: 16px 12px; 
+                  text-align: left;
+                  font-weight: 600;
+                }
+                .summary, .recommendation {
+                  background: white;
+                  padding: 24px;
+                  border-radius: 12px;
+                  margin: 20px 0;
+                  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+                }
+                .recommendation {
+                  border-left: 4px solid #6366f1;
+                }
+                .metric {
+                  display: inline-block;
+                  background: #f3f4f6;
+                  padding: 8px 16px;
+                  border-radius: 20px;
+                  margin: 4px 8px 4px 0;
+                  font-weight: 600;
+                }
+                h1 { color: #6366f1; margin-bottom: 8px; }
+                h2 { color: #374151; margin-bottom: 16px; }
+                h3 { color: #6366f1; margin-bottom: 12px; }
+                .footer {
+                  margin-top: 40px;
+                  text-align: center;
+                  color: #6b7280;
+                  font-size: 14px;
+                  border-top: 1px solid #e5e7eb;
+                  padding-top: 20px;
+                }
+                @media print {
+                  body { background: white; margin: 20px; }
+                  .header, .summary, .recommendation, table { box-shadow: none; }
+                }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <h1>NH Score Gesundheitsauswertung</h1>
+                <p style="font-size: 18px; color: #6b7280;"><strong>Datum:</strong> ${date}</p>
+                <div class="score-circle">
+                  <div class="score-text">
+                    <div style="font-size: 28px;">${totalScore}</div>
+                    <div style="font-size: 16px; color: #6b7280;">${percentage}%</div>
+                  </div>
+                </div>
+                <h2 style="color: #6366f1;">Gesamtergebnis: ${totalScore} von 100 Punkten</h2>
+              </div>
+              
+              <div class="summary">
+                <h3>📊 Zusammenfassung</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0;">
+                  <span class="metric">✅ ${answeredQuestions}/${totalQuestions} Fragen</span>
+                  <span class="metric">🎯 ${percentage}% Score</span>
+                  <span class="metric">📁 ${this.answers.filter(cat => cat.every(a => a !== null)).length}/5 Kategorien</span>
+                </div>
+                <p><strong>Bewertung:</strong> ${this.getScoreRating(percentage)}</p>
+              </div>
+              
+              <h3>📋 Detailauswertung nach Kategorien</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Kategorie</th>
+                    <th style="text-align: center;">Punkte</th>
+                    <th style="text-align: center;">Prozent</th>
+                    <th style="text-align: center;">Beantwortet</th>
+                    <th style="text-align: center;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${categoryBreakdown}
+                </tbody>
+              </table>
+              
+              <div class="recommendation">
+                <h3>💡 Persönliche Empfehlungen</h3>
+                ${recommendations}
+              </div>
+              
+              <div class="footer">
+                <p><strong>NH Score</strong> - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</p>
+                <p>Erstellt am ${date} | Version 3.1</p>
+              </div>
+            </body>
+            </html>
+          `);
+          printWindow.document.close();
+          
+          // Wait for content to load, then print
+          setTimeout(() => {
+            printWindow.print();
+          }, 800);
+          
+          this.showNotification('📄 PDF wird erstellt...', 'success');
+          
+        } catch (error) {
+          console.error('Export error:', error);
+          this.showNotification('Fehler beim Exportieren', 'error');
+        }
+      }
+      
+      getScoreRating(percentage) {
+        if (percentage >= 85) return '🌟 Ausgezeichnet - Vorbildlicher Gesundheitsstatus';
+        if (percentage >= 70) return '✅ Sehr gut - Solide Gesundheitsbasis';
+        if (percentage >= 55) return '👍 Gut - Optimierungspotential vorhanden';
+        if (percentage >= 40) return '⚠️ Verbesserungswürdig - Fokus auf Schlüsselbereiche';
+        return '🚨 Handlungsbedarf - Professionelle Beratung empfohlen';
+      }
+      
+      generateRecommendations(overallPercentage) {
+        const categoryScores = this.categories.map((cat, idx) => {
+          const score = this.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0);
+          const answered = this.answers[idx].filter(answer => answer !== null).length;
+          const percentage = answered > 0 ? Math.round((score / (cat.questions.length * 2)) * 100) : 0;
+          return { title: cat.title, percentage, index: idx };
+        });
+        
+        const weakestCategories = categoryScores
+          .filter(cat => cat.percentage < 60)
+          .sort((a, b) => a.percentage - b.percentage)
+          .slice(0, 2);
+        
+        let recommendations = [];
+        
+        if (overallPercentage >= 80) {
+          recommendations.push('<p><strong>🎉 Herzlichen Glückwunsch!</strong> Sie haben einen ausgezeichneten Gesundheitsstatus erreicht. Halten Sie Ihre guten Gewohnheiten bei und optimieren Sie gezielt die verbleibenden Bereiche.</p>');
+        } else if (overallPercentage >= 60) {
+          recommendations.push('<p><strong>👏 Sehr gute Ausgangslage!</strong> Sie haben bereits eine solide Gesundheitsbasis. Konzentrieren Sie sich auf die schwächeren Bereiche für weitere Verbesserungen.</p>');
+        } else {
+          recommendations.push('<p><strong>💪 Guter Start!</strong> Sie haben Verbesserungspotential erkannt. Beginnen Sie mit den wichtigsten Grundlagen und arbeiten Sie sich systematisch vor.</p>');
+        }
+        
+        if (weakestCategories.length > 0) {
+          recommendations.push('<p><strong>🎯 Prioritäre Handlungsfelder:</strong></p><ul>');
+          weakestCategories.forEach(cat => {
+            const advice = this.getCategoryAdvice(cat.index);
+            recommendations.push(`<li><strong>${cat.title}</strong> (${cat.percentage}%): ${advice}</li>`);
+          });
+          recommendations.push('</ul>');
+        }
+        
+        recommendations.push('<p><strong>📈 Nächste Schritte:</strong> Wählen Sie 1-2 Bereiche aus und implementieren Sie schrittweise kleine, nachhaltige Veränderungen. Überprüfen Sie Ihren Fortschritt in 4-6 Wochen erneut.</p>');
+        
+        return recommendations.join('');
+      }
+      
+      getCategoryAdvice(categoryIndex) {
+        const advice = [
+          'Etablieren Sie feste Schlafzeiten und schaffen Sie eine optimale Schlafumgebung.',
+          'Reduzieren Sie verarbeitete Lebensmittel und erhöhen Sie den Anteil an frischen, nährstoffreichen Nahrungsmitteln.',
+          'Integrieren Sie tägliche Bewegung in Ihren Alltag und entwickeln Sie einen strukturierten Trainingsplan.',
+          'Praktizieren Sie regelmäßig Stressmanagement-Techniken wie Meditation oder Achtsamkeitsübungen.',
+          'Reduzieren Sie schädliche Umwelteinflüsse und schaffen Sie einen gesünderen Lebensraum.'
+        ];
+        return advice[categoryIndex] || 'Fokussieren Sie sich auf nachhaltige, kleine Verbesserungen in diesem Bereich.';
       }
       
       resetData() {
-        if (confirm('Möchten Sie wirklich alle Antworten zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+        if (!confirm('⚠️ Möchten Sie wirklich alle Antworten zurücksetzen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
+          return;
+        }
+        
+        try {
           // Reset answers array
           this.answers = this.initializeAnswers();
           this.startTime = Date.now();
@@ -1178,44 +1588,170 @@
           // Clear localStorage
           localStorage.removeItem('nh-score-data');
           
+          // Clear intervals
+          if (this.autosaveInterval) {
+            clearInterval(this.autosaveInterval);
+          }
+          if (this.updateTimeInterval) {
+            clearInterval(this.updateTimeInterval);
+          }
+          
           // Completely re-render everything from scratch
           this.renderCategories();
           this.renderCategoryNav();
           this.updateUI();
           
-          this.showNotification('Alle Daten wurden zurückgesetzt', 'success');
+          // Restart intervals
+          this.startAutosave();
+          this.updateTimeSpent();
+          
+          this.showNotification('✅ Alle Daten wurden erfolgreich zurückgesetzt', 'success');
+          
+          // Scroll to top
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          
+        } catch (error) {
+          console.error('Reset error:', error);
+          this.showNotification('❌ Fehler beim Zurücksetzen der Daten', 'error');
         }
       }
       
       showNotification(message, type = 'success') {
         const notification = document.getElementById('notification');
+        if (!notification) return;
+        
         notification.textContent = message;
         notification.className = `notification ${type}`;
         notification.classList.add('show');
         
+        // Auto-hide after 4 seconds
         setTimeout(() => {
           notification.classList.remove('show');
-        }, 3000);
+        }, 4000);
+      }
+      
+      showError(message) {
+        const container = document.getElementById('categories');
+        if (container) {
+          container.innerHTML = `
+            <div class="error-state">
+              <h3>⚠️ Fehler aufgetreten</h3>
+              <p>${message}</p>
+              <button class="btn primary" onclick="location.reload()">
+                🔄 Seite neu laden
+              </button>
+            </div>
+          `;
+        }
+        console.error('Application error:', message);
+      }
+      
+      // Cleanup method for proper resource management
+      destroy() {
+        if (this.autosaveInterval) {
+          clearInterval(this.autosaveInterval);
+        }
+        if (this.updateTimeInterval) {
+          clearInterval(this.updateTimeInterval);
+        }
+        
+        // Remove event listeners
+        document.removeEventListener('keydown', this.setupKeyboardNavigation);
       }
     }
     
-    // Global functions that work properly
+    // Enhanced global functions with error handling
     window.exportPDF = function() {
-      if (window.healthApp) {
-        window.healthApp.exportData();
+      try {
+        if (window.healthApp) {
+          window.healthApp.exportData();
+        } else {
+          console.error('Health app not initialized');
+        }
+      } catch (error) {
+        console.error('Export error:', error);
+        alert('Fehler beim Exportieren der Daten');
       }
     };
     
     window.resetAll = function() {
-      if (window.healthApp) {
-        window.healthApp.resetData();
+      try {
+        if (window.healthApp) {
+          window.healthApp.resetData();
+        } else {
+          console.error('Health app not initialized');
+        }
+      } catch (error) {
+        console.error('Reset error:', error);
+        alert('Fehler beim Zurücksetzen der Daten');
       }
     };
     
-    // Initialize app when DOM is ready
+    // Initialize app when DOM is ready with error handling
     document.addEventListener('DOMContentLoaded', () => {
-      window.healthApp = new HealthAssessment();
+      try {
+        window.healthApp = new HealthAssessment();
+        
+        // Add performance monitoring
+        if ('performance' in window) {
+          window.addEventListener('load', () => {
+            const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+            console.log(`NH Score loaded in ${loadTime}ms`);
+          });
+        }
+        
+        // Add visibility change handling for better UX
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden && window.healthApp) {
+            // Refresh UI when user returns to tab
+            window.healthApp.updateUI();
+          }
+        });
+        
+      } catch (error) {
+        console.error('Failed to initialize health assessment:', error);
+        
+        // Fallback error display
+        const container = document.getElementById('categories');
+        if (container) {
+          container.innerHTML = `
+            <div class="error-state">
+              <h3>⚠️ Anwendung konnte nicht geladen werden</h3>
+              <p>Es ist ein technischer Fehler aufgetreten. Bitte laden Sie die Seite neu.</p>
+              <button class="btn primary" onclick="location.reload()">
+                🔄 Seite neu laden
+              </button>
+            </div>
+          `;
+        }
+      }
     });
+    
+    // Add beforeunload handler to prevent accidental data loss
+    window.addEventListener('beforeunload', (e) => {
+      if (window.healthApp) {
+        const answeredQuestions = window.healthApp.answers.flat().filter(answer => answer !== null).length;
+        if (answeredQuestions > 0) {
+          // Save data before leaving
+          window.healthApp.saveData();
+          
+          // Show warning for significant progress
+          if (answeredQuestions > 10) {
+            e.preventDefault();
+            e.returnValue = 'Sie haben ungespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen?';
+            return e.returnValue;
+          }
+        }
+      }
+    });
+    
+    // Service Worker registration for potential PWA features (optional)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        // Could be implemented for offline functionality
+        console.log('Service Worker support detected');
+      });
+    }
   </script>
 </body>
 </html>
