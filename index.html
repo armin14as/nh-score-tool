@@ -3,1353 +3,1042 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>NH SCORE – Ultra-Optimized UX</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<meta name="description" content="NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem" />
+<title>NH SCORE – Professional Health Assessment</title>
 <style>
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-  
   :root {
-    --primary-gradient: linear-gradient(135deg, #7877c6, #533483);
-    --secondary-gradient: linear-gradient(135deg, #00c6ff, #0072ff);
-    --success-color: #10b981;
-    --warning-color: #f59e0b;
-    --error-color: #ef4444;
-    --text-primary: #ffffff;
-    --text-secondary: rgba(255, 255, 255, 0.85);
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --shadow-primary: 0 20px 60px rgba(120, 119, 198, 0.3);
-    --shadow-hover: 0 25px 70px rgba(120, 119, 198, 0.4);
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --border-color: rgba(148, 163, 184, 0.1);
+    --glass-bg: rgba(30, 41, 59, 0.4);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   }
 
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
     color: var(--text-primary);
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
     line-height: 1.6;
-  }
-
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image:
-      radial-gradient(circle at 25% 25%, rgba(120, 119, 198, 0.15) 0%, transparent 40%),
-      radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.06) 0%, transparent 40%);
-    z-index: -1;
-    pointer-events: none;
+    min-height: 100vh;
   }
 
   /* Enhanced Progress Bar */
-  .progress-container {
-    position: fixed;
+  .progress-header {
+    position: sticky;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 6px;
-    background: rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-    backdrop-filter: blur(10px);
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    z-index: 100;
+    padding: 1rem 0;
+  }
+  
+  .progress-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  
+  .progress-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+  
+  .progress-bar-container {
+    flex: 1;
+    max-width: 400px;
+    height: 8px;
+    background: var(--gray-800);
+    border-radius: 4px;
+    overflow: hidden;
   }
   
   .progress-bar {
     height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--success));
+    border-radius: 4px;
+    transition: width 0.3s ease;
     width: 0%;
-    background: var(--secondary-gradient);
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-  }
-  
-  .progress-bar::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 20px;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8));
-    animation: progressShine 2s ease-in-out infinite;
-  }
-  
-  @keyframes progressShine {
-    0%, 100% { opacity: 0; }
-    50% { opacity: 1; }
   }
 
-  /* Mini Navigation */
-  .mini-nav {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+  /* Category Navigation */
+  .category-nav {
     display: flex;
-    gap: 8px;
-    z-index: 999;
-    padding: 8px 12px;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 25px;
-    backdrop-filter: blur(20px);
+    gap: 0.5rem;
+    align-items: center;
   }
   
-  .nav-dot {
+  .category-dot {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
+    background: var(--gray-600);
     cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
+    transition: all 0.2s ease;
   }
   
-  .nav-dot.completed {
-    background: var(--success-color);
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+  .category-dot.completed { background: var(--success); }
+  .category-dot.active { background: var(--primary); transform: scale(1.2); }
+  .category-dot:hover { transform: scale(1.1); }
+
+  /* Action Buttons */
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
   }
   
-  .nav-dot.active {
-    background: var(--secondary-gradient);
-    transform: scale(1.3);
-    box-shadow: 0 0 15px rgba(0, 198, 255, 0.6);
+  .btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
   
-  .nav-dot:hover {
-    transform: scale(1.2);
+  .btn:hover {
+    background: var(--gray-700);
+    border-color: var(--gray-600);
+  }
+  
+  .btn.primary {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .btn.primary:hover {
+    background: var(--primary-dark);
   }
 
-  /* Clean Action Buttons */
-  .fab-container {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    z-index: 998;
+  /* Main Layout */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+  }
+
+  /* Score Panel */
+  .score-panel {
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(12px);
+    height: fit-content;
+    position: sticky;
+    top: 120px;
   }
   
-  .fab {
-    width: 48px;
-    height: 48px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 16px;
-    cursor: pointer;
-    backdrop-filter: blur(10px);
-    transition: all 0.2s ease;
+  .score-header h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .score-date {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+  }
+  
+  .score-ring {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1rem;
+  }
+  
+  .score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary) 0deg, var(--gray-700) 0deg);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 500;
-  }
-  
-  .fab:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
-    transform: translateY(-1px);
-  }
-  
-  .fab:active {
-    transform: translateY(0);
-    background: rgba(255, 255, 255, 0.08);
-  }
-  
-  .fab.save-fab:hover {
-    background: rgba(16, 185, 129, 0.2);
-    border-color: rgba(16, 185, 129, 0.4);
-    color: var(--success-color);
-  }
-  
-  .fab.reset-fab:hover {
-    background: rgba(239, 68, 68, 0.2);
-    border-color: rgba(239, 68, 68, 0.4);
-    color: var(--error-color);
-  }
-  
-  .fab.export-fab:hover {
-    background: rgba(120, 119, 198, 0.2);
-    border-color: rgba(120, 119, 198, 0.4);
-    color: #7877c6;
-  }
-
-  header {
-    text-align: center;
-    padding: 6rem 1rem 2rem;
     position: relative;
   }
   
-  .main-title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 900;
-    background: linear-gradient(135deg, #ffffff, #7877c6, #00ffff);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 1rem;
-    animation: titleGradient 4s ease-in-out infinite;
+  .score-circle::before {
+    content: '';
+    width: 80px;
+    height: 80px;
+    background: var(--bg-secondary);
+    border-radius: 50%;
+    position: absolute;
   }
   
-  @keyframes titleGradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  .score-value {
+    position: relative;
+    z-index: 1;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.2;
   }
   
-  .subtitle {
+  .score-percentage {
+    font-size: 0.875rem;
     color: var(--text-secondary);
-    font-size: clamp(1rem, 2.5vw, 1.25rem);
-    max-width: 600px;
-    margin: 0 auto;
   }
-
-  /* Hero Stats */
-  .hero-stats {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
+  
+  .score-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
   }
   
   .stat-item {
     text-align: center;
-    background: var(--glass-bg);
-    padding: 1.5rem 2rem;
-    border-radius: 20px;
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(15px);
-    transition: all 0.3s ease;
   }
   
-  .stat-item:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-primary);
-  }
-  
-  .stat-number {
-    font-size: 2.5rem;
-    font-weight: 900;
-    background: var(--secondary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 0.5rem;
+  .stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--success);
   }
   
   .stat-label {
+    font-size: 0.75rem;
     color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.05em;
   }
 
-  .container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-
-  /* Enhanced Total Score Box */
-  .total-score-box {
-    text-align: center;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(20px);
-    border-radius: 2rem;
-    padding: 2.5rem;
-    margin-bottom: 3rem;
-    box-shadow: var(--shadow-primary);
-    position: relative;
-    z-index: 100;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  .total-score-box:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-hover);
-  }
-  
-  .score-header {
-    margin-bottom: 1.5rem;
-  }
-  
-  .score-header h3 {
-    margin: 0 0 0.5rem 0;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-  
-  .score-date {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-  }
-  
-  .total-score-ring {
-    position: relative;
-    width: 200px;
-    height: 200px;
-    margin: 0 auto 1rem;
-  }
-  
-  .total-score-ring canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-  
-  .score-value {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2.8rem;
-    font-weight: 900;
-    background: var(--secondary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    line-height: 1;
-  }
-  
-  .score-percentage {
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-  }
-  
-  .score-label {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    margin-bottom: 1rem;
-  }
-  
-  .score-interpretation {
-    background: rgba(120, 119, 198, 0.15);
-    padding: 1rem 1.5rem;
-    border-radius: 15px;
-    margin: 1.5rem 0;
-    font-weight: 600;
-    font-size: 1rem;
-    border: 1px solid rgba(120, 119, 198, 0.3);
-  }
-  
-  .score-breakdown {
+  /* Categories */
+  .categories {
     display: flex;
-    justify-content: space-around;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--glass-border);
+    flex-direction: column;
+    gap: 2rem;
   }
   
-  .breakdown-item {
-    text-align: center;
-  }
-  
-  .breakdown-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--success-color);
-  }
-  
-  .breakdown-label {
-    font-size: 0.9rem;
-    color: var(--text-secondary);
-    margin-top: 0.5rem;
-  }
-
-  /* Enhanced Categories */
   .category {
     background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: 2rem;
-    padding: 2.5rem;
-    margin-bottom: 2.5rem;
-    backdrop-filter: blur(20px);
-    box-shadow: var(--shadow-primary);
-    position: relative;
-    overflow: hidden;
-    animation: fadeInUp 0.6s ease forwards;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    backdrop-filter: blur(12px);
+    transition: all 0.2s ease;
   }
   
-  .category:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
+  .category.active {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 1px var(--primary);
   }
   
-  .category::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--primary-gradient);
-    opacity: 0.8;
-    transition: all 0.3s ease;
-  }
-  
-  .category.completed::before {
-    background: var(--success-color);
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
-  }
-  
-  .category.active::before {
-    background: var(--secondary-gradient);
-    box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
-    animation: pulse 2s ease-in-out infinite;
-  }
-  
-  @keyframes pulse {
-    0%, 100% { opacity: 0.8; }
-    50% { opacity: 1; }
-  }
-
   .category-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: between;
     align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
     gap: 1rem;
   }
   
-  .category h2 {
-    font-size: 1.5rem;
-    margin: 0;
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 700;
+  .category-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    flex: 1;
   }
   
   .category-score {
-    background: rgba(120, 119, 198, 0.2);
-    padding: 0.75rem 1.5rem;
-    border-radius: 25px;
-    font-weight: 700;
-    color: #00e6e6;
-    font-size: 1rem;
-    min-width: 100px;
-    text-align: center;
-    border: 1px solid rgba(0, 230, 230, 0.3);
-    transition: all 0.3s ease;
+    background: var(--gray-800);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
   }
   
   .category-progress {
     width: 100%;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    margin-top: 1rem;
+    height: 4px;
+    background: var(--gray-800);
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
     overflow: hidden;
   }
   
   .category-progress-fill {
     height: 100%;
-    background: var(--secondary-gradient);
-    border-radius: 3px;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(90deg, var(--primary), var(--success));
+    border-radius: 2px;
+    transition: width 0.3s ease;
     width: 0%;
   }
 
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(40px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Enhanced Questions */
+  /* Questions */
   .question {
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 15px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 1.5rem;
+    padding: 1rem;
     border: 1px solid transparent;
+    border-radius: 8px;
+    transition: all 0.2s ease;
   }
   
   .question:hover {
-    background: rgba(255, 255, 255, 0.06);
-    transform: translateX(5px);
+    background: rgba(255, 255, 255, 0.02);
   }
   
   .question.answered {
-    border-color: var(--success-color);
+    border-color: var(--success);
     background: rgba(16, 185, 129, 0.05);
   }
   
-  .question label {
+  .question-label {
     display: block;
     margin-bottom: 1rem;
-    font-weight: 600;
-    font-size: 1.1rem;
-    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 1rem;
+  }
+  
+  .question-number {
+    color: var(--text-secondary);
+    font-weight: 400;
+    margin-right: 0.5rem;
   }
 
-  /* Ultra-Enhanced Radio Buttons */
+  /* Radio Groups */
   .radio-group {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
   }
   
-  .radio-group input[type="radio"] {
-    display: none;
-  }
-  
-  .radio-group label {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: rgba(120, 119, 198, 0.15);
-    color: var(--text-primary);
-    border-radius: 30px;
-    padding: 1.2rem 1.8rem;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.1);
-    border: 2px solid transparent;
+  .radio-option {
     position: relative;
-    overflow: hidden;
-    min-height: 60px;
   }
   
-  .radio-group label::before {
-    content: '';
+  .radio-option input {
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  .radio-group label:hover::before {
-    left: 100%;
-  }
-  
-  .radio-group label:hover {
-    background: linear-gradient(135deg, #a292f1, #5a3f99);
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 30px rgba(162, 146, 241, 0.4);
-  }
-  
-  .radio-group input[type="radio"]:checked + span {
-    display: inline-block;
-    background: var(--primary-gradient);
-    box-shadow: 0 0 25px rgba(124, 94, 221, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 1.2rem 1.8rem;
-    border-radius: 30px;
-    font-weight: 800;
-    font-size: 1.1rem;
-    letter-spacing: 0.5px;
-    animation: selectPulse 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-  }
-  
-  /* Different colors for different values */
-  .radio-group label:nth-child(1):has(input:checked) span { /* Nein */
-    background: var(--error-color) !important;
-    box-shadow: 0 0 25px rgba(239, 68, 68, 0.6) !important;
-  }
-  
-  .radio-group label:nth-child(2):has(input:checked) span { /* Teilweise */
-    background: var(--warning-color) !important;
-    box-shadow: 0 0 25px rgba(245, 158, 11, 0.6) !important;
-  }
-  
-  .radio-group label:nth-child(3):has(input:checked) span { /* Ja */
-    background: var(--success-color) !important;
-    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6) !important;
-  }
-  
-  @keyframes selectPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-    100% { transform: scale(1); }
-  }
-
-  /* Enhanced Success Messages */
-  .success-message {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-    padding: 2.5rem 3.5rem;
-    border-radius: 25px;
-    box-shadow: 0 25px 80px rgba(16, 185, 129, 0.4);
-    z-index: 1001;
     opacity: 0;
-    visibility: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    text-align: center;
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    pointer-events: none;
   }
   
-  .success-message h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.8rem;
-    font-weight: 800;
+  .radio-option label {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--gray-800);
+    border: 2px solid var(--gray-700);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: center;
+    min-height: 48px;
   }
   
-  .success-message h3::before {
-    content: "";
-    width: 32px;
-    height: 32px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 24 24'%3E%3Cpath d='M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'/%3E%3C/svg%3E") no-repeat center;
-    background-size: contain;
+  .radio-option label:hover {
+    border-color: var(--gray-600);
+    background: var(--gray-700);
   }
   
-  .success-message.show {
-    opacity: 1;
-    visibility: visible;
-    animation: successBounce 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  .radio-option input:checked + label {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary);
   }
   
-  @keyframes successBounce {
-    0% { transform: translate(-50%, -50%) scale(0.7) rotate(-5deg); }
-    50% { transform: translate(-50%, -50%) scale(1.1) rotate(2deg); }
-    100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  .radio-option:nth-child(1) input:checked + label {
+    border-color: var(--error);
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+  }
+  
+  .radio-option:nth-child(2) input:checked + label {
+    border-color: var(--warning);
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+  
+  .radio-option:nth-child(3) input:checked + label {
+    border-color: var(--success);
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
   }
 
-  /* Notification */
+  /* Keyboard Navigation */
+  .radio-option input:focus + label {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  /* Notifications */
   .notification {
     position: fixed;
-    top: 100px;
-    right: 30px;
+    top: 1rem;
+    right: 1rem;
     padding: 1rem 1.5rem;
-    border-radius: 15px;
+    background: var(--success);
     color: white;
-    font-weight: 600;
-    z-index: 1002;
-    opacity: 0;
+    border-radius: 8px;
+    font-weight: 500;
+    z-index: 1000;
     transform: translateX(100%);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s ease;
   }
   
   .notification.show {
-    opacity: 1;
     transform: translateX(0);
   }
   
-  .notification.success {
-    background: var(--success-color);
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-  }
-  
   .notification.error {
-    background: var(--error-color);
-    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
+    background: var(--error);
   }
 
-  /* Responsive */
-  @media (max-width: 768px) {
+  /* Auto-save indicator */
+  .autosave-indicator {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .autosave-indicator.saving {
+    color: var(--warning);
+  }
+  
+  .autosave-indicator.saved {
+    color: var(--success);
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
     .container {
-      padding: 1rem;
-    }
-    
-    .hero-stats {
-      gap: 1.5rem;
-    }
-    
-    .stat-item {
-      padding: 1rem 1.5rem;
-    }
-    
-    .stat-number {
-      font-size: 2rem;
-    }
-    
-    .mini-nav {
-      top: 10px;
-      padding: 6px 10px;
-    }
-    
-    .nav-dot {
-      width: 10px;
-      height: 10px;
-    }
-    
-    .total-score-box {
-      padding: 2rem;
-    }
-    
-    .total-score-ring {
-      width: 160px;
-      height: 160px;
-    }
-    
-    .score-value {
-      font-size: 2.2rem;
-    }
-    
-    .score-percentage {
-      font-size: 1rem;
-    }
-    
-    .category {
-      padding: 2rem;
-    }
-    
-    .category-header {
-      flex-direction: column;
-      align-items: flex-start;
+      grid-template-columns: 1fr;
       gap: 1rem;
+    }
+    
+    .score-panel {
+      position: static;
+      order: -1;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .progress-content {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .progress-info {
+      order: 1;
+    }
+    
+    .action-buttons {
+      flex-wrap: wrap;
     }
     
     .radio-group {
       grid-template-columns: 1fr;
-      gap: 0.8rem;
-    }
-    
-    .fab-container {
-      bottom: 20px;
-      right: 20px;
-    }
-    
-    .fab {
-      width: 44px;
-      height: 44px;
-      font-size: 14px;
-    }
-    
-    .score-breakdown {
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .breakdown-item {
-      padding: 0.5rem;
-    }
-  }
-
-  /* Desktop optimization */
-  @media (min-width: 1024px) {
-    .container {
-      max-width: 1200px;
-      padding: 2rem;
-    }
-    
-    .total-score-box {
-      position: fixed;
-      top: 80px;
-      right: 30px;
-      width: 280px;
-      padding: 1.5rem;
-      margin: 0;
-      border-radius: 1.5rem;
-      z-index: 150;
-    }
-    
-    .total-score-ring {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 0.5rem;
-    }
-    
-    .score-value {
-      font-size: 2rem;
-    }
-    
-    .score-percentage {
-      font-size: 1rem;
-    }
-    
-    .score-header h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.25rem;
-    }
-    
-    .score-label {
-      font-size: 0.8rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .score-interpretation {
-      font-size: 0.8rem;
-      padding: 0.5rem 1rem;
-      margin: 0.5rem 0;
-    }
-    
-    .score-breakdown {
-      margin-top: 0.5rem;
-      padding-top: 0.5rem;
-    }
-    
-    .breakdown-value {
-      font-size: 1.1rem;
-    }
-    
-    .breakdown-label {
-      font-size: 0.7rem;
-    }
-    
-    .main-content {
-      margin-right: 320px;
+      gap: 0.5rem;
     }
     
     .category {
-      padding: 3rem;
+      padding: 1.5rem;
     }
     
-    .radio-group {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-    }
-    
-    .fab-container {
-      right: 340px;
+    .container {
+      padding: 1rem;
     }
   }
 
-  .radio-group label:focus-within {
-    outline: 2px solid var(--secondary-gradient);
-    outline-offset: 2px;
+  /* Loading states */
+  .loading {
+    opacity: 0.6;
+    pointer-events: none;
   }
-  
-  .fab:focus {
-    outline: 2px solid rgba(255, 255, 255, 0.5);
-    outline-offset: 2px;
+
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 </style>
 </head>
 <body>
-  <div class="progress-container">
-    <div class="progress-bar" id="progressBar"></div>
-  </div>
-  
-  <nav class="mini-nav" id="miniNav"></nav>
-  
-  <div class="fab-container">
-    <button class="fab export-fab" onclick="exportToPDF()" title="Als PDF exportieren">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-        <polyline points="7,3 7,8 15,8"/>
-      </svg>
-    </button>
-    <button class="fab reset-fab" onclick="resetAll()" title="Alles zurücksetzen">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <polyline points="1 4 1 10 7 10"/>
-        <polyline points="23 20 23 14 17 14"/>
-        <path d="m20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4-4.64 4.36A9 9 0 0 1 3.51 15"/>
-      </svg>
-    </button>
-    <button class="fab" onclick="scrollToTop()" title="Nach oben">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="12" y1="19" x2="12" y2="5"/>
-        <polyline points="5,12 12,5 19,12"/>
-      </svg>
-    </button>
-  </div>
-
-  <header>
-    <h1 class="main-title">NH Score</h1>
-    <p class="subtitle">Wissenschaftlich fundiertes 100-Punkte-System für umfassende Gesundheit & Leistungsfähigkeit</p>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-number">5</div>
-        <div class="stat-label">Kategorien</div>
+  <div class="progress-header">
+    <div class="progress-content">
+      <div class="progress-info">
+        <span id="progressText">Frage 0 von 50</span>
+        <div class="autosave-indicator" id="autosaveIndicator">
+          <span>●</span>
+          <span>Automatisch gespeichert</span>
+        </div>
       </div>
-      <div class="stat-item">
-        <div class="stat-number">50</div>
-        <div class="stat-label">Fragen</div>
+      
+      <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
       </div>
-      <div class="stat-item">
-        <div class="stat-number">100</div>
-        <div class="stat-label">Max. Punkte</div>
+      
+      <div class="category-nav" id="categoryNav"></div>
+      
+      <div class="action-buttons">
+        <button class="btn" onclick="exportData()" title="Daten exportieren">
+          <span>↓</span> Export
+        </button>
+        <button class="btn" onclick="importData()" title="Daten importieren">
+          <span>↑</span> Import
+        </button>
+        <button class="btn primary" onclick="resetData()" title="Zurücksetzen">
+          Reset
+        </button>
       </div>
     </div>
-  </header>
+  </div>
 
-  <main class="container">
-    <section class="total-score-box">
+  <div class="container">
+    <main class="categories" id="categories"></main>
+    
+    <aside class="score-panel">
       <div class="score-header">
-        <h3>Ihr aktueller Gesundheitsscore</h3>
+        <h3>Gesundheitsscore</h3>
         <div class="score-date" id="scoreDate"></div>
       </div>
-      <div class="total-score-ring">
-        <canvas id="scoreRing" width="200" height="200"></canvas>
-        <div class="score-value" id="totalScore">0</div>
-        <div class="score-percentage" id="scorePercentage">0%</div>
-      </div>
-      <div class="score-label">von 100 möglichen Punkten</div>
-      <div class="score-interpretation" id="scoreInterpretation">
-        Starten Sie mit der ersten Kategorie
-      </div>
-      <div class="score-breakdown">
-        <div class="breakdown-item">
-          <div class="breakdown-value" id="completedQuestions">0</div>
-          <div class="breakdown-label">Beantwortet</div>
-        </div>
-        <div class="breakdown-item">
-          <div class="breakdown-value" id="completedCategories">0</div>
-          <div class="breakdown-label">Abgeschlossen</div>
-        </div>
-        <div class="breakdown-item">
-          <div class="breakdown-value" id="averageScore">0%</div>
-          <div class="breakdown-label">Durchschnitt</div>
+      
+      <div class="score-ring">
+        <div class="score-circle" id="scoreCircle">
+          <div class="score-value">
+            <div id="totalScore">0</div>
+            <div class="score-percentage" id="scorePercentage">0%</div>
+          </div>
         </div>
       </div>
-    </section>
-    
-    <div id="categories"></div>
-  </main>
-
-  <div class="success-message" id="successMessage">
-    <h3>Kategorie erfolgreich abgeschlossen!</h3>
-    <p>Großartig! Du machst echte Fortschritte.</p>
+      
+      <div class="score-stats">
+        <div class="stat-item">
+          <div class="stat-value" id="answeredCount">0</div>
+          <div class="stat-label">Beantwortet</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="completedCategories">0</div>
+          <div class="stat-label">Kategorien</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="averageScore">0%</div>
+          <div class="stat-label">Durchschnitt</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="timeSpent">0m</div>
+          <div class="stat-label">Zeit</div>
+        </div>
+      </div>
+    </aside>
   </div>
-  
+
   <div class="notification" id="notification"></div>
+  <input type="file" id="fileInput" accept=".json" style="display: none;">
 
   <script>
-    // Simple working version
-    const ctx = document.getElementById('scoreRing').getContext('2d');
-    const scoreChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Erreichte Punkte', 'Verbleibende Punkte'],
-        datasets: [{
-          data: [0, 100],
-          backgroundColor: ['rgba(0, 198, 255, 0.8)', 'rgba(255, 255, 255, 0.1)'],
-          borderColor: ['rgba(0, 198, 255, 1)', 'rgba(255, 255, 255, 0.2)'],
-          borderWidth: 2,
-        }]
-      },
-      options: {
-        cutout: '75%',
-        plugins: { legend: { display: false } },
-        animation: { animateRotate: true, duration: 1500 }
+    // Modern ES6+ Implementation with enterprise patterns
+    class HealthAssessment {
+      constructor() {
+        this.categories = [
+          {
+            title: 'Schlaf & Erholung',
+            questions: [
+              'Schläfst du mindestens 7–8 Stunden pro Nacht?',
+              'Hast du einen regelmäßigen Schlaf-Wach-Rhythmus?',
+              'Wachst du ohne Wecker erholt auf?',
+              'Schläfst du ohne Unterbrechungen durch?',
+              'Vermeidest du Blaulicht 2h vor dem Schlafengehen?',
+              'Schläfst du in einem völlig dunklen Raum?',
+              'Wachst du erfrischt und energiegeladen auf?',
+              'Vermeidest du späte und schwere Mahlzeiten?',
+              'Kommst du ohne Schlafmittel oder Alkohol aus?',
+              'Fühlst du dich tagsüber wach und konzentriert?'
+            ]
+          },
+          {
+            title: 'Ernährung & Supplements',
+            questions: [
+              'Verzichtest du weitgehend auf raffinierten Zucker?',
+              'Isst du täglich mindestens 5 Portionen Gemüse/Obst?',
+              'Trinkst du täglich 2-3 Liter reines Wasser?',
+              'Verwendest du Supplements gezielt nach Bedarf?',
+              'Hast du regelmäßige und bewusste Essenszeiten?',
+              'Isst du ballaststoffreich und nährstoffdicht?',
+              'Vermeidest du hochverarbeitete Fertigprodukte?',
+              'Meidest du künstliche Zusätze und Konservierungsstoffe?',
+              'Hast du eine gesunde Verdauung ohne Probleme?',
+              'Verzichtest du auf künstliche Süßstoffe?'
+            ]
+          },
+          {
+            title: 'Training & Bewegung',
+            questions: [
+              'Bewegst du dich täglich mindestens 30 Minuten?',
+              'Trainierst du 3-4x pro Woche strukturiert?',
+              'Schaffst du problemlos 10.000 Schritte täglich?',
+              'Bist du schmerzfrei und beweglich?',
+              'Hast du klare sportliche Ziele und Motivation?',
+              'Folgst du einem durchdachten Trainingsplan?',
+              'Trainierst du regelmäßig deine Ausdauer?',
+              'Trainierst du systematisch deine Kraft?',
+              'Bist du flexibel und hast gute Mobilität?',
+              'Kannst du problemlos länger laufen/gehen?'
+            ]
+          },
+          {
+            title: 'Mindset & Stressmanagement',
+            questions: [
+              'Fühlst du dich selten überwältigt oder gestresst?',
+              'Praktizierst du regelmäßig Meditation oder Achtsamkeit?',
+              'Umgibst du dich mit positiven Einflüssen?',
+              'Hast du klare Lebensziele und Prioritäten?',
+              'Lebst du nach deinen persönlichen Werten?',
+              'Hast du eine grundsätzlich optimistische Einstellung?',
+              'Vermeidest du Multitasking und Ablenkungen?',
+              'Hast du starke soziale Verbindungen und Unterstützung?',
+              'Kannst du nach der Arbeit wirklich abschalten?',
+              'Fühlst du dich meistens glücklich und erfüllt?'
+            ]
+          },
+          {
+            title: 'Lifestyle & Umwelt',
+            questions: [
+              'Rauchst du nicht und meidest Passivrauchen?',
+              'Trinkst du maximal 1-2 Gläser Alkohol pro Woche?',
+              'Vermeidest du Plastik bei Lebensmitteln und Getränken?',
+              'Hast du Zugang zu sauberem, gefiltertem Wasser?',
+              'Meidest du schädliche Chemikalien im Alltag?',
+              'Verwendest du natürliche Körperpflege ohne Toxine?',
+              'Schläfst du in einem schadstofffreien Umfeld?',
+              'Bekommst du täglich natürliches Tageslicht?',
+              'Verbringst du regelmäßig Zeit in der Natur?',
+              'Führst du einen bewusst nachhaltigen Lebensstil?'
+            ]
+          }
+        ];
+        
+        this.answers = this.loadData() || this.initializeAnswers();
+        this.startTime = Date.now();
+        this.autosaveInterval = null;
+        
+        this.init();
       }
-    });
-
-    const categories = [
-      {
-        title: 'Schlaf & Erholung',
-        questions: [
-          'Schläfst du mindestens 7–8 Stunden pro Nacht?',
-          'Hast du einen regelmäßigen Schlaf-Wach-Rhythmus?',
-          'Wachst du ohne Wecker erholt auf?',
-          'Schläfst du ohne Unterbrechungen durch?',
-          'Vermeidest du Blaulicht 2h vor dem Schlafengehen?',
-          'Schläfst du in einem völlig dunklen Raum?',
-          'Wachst du erfrischt und energiegeladen auf?',
-          'Vermeidest du späte und schwere Mahlzeiten?',
-          'Kommst du ohne Schlafmittel oder Alkohol aus?',
-          'Fühlst du dich tagsüber wach und konzentriert?'
-        ]
-      },
-      {
-        title: 'Ernährung & Supplements',
-        questions: [
-          'Verzichtest du weitgehend auf raffinierten Zucker?',
-          'Isst du täglich mindestens 5 Portionen Gemüse/Obst?',
-          'Trinkst du täglich 2-3 Liter reines Wasser?',
-          'Verwendest du Supplements gezielt nach Bedarf?',
-          'Hast du regelmäßige und bewusste Essenszeiten?',
-          'Isst du ballaststoffreich und nährstoffdicht?',
-          'Vermeidest du hochverarbeitete Fertigprodukte?',
-          'Meidest du künstliche Zusätze und Konservierungsstoffe?',
-          'Hast du eine gesunde Verdauung ohne Probleme?',
-          'Verzichtest du auf künstliche Süßstoffe?'
-        ]
-      },
-      {
-        title: 'Training & Bewegung',
-        questions: [
-          'Bewegst du dich täglich mindestens 30 Minuten?',
-          'Trainierst du 3-4x pro Woche strukturiert?',
-          'Schaffst du problemlos 10.000 Schritte täglich?',
-          'Bist du schmerzfrei und beweglich?',
-          'Hast du klare sportliche Ziele und Motivation?',
-          'Folgst du einem durchdachten Trainingsplan?',
-          'Trainierst du regelmäßig deine Ausdauer?',
-          'Trainierst du systematisch deine Kraft?',
-          'Bist du flexibel und hast gute Mobilität?',
-          'Kannst du problemlos länger laufen/gehen?'
-        ]
-      },
-      {
-        title: 'Mindset & Stressmanagement',
-        questions: [
-          'Fühlst du dich selten überwältigt oder gestresst?',
-          'Praktizierst du regelmäßig Meditation oder Achtsamkeit?',
-          'Umgibst du dich mit positiven Einflüssen?',
-          'Hast du klare Lebensziele und Prioritäten?',
-          'Lebst du nach deinen persönlichen Werten?',
-          'Hast du eine grundsätzlich optimistische Einstellung?',
-          'Vermeidest du Multitasking und Ablenkungen?',
-          'Hast du starke soziale Verbindungen und Unterstützung?',
-          'Kannst du nach der Arbeit wirklich abschalten?',
-          'Fühlst du dich meistens glücklich und erfüllt?'
-        ]
-      },
-      {
-        title: 'Lifestyle & Umwelt',
-        questions: [
-          'Rauchst du nicht und meidest Passivrauchen?',
-          'Trinkst du maximal 1-2 Gläser Alkohol pro Woche?',
-          'Vermeidest du Plastik bei Lebensmitteln und Getränken?',
-          'Hast du Zugang zu sauberem, gefiltertem Wasser?',
-          'Meidest du schädliche Chemikalien im Alltag?',
-          'Verwendest du natürliche Körperpflege ohne Toxine?',
-          'Schläfst du in einem schadstofffreien Umfeld?',
-          'Bekommst du täglich natürliches Tageslicht?',
-          'Verbringst du regelmäßig Zeit in der Natur?',
-          'Führst du einen bewusst nachhaltigen Lebensstil?'
-        ]
+      
+      initializeAnswers() {
+        return this.categories.map(cat => new Array(cat.questions.length).fill(null));
       }
-    ];
-
-    const categoriesEl = document.getElementById('categories');
-    const answers = [];
-    let currentActiveCategory = 0;
-
-    // Initialize
-    categories.forEach((cat, catIdx) => {
-      answers[catIdx] = Array(cat.questions.length).fill(null);
-    });
-
-    function createMiniNav() {
-      const miniNav = document.getElementById('miniNav');
-      categories.forEach((cat, idx) => {
-        const dot = document.createElement('div');
-        dot.className = 'nav-dot';
-        dot.title = cat.title;
-        dot.onclick = () => scrollToCategory(idx);
-        miniNav.appendChild(dot);
-      });
-    }
-
-    function createCategories() {
-      categories.forEach((cat, catIdx) => {
-        const catEl = document.createElement('section');
-        catEl.className = 'category';
-        catEl.id = `category-${catIdx}`;
+      
+      init() {
+        this.renderCategories();
+        this.renderCategoryNav();
+        this.updateUI();
+        this.setupKeyboardNavigation();
+        this.startAutosave();
+        this.updateTimeSpent();
+      }
+      
+      renderCategories() {
+        const container = document.getElementById('categories');
+        container.innerHTML = '';
         
-        const headerEl = document.createElement('div');
-        headerEl.className = 'category-header';
-        
-        const title = document.createElement('h2');
-        title.textContent = cat.title;
-        
-        const scoreEl = document.createElement('div');
-        scoreEl.className = 'category-score';
-        scoreEl.id = `score-${catIdx}`;
-        scoreEl.textContent = '0 / 20';
-        
-        headerEl.appendChild(title);
-        headerEl.appendChild(scoreEl);
-        catEl.appendChild(headerEl);
-        
-        const progressContainer = document.createElement('div');
-        progressContainer.className = 'category-progress';
-        const progressFill = document.createElement('div');
-        progressFill.className = 'category-progress-fill';
-        progressFill.id = `progress-${catIdx}`;
-        progressContainer.appendChild(progressFill);
-        catEl.appendChild(progressContainer);
-
-        cat.questions.forEach((q, qIdx) => {
-          const qEl = document.createElement('div');
-          qEl.className = 'question';
-          qEl.id = `question-${catIdx}-${qIdx}`;
-          
-          const label = document.createElement('label');
-          label.textContent = `${qIdx + 1}. ${q}`;
-          qEl.appendChild(label);
-          
-          const group = document.createElement('div');
-          group.className = 'radio-group';
-
-          ['Nein', 'Teilweise', 'Ja'].forEach((text, val) => {
-            const id = `cat${catIdx}_q${qIdx}_v${val}`;
-            const radio = document.createElement('input');
-            radio.type = 'radio';
-            radio.name = `cat${catIdx}_q${qIdx}`;
-            radio.value = val;
-            radio.id = id;
-            radio.onchange = () => handleAnswerChange(catIdx, qIdx, parseInt(radio.value));
-            
-            const span = document.createElement('span');
-            span.textContent = text;
-            
-            const lbl = document.createElement('label');
-            lbl.htmlFor = id;
-            lbl.appendChild(radio);
-            lbl.appendChild(span);
-            group.appendChild(lbl);
-          });
-          
-          qEl.appendChild(group);
-          catEl.appendChild(qEl);
+        this.categories.forEach((category, catIdx) => {
+          const categoryEl = this.createCategoryElement(category, catIdx);
+          container.appendChild(categoryEl);
         });
-
-        categoriesEl.appendChild(catEl);
-      });
-    }
-
-    function handleAnswerChange(catIdx, qIdx, value) {
-      answers[catIdx][qIdx] = value;
-      const questionEl = document.getElementById(`question-${catIdx}-${qIdx}`);
-      questionEl.classList.add('answered');
-      updateScores();
-      updateMiniNav();
-      checkCategoryCompletion(catIdx);
-    }
-
-    function updateScores() {
-      let total = 0;
-      let answeredQuestions = 0;
-      const totalQuestions = categories.reduce((sum, cat) => sum + cat.questions.length, 0);
-      let completedCats = 0;
-      
-      answers.forEach((group, i) => {
-        const sum = group.reduce((a, b) => a + (b !== null ? b : 0), 0);
-        const answered = group.filter(a => a !== null).length;
-        const percentage = answered > 0 ? (answered / group.length * 100) : 0;
-        
-        total += sum;
-        answeredQuestions += answered;
-        
-        if (answered === group.length) completedCats++;
-        
-        document.getElementById(`score-${i}`).textContent = `${sum} / 20`;
-        document.getElementById(`progress-${i}`).style.width = percentage + '%';
-      });
-      
-      const overallPercentage = totalQuestions > 0 ? Math.round((total / (totalQuestions * 2)) * 100) : 0;
-      
-      document.getElementById('totalScore').textContent = total;
-      document.getElementById('scorePercentage').textContent = overallPercentage + '%';
-      document.getElementById('completedQuestions').textContent = `${answeredQuestions}/${totalQuestions}`;
-      document.getElementById('completedCategories').textContent = `${completedCats}/5`;
-      document.getElementById('averageScore').textContent = overallPercentage + '%';
-      
-      updateScoreInterpretation(total, overallPercentage, answeredQuestions, totalQuestions);
-      document.getElementById('scoreDate').textContent = `Stand: ${new Date().toLocaleDateString('de-DE')}`;
-      
-      scoreChart.data.datasets[0].data = [total, 100 - total];
-      scoreChart.update();
-      
-      const progress = (answeredQuestions / totalQuestions) * 100;
-      document.getElementById('progressBar').style.width = progress + '%';
-      
-      let chartColor = 'rgba(239, 68, 68, 0.8)';
-      if (overallPercentage >= 40) chartColor = 'rgba(245, 158, 11, 0.8)';
-      if (overallPercentage >= 70) chartColor = 'rgba(16, 185, 129, 0.8)';
-      
-      scoreChart.data.datasets[0].backgroundColor[0] = chartColor;
-      scoreChart.update();
-    }
-
-    function updateScoreInterpretation(total, percentage, answered, totalQuestions) {
-      const interpretationEl = document.getElementById('scoreInterpretation');
-      
-      if (answered === 0) {
-        interpretationEl.textContent = 'Beginnen Sie mit der Bewertung Ihrer Gesundheit';
-        interpretationEl.style.background = 'rgba(120, 119, 198, 0.15)';
-        return;
       }
       
-      if (answered < totalQuestions) {
-        interpretationEl.textContent = `Bewertung läuft... ${Math.round((answered/totalQuestions)*100)}% abgeschlossen`;
-        interpretationEl.style.background = 'rgba(245, 158, 11, 0.15)';
-        return;
+      createCategoryElement(category, catIdx) {
+        const categoryEl = document.createElement('section');
+        categoryEl.className = 'category';
+        categoryEl.id = `category-${catIdx}`;
+        
+        categoryEl.innerHTML = `
+          <div class="category-header">
+            <h2 class="category-title">${category.title}</h2>
+            <div class="category-score" id="score-${catIdx}">0 / 20</div>
+          </div>
+          <div class="category-progress">
+            <div class="category-progress-fill" id="progress-${catIdx}"></div>
+          </div>
+          <div class="questions">
+            ${category.questions.map((question, qIdx) => 
+              this.createQuestionHTML(question, catIdx, qIdx)
+            ).join('')}
+          </div>
+        `;
+        
+        return categoryEl;
       }
       
-      let interpretation = '';
-      let bgColor = '';
-      
-      if (percentage >= 85) {
-        interpretation = 'Ausgezeichnet! Ihr Gesundheitsstatus ist vorbildlich.';
-        bgColor = 'rgba(16, 185, 129, 0.15)';
-      } else if (percentage >= 70) {
-        interpretation = 'Sehr gut! Sie haben eine solide Gesundheitsbasis.';
-        bgColor = 'rgba(16, 185, 129, 0.15)';
-      } else if (percentage >= 55) {
-        interpretation = 'Gut! Es gibt noch Optimierungspotential.';
-        bgColor = 'rgba(245, 158, 11, 0.15)';
-      } else if (percentage >= 40) {
-        interpretation = 'Verbesserungswürdig. Fokus auf Schlüsselbereiche empfohlen.';
-        bgColor = 'rgba(245, 158, 11, 0.15)';
-      } else {
-        interpretation = 'Handlungsbedarf! Professionelle Beratung empfohlen.';
-        bgColor = 'rgba(239, 68, 68, 0.15)';
+      createQuestionHTML(question, catIdx, qIdx) {
+        const isAnswered = this.answers[catIdx][qIdx] !== null;
+        return `
+          <div class="question ${isAnswered ? 'answered' : ''}" id="question-${catIdx}-${qIdx}">
+            <label class="question-label">
+              <span class="question-number">${qIdx + 1}.</span>
+              ${question}
+            </label>
+            <div class="radio-group">
+              ${['Nein', 'Teilweise', 'Ja'].map((text, val) => `
+                <div class="radio-option">
+                  <input type="radio" 
+                         name="cat${catIdx}_q${qIdx}" 
+                         value="${val}" 
+                         id="cat${catIdx}_q${qIdx}_v${val}"
+                         ${this.answers[catIdx][qIdx] === val ? 'checked' : ''}
+                         onchange="app.handleAnswer(${catIdx}, ${qIdx}, ${val})">
+                  <label for="cat${catIdx}_q${qIdx}_v${val}">${text}</label>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
       }
       
-      interpretationEl.textContent = interpretation;
-      interpretationEl.style.background = bgColor;
-    }
-
-    function updateMiniNav() {
-      const dots = document.querySelectorAll('.nav-dot');
-      answers.forEach((group, i) => {
-        const answered = group.filter(a => a !== null).length;
-        const isCompleted = answered === group.length;
-        const isActive = i === currentActiveCategory;
+      renderCategoryNav() {
+        const nav = document.getElementById('categoryNav');
+        nav.innerHTML = '';
         
-        dots[i].classList.toggle('completed', isCompleted);
-        dots[i].classList.toggle('active', isActive && !isCompleted);
-      });
-    }
-
-    function checkCategoryCompletion(catIdx) {
-      const category = answers[catIdx];
-      const isComplete = category.every(answer => answer !== null);
-      const categoryEl = document.getElementById(`category-${catIdx}`);
+        this.categories.forEach((cat, idx) => {
+          const dot = document.createElement('div');
+          dot.className = 'category-dot';
+          dot.title = cat.title;
+          dot.onclick = () => this.scrollToCategory(idx);
+          nav.appendChild(dot);
+        });
+      }
       
-      if (isComplete) {
-        categoryEl.classList.add('completed');
-        showSuccessMessage();
-        updateActiveCategory();
+      handleAnswer(catIdx, qIdx, value) {
+        this.answers[catIdx][qIdx] = parseInt(value);
         
-        const nextCategory = findNextIncompleteCategory(catIdx);
-        if (nextCategory !== -1) {
-          setTimeout(() => scrollToCategory(nextCategory), 2000);
+        // Update question state
+        const questionEl = document.getElementById(`question-${catIdx}-${qIdx}`);
+        questionEl.classList.add('answered');
+        
+        this.updateUI();
+        this.saveData();
+        this.showAutosaveIndicator('saving');
+        
+        // Auto-advance to next question
+        setTimeout(() => this.focusNextQuestion(catIdx, qIdx), 100);
+      }
+      
+      focusNextQuestion(catIdx, qIdx) {
+        // Find next unanswered question
+        for (let c = catIdx; c < this.categories.length; c++) {
+          const startQ = (c === catIdx) ? qIdx + 1 : 0;
+          for (let q = startQ; q < this.categories[c].questions.length; q++) {
+            if (this.answers[c][q] === null) {
+              const nextQuestion = document.getElementById(`question-${c}-${q}`);
+              if (nextQuestion) {
+                nextQuestion.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Focus first radio button
+                const firstRadio = nextQuestion.querySelector('input[type="radio"]');
+                if (firstRadio) firstRadio.focus();
+              }
+              return;
+            }
+          }
         }
       }
-    }
-
-    function findNextIncompleteCategory(currentIdx) {
-      for (let i = currentIdx + 1; i < answers.length; i++) {
-        if (!answers[i].every(answer => answer !== null)) {
-          return i;
+      
+      updateUI() {
+        this.updateProgress();
+        this.updateScorePanel();
+        this.updateCategoryNav();
+        this.updateCategoryStates();
+      }
+      
+      updateProgress() {
+        const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
+        const answeredQuestions = this.answers.flat().filter(answer => answer !== null).length;
+        const progress = (answeredQuestions / totalQuestions) * 100;
+        
+        document.getElementById('progressBar').style.width = `${progress}%`;
+        document.getElementById('progressText').textContent = `Frage ${answeredQuestions} von ${totalQuestions}`;
+      }
+      
+      updateScorePanel() {
+        const totalScore = this.calculateTotalScore();
+        const maxScore = this.categories.reduce((sum, cat) => sum + cat.questions.length * 2, 0);
+        const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
+        const answeredCount = this.answers.flat().filter(answer => answer !== null).length;
+        const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
+        const completedCategories = this.answers.filter(catAnswers => 
+          catAnswers.every(answer => answer !== null)
+        ).length;
+        
+        // Update score circle
+        const scoreCircle = document.getElementById('scoreCircle');
+        const degrees = (percentage / 100) * 360;
+        scoreCircle.style.background = `conic-gradient(var(--primary) ${degrees}deg, var(--gray-700) ${degrees}deg)`;
+        
+        // Update values
+        document.getElementById('totalScore').textContent = totalScore;
+        document.getElementById('scorePercentage').textContent = `${percentage}%`;
+        document.getElementById('answeredCount').textContent = `${answeredCount}/${totalQuestions}`;
+        document.getElementById('completedCategories').textContent = `${completedCategories}/5`;
+        document.getElementById('averageScore').textContent = `${percentage}%`;
+        document.getElementById('scoreDate').textContent = `Stand: ${new Date().toLocaleDateString('de-DE')}`;
+      }
+      
+      updateCategoryNav() {
+        const dots = document.querySelectorAll('.category-dot');
+        this.answers.forEach((categoryAnswers, idx) => {
+          const isCompleted = categoryAnswers.every(answer => answer !== null);
+          const hasAnswers = categoryAnswers.some(answer => answer !== null);
+          
+          dots[idx].classList.toggle('completed', isCompleted);
+          dots[idx].classList.toggle('active', hasAnswers && !isCompleted);
+        });
+      }
+      
+      updateCategoryStates() {
+        this.categories.forEach((category, catIdx) => {
+          const categoryEl = document.getElementById(`category-${catIdx}`);
+          const categoryAnswers = this.answers[catIdx];
+          const answered = categoryAnswers.filter(answer => answer !== null).length;
+          const score = categoryAnswers.reduce((sum, answer) => sum + (answer || 0), 0);
+          const progress = (answered / category.questions.length) * 100;
+          
+          // Update category visual state
+          const isCompleted = answered === category.questions.length;
+          categoryEl.classList.toggle('active', answered > 0 && !isCompleted);
+        });
+      }
+      
+      calculateTotalScore() {
+        return this.answers.flat().reduce((sum, answer) => sum + (answer || 0), 0);
+      }
+      
+      scrollToCategory(index) {
+        const categoryEl = document.getElementById(`category-${index}`);
+        if (categoryEl) {
+          categoryEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
-      return -1;
-    }
-
-    function updateActiveCategory() {
-      document.querySelectorAll('.category').forEach(cat => cat.classList.remove('active'));
-      const nextIncomplete = findNextIncompleteCategory(-1);
-      if (nextIncomplete !== -1) {
-        currentActiveCategory = nextIncomplete;
-        document.getElementById(`category-${nextIncomplete}`).classList.add('active');
-      }
-    }
-
-    function showSuccessMessage() {
-      const msg = document.getElementById('successMessage');
-      msg.classList.add('show');
-      setTimeout(() => msg.classList.remove('show'), 3000);
-    }
-
-    function scrollToCategory(index) {
-      currentActiveCategory = index;
-      updateMiniNav();
-      document.getElementById(`category-${index}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function saveProgress() {
-      const data = { answers: answers, timestamp: Date.now(), version: '2.0' };
-      const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `nh-score-${new Date().toISOString().split('T')[0]}.json`;
-      a.click();
-      URL.revokeObjectURL(url);
-      showNotification('Fortschritt gespeichert!', 'success');
-    }
-
-    function resetAll() {
-      if (confirm('Alle Antworten zurücksetzen?')) {
-        answers.forEach(group => group.fill(null));
-        document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
-        document.querySelectorAll('.question').forEach(q => q.classList.remove('answered'));
-        document.querySelectorAll('.category').forEach(cat => cat.classList.remove('completed', 'active'));
-        currentActiveCategory = 0;
-        document.getElementById('category-0').classList.add('active');
-        updateScores();
-        updateMiniNav();
-        showNotification('Zurückgesetzt!', 'success');
-      }
-    }
-
-    function exportToPDF() {
-      const total = answers.reduce((sum, group) => sum + group.reduce((a, b) => a + (b !== null ? b : 0), 0), 0);
-      const percentage = Math.round((total / 100) * 100);
-      const date = new Date().toLocaleDateString('de-DE');
       
-      const printWindow = window.open('', '_blank');
-      printWindow.document.write(`
-        <!DOCTYPE html>
-        <html>
-        <head><title>NH Score Auswertung</title>
-        <style>body{font-family:Arial,sans-serif;margin:40px;color:#333}.header{text-align:center;margin-bottom:40px;border-bottom:2px solid #7877c6;padding-bottom:20px}</style>
-        </head>
-        <body>
-        <div class="header"><h1>NH Score Auswertung</h1><p>Datum: ${date}</p><h2>Ergebnis: ${total}/100 Punkte (${percentage}%)</h2></div>
-        </body></html>
-      `);
-      printWindow.document.close();
-      setTimeout(() => printWindow.print(), 500);
+      setupKeyboardNavigation() {
+        document.addEventListener('keydown', (e) => {
+          if (e.target.type === 'radio') {
+            const name = e.target.name;
+            const radios = document.querySelectorAll(`input[name="${name}"]`);
+            const currentIndex = Array.from(radios).indexOf(e.target);
+            
+            switch(e.key) {
+              case 'ArrowLeft':
+              case 'ArrowUp':
+                e.preventDefault();
+                if (currentIndex > 0) radios[currentIndex - 1].focus();
+                break;
+              case 'ArrowRight':
+              case 'ArrowDown':
+                e.preventDefault();
+                if (currentIndex < radios.length - 1) radios[currentIndex + 1].focus();
+                break;
+              case 'Enter':
+              case ' ':
+                e.preventDefault();
+                e.target.checked = true;
+                e.target.onchange();
+                break;
+            }
+          }
+          
+          // Global shortcuts
+          if (e.ctrlKey || e.metaKey) {
+            switch(e.key) {
+              case 's':
+                e.preventDefault();
+                this.exportData();
+                break;
+              case 'r':
+                e.preventDefault();
+                this.resetData();
+                break;
+            }
+          }
+        });
+      }
+      
+      startAutosave() {
+        this.autosaveInterval = setInterval(() => {
+          this.saveData();
+          this.showAutosaveIndicator('saved');
+        }, 30000); // Save every 30 seconds
+      }
+      
+      updateTimeSpent() {
+        setInterval(() => {
+          const elapsed = Math.floor((Date.now() - this.startTime) / 60000);
+          document.getElementById('timeSpent').textContent = `${elapsed}m`;
+        }, 60000); // Update every minute
+      }
+      
+      showAutosaveIndicator(state) {
+        const indicator = document.getElementById('autosaveIndicator');
+        indicator.className = `autosave-indicator ${state}`;
+        
+        if (state === 'saving') {
+          indicator.innerHTML = '<span>●</span><span>Speichere...</span>';
+          setTimeout(() => this.showAutosaveIndicator('saved'), 1000);
+        } else if (state === 'saved') {
+          indicator.innerHTML = '<span>●</span><span>Automatisch gespeichert</span>';
+        }
+      }
+      
+      saveData() {
+        const data = {
+          answers: this.answers,
+          timestamp: Date.now(),
+          version: '3.0',
+          startTime: this.startTime
+        };
+        localStorage.setItem('nh-score-data', JSON.stringify(data));
+      }
+      
+      loadData() {
+        try {
+          const saved = localStorage.getItem('nh-score-data');
+          if (saved) {
+            const data = JSON.parse(saved);
+            if (data.version === '3.0' && data.answers) {
+              this.startTime = data.startTime || Date.now();
+              return data.answers;
+            }
+          }
+        } catch (e) {
+          console.warn('Failed to load saved data:', e);
+        }
+        return null;
+      }
+      
+      exportData() {
+        const data = {
+          answers: this.answers,
+          timestamp: Date.now(),
+          version: '3.0',
+          score: this.calculateTotalScore(),
+          categories: this.categories.map((cat, idx) => ({
+            title: cat.title,
+            score: this.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0),
+            answered: this.answers[idx].filter(answer => answer !== null).length,
+            total: cat.questions.length
+          }))
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `nh-score-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        this.showNotification('Daten erfolgreich exportiert', 'success');
+      }
+      
+      importData() {
+        const fileInput = document.getElementById('fileInput');
+        fileInput.onchange = (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              try {
+                const data = JSON.parse(e.target.result);
+                if (data.answers && Array.isArray(data.answers)) {
+                  this.answers = data.answers;
+                  this.startTime = data.startTime || Date.now();
+                  this.renderCategories();
+                  this.updateUI();
+                  this.saveData();
+                  this.showNotification('Daten erfolgreich importiert', 'success');
+                } else {
+                  throw new Error('Invalid data format');
+                }
+              } catch (error) {
+                this.showNotification('Fehler beim Importieren der Daten', 'error');
+              }
+            };
+            reader.readAsText(file);
+          }
+        };
+        fileInput.click();
+      }
+      
+      resetData() {
+        if (confirm('Möchten Sie wirklich alle Antworten zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+          this.answers = this.initializeAnswers();
+          this.startTime = Date.now();
+          localStorage.removeItem('nh-score-data');
+          this.renderCategories();
+          this.updateUI();
+          this.showNotification('Alle Daten wurden zurückgesetzt', 'success');
+        }
+      }
+      
+      showNotification(message, type = 'success') {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
+      }
     }
-
-    function showNotification(message, type) {
-      const notification = document.getElementById('notification');
-      notification.textContent = message;
-      notification.className = `notification ${type}`;
-      notification.classList.add('show');
-      setTimeout(() => notification.classList.remove('show'), 3000);
-    }
-
-    // Initialize
+    
+    // Global functions for onclick handlers
+    window.exportData = () => app.exportData();
+    window.importData = () => app.importData();
+    window.resetData = () => app.resetData();
+    
+    // Initialize app when DOM is ready
+    let app;
     document.addEventListener('DOMContentLoaded', () => {
-      createMiniNav();
-      createCategories();
-      updateActiveCategory();
-      updateMiniNav();
-      setTimeout(() => scrollToCategory(0), 1000);
+      app = new HealthAssessment();
     });
   </script>
 </body>
-</html>14,2 14,8 20,8"/>
-        <line x1="16" y1="13" x2="8" y2="13"/>
-        <line x1="16" y1="17" x2="8" y2="17"/>
-        <polyline points="10,9 9,9 8,9"/>
-      </svg>
-    </button>
-    <button class="fab save-fab" onclick="saveProgress()" title="Fortschritt speichern">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-        <polyline points="17,21 17,13 7,13 7,21"/>
-        <polyline points="
+</html> category score and progress
+          document.getElementById(`score-${catIdx}`).textContent = `${score} / 20`;
+          document.getElementById(`progress-${catIdx}`).style.width = `${progress}%`;
+          
+          // Update
