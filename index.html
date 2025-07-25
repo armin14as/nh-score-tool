@@ -240,6 +240,39 @@
     letter-spacing: 0.05em;
   }
 
+  /* Hero Section */
+  .hero-section {
+    text-align: center;
+    padding: 3rem 0 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .main-title {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--primary), #8b5cf6, #06b6d4);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    animation: gradientShift 6s ease-in-out infinite;
+  }
+  
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  .subtitle {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+
   /* Categories */
   .categories {
     display: flex;
@@ -451,6 +484,10 @@
       position: static;
       order: -1;
     }
+    
+    .hero-section {
+      padding: 2rem 0 1.5rem;
+    }
   }
   
   @media (max-width: 768px) {
@@ -470,6 +507,18 @@
     .radio-group {
       grid-template-columns: 1fr;
       gap: 0.5rem;
+    }
+    
+    .hero-section {
+      padding: 1.5rem 0 1rem;
+    }
+    
+    .main-title {
+      font-size: clamp(2rem, 12vw, 3rem);
+    }
+    
+    .subtitle {
+      font-size: clamp(0.9rem, 4vw, 1.1rem);
     }
     
     .category {
@@ -526,6 +575,12 @@
   </div>
 
   <div class="container">
+    <!-- Hero Section -->
+    <header class="hero-section">
+      <h1 class="main-title">NH Score</h1>
+      <p class="subtitle">Wissenschaftlich fundiertes 100-Punkte-System für umfassende Gesundheit & Leistungsfähigkeit</p>
+    </header>
+
     <main class="categories" id="categories"></main>
     
     <aside class="score-panel">
