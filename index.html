@@ -263,7 +263,7 @@
   
   .category-header {
     display: flex;
-    justify-content: between;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
     gap: 1rem;
@@ -515,13 +515,10 @@
       <div class="category-nav" id="categoryNav"></div>
       
       <div class="action-buttons">
-        <button class="btn" onclick="exportData()" title="Daten exportieren">
-          <span>↓</span> Export
+        <button class="btn" onclick="window.exportPDF()" title="Als PDF exportieren">
+          <span>📄</span> Export
         </button>
-        <button class="btn" onclick="importData()" title="Daten importieren">
-          <span>↑</span> Import
-        </button>
-        <button class="btn primary" onclick="resetData()" title="Zurücksetzen">
+        <button class="btn primary" onclick="window.resetAll()" title="Zurücksetzen">
           Reset
         </button>
       </div>
@@ -568,7 +565,6 @@
   </div>
 
   <div class="notification" id="notification"></div>
-  <input type="file" id="fileInput" accept=".json" style="display: none;">
 
   <script>
     // Modern ES6+ Implementation with enterprise patterns
@@ -721,7 +717,7 @@
                          value="${val}" 
                          id="cat${catIdx}_q${qIdx}_v${val}"
                          ${this.answers[catIdx][qIdx] === val ? 'checked' : ''}
-                         onchange="app.handleAnswer(${catIdx}, ${qIdx}, ${val})">
+                         onchange="window.healthApp.handleAnswer(${catIdx}, ${qIdx}, ${val})">
                   <label for="cat${catIdx}_q${qIdx}_v${val}">${text}</label>
                 </div>
               `).join('')}
@@ -836,6 +832,10 @@
           const score = categoryAnswers.reduce((sum, answer) => sum + (answer || 0), 0);
           const progress = (answered / category.questions.length) * 100;
           
+          // Update category score and progress
+          document.getElementById(`score-${catIdx}`).textContent = `${score} / 20`;
+          document.getElementById(`progress-${catIdx}`).style.width = `${progress}%`;
+          
           // Update category visual state
           const isCompleted = answered === category.questions.length;
           categoryEl.classList.toggle('active', answered > 0 && !isCompleted);
@@ -949,66 +949,183 @@
       }
       
       exportData() {
-        const data = {
-          answers: this.answers,
-          timestamp: Date.now(),
-          version: '3.0',
-          score: this.calculateTotalScore(),
-          categories: this.categories.map((cat, idx) => ({
-            title: cat.title,
-            score: this.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0),
-            answered: this.answers[idx].filter(answer => answer !== null).length,
-            total: cat.questions.length
-          }))
-        };
+        const totalScore = this.calculateTotalScore();
+        const maxScore = this.categories.reduce((sum, cat) => sum + cat.questions.length * 2, 0);
+        const percentage = Math.round((totalScore / maxScore) * 100);
+        const date = new Date().toLocaleDateString('de-DE');
+        const answeredQuestions = this.answers.flat().filter(answer => answer !== null).length;
+        const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
         
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `nh-score-${new Date().toISOString().split('T')[0]}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
+        // Generate category breakdown
+        const categoryBreakdown = this.categories.map((cat, idx) => {
+          const score = this.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0);
+          const answered = this.answers[idx].filter(answer => answer !== null).length;
+          const catPercentage = answered > 0 ? Math.round((score / (cat.questions.length * 2)) * 100) : 0;
+          return `
+            <tr>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd;">${cat.title}</td>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${score}/20</td>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${catPercentage}%</td>
+              <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${answered}/${cat.questions.length}</td>
+            </tr>
+          `;
+        }).join('');
         
-        this.showNotification('Daten erfolgreich exportiert', 'success');
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>NH Score Auswertung</title>
+            <meta charset="UTF-8">
+            <style>
+              body { 
+                font-family: Arial, sans-serif; 
+                margin: 40px; 
+                color: #333; 
+                line-height: 1.6;
+              }
+              .header { 
+                text-align: center; 
+                margin-bottom: 40px; 
+                border-bottom: 3px solid #6366f1; 
+                padding-bottom: 20px; 
+              }
+              .score-circle {
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                background: conic-gradient(#6366f1 ${(percentage/100)*360}deg, #e5e7eb ${(percentage/100)*360}deg);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 20px auto;
+                position: relative;
+              }
+              .score-circle::before {
+                content: '';
+                width: 100px;
+                height: 100px;
+                background: white;
+                border-radius: 50%;
+                position: absolute;
+              }
+              .score-text {
+                position: relative;
+                z-index: 1;
+                text-align: center;
+                font-weight: bold;
+              }
+              table { 
+                width: 100%; 
+                border-collapse: collapse; 
+                margin-top: 30px; 
+              }
+              th { 
+                background: #f8f9fa; 
+                padding: 12px; 
+                border-bottom: 2px solid #6366f1; 
+                text-align: left; 
+              }
+              .summary {
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 8px;
+                margin: 20px 0;
+              }
+              .recommendation {
+                background: #e0e7ff;
+                padding: 15px;
+                border-left: 4px solid #6366f1;
+                margin: 20px 0;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <h1>NH Score Gesundheitsauswertung</h1>
+              <p><strong>Datum:</strong> ${date}</p>
+              <div class="score-circle">
+                <div class="score-text">
+                  <div style="font-size: 24px;">${totalScore}</div>
+                  <div style="font-size: 14px; color: #666;">${percentage}%</div>
+                </div>
+              </div>
+              <h2>Gesamtergebnis: ${totalScore} von 100 Punkten</h2>
+            </div>
+            
+            <div class="summary">
+              <h3>Zusammenfassung</h3>
+              <p><strong>Beantwortete Fragen:</strong> ${answeredQuestions} von ${totalQuestions}</p>
+              <p><strong>Gesamtscore:</strong> ${percentage}% (${totalScore}/100 Punkte)</p>
+              <p><strong>Bewertung:</strong> ${
+                percentage >= 85 ? 'Ausgezeichnet - Vorbildlicher Gesundheitsstatus' :
+                percentage >= 70 ? 'Sehr gut - Solide Gesundheitsbasis' :
+                percentage >= 55 ? 'Gut - Optimierungspotential vorhanden' :
+                percentage >= 40 ? 'Verbesserungswürdig - Fokus auf Schlüsselbereiche' :
+                'Handlungsbedarf - Professionelle Beratung empfohlen'
+              }</p>
+            </div>
+            
+            <h3>Detailauswertung nach Kategorien</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Kategorie</th>
+                  <th style="text-align: center;">Punkte</th>
+                  <th style="text-align: center;">Prozent</th>
+                  <th style="text-align: center;">Beantwortet</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${categoryBreakdown}
+              </tbody>
+            </table>
+            
+            <div class="recommendation">
+              <h3>Empfehlung</h3>
+              <p>${
+                percentage >= 70 ? 'Großartig! Halten Sie Ihre guten Gewohnheiten bei und optimieren Sie gezielt die schwächeren Bereiche.' :
+                percentage >= 40 ? 'Sie haben eine gute Basis. Konzentrieren Sie sich auf 1-2 Bereiche und implementieren Sie schrittweise Verbesserungen.' :
+                'Beginnen Sie mit den Grundlagen: Regelmäßiger Schlaf und ausgewogene Ernährung bilden das Fundament für alle anderen Verbesserungen.'
+              }</p>
+            </div>
+            
+            <div style="margin-top: 40px; text-align: center; color: #666; font-size: 12px;">
+              <p>NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</p>
+              <p>Erstellt am ${date}</p>
+            </div>
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
+        
+        // Wait a moment for content to load, then print
+        setTimeout(() => {
+          printWindow.print();
+        }, 500);
+        
+        this.showNotification('PDF wird erstellt...', 'success');
       }
       
       importData() {
-        const fileInput = document.getElementById('fileInput');
-        fileInput.onchange = (e) => {
-          const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              try {
-                const data = JSON.parse(e.target.result);
-                if (data.answers && Array.isArray(data.answers)) {
-                  this.answers = data.answers;
-                  this.startTime = data.startTime || Date.now();
-                  this.renderCategories();
-                  this.updateUI();
-                  this.saveData();
-                  this.showNotification('Daten erfolgreich importiert', 'success');
-                } else {
-                  throw new Error('Invalid data format');
-                }
-              } catch (error) {
-                this.showNotification('Fehler beim Importieren der Daten', 'error');
-              }
-            };
-            reader.readAsText(file);
-          }
-        };
-        fileInput.click();
+        // Removed - Import functionality not needed
       }
       
       resetData() {
         if (confirm('Möchten Sie wirklich alle Antworten zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
+          // Reset answers array
           this.answers = this.initializeAnswers();
           this.startTime = Date.now();
+          
+          // Clear localStorage
           localStorage.removeItem('nh-score-data');
+          
+          // Completely re-render everything from scratch
           this.renderCategories();
+          this.renderCategoryNav();
           this.updateUI();
+          
           this.showNotification('Alle Daten wurden zurückgesetzt', 'success');
         }
       }
@@ -1025,20 +1142,23 @@
       }
     }
     
-    // Global functions for onclick handlers
-    window.exportData = () => app.exportData();
-    window.importData = () => app.importData();
-    window.resetData = () => app.resetData();
+    // Global functions that work properly
+    window.exportPDF = function() {
+      if (window.healthApp) {
+        window.healthApp.exportData();
+      }
+    };
+    
+    window.resetAll = function() {
+      if (window.healthApp) {
+        window.healthApp.resetData();
+      }
+    };
     
     // Initialize app when DOM is ready
-    let app;
     document.addEventListener('DOMContentLoaded', () => {
-      app = new HealthAssessment();
+      window.healthApp = new HealthAssessment();
     });
   </script>
 </body>
-</html> category score and progress
-          document.getElementById(`score-${catIdx}`).textContent = `${score} / 20`;
-          document.getElementById(`progress-${catIdx}`).style.width = `${progress}%`;
-          
-          // Update
+</html>
