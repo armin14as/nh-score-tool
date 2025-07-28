@@ -40,7 +40,7 @@
     min-height: 100vh;
   }
 
-  /* Enhanced Progress Bar */
+  /* Progress Header */
   .progress-header {
     position: sticky;
     top: 0;
@@ -78,36 +78,16 @@
     background: var(--gray-800);
     border-radius: 5px;
     overflow: hidden;
-    position: relative;
   }
   
   .progress-bar {
     height: 100%;
     background: linear-gradient(90deg, var(--primary), var(--success));
     border-radius: 5px;
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.4s ease;
     width: 0%;
-    position: relative;
-    overflow: hidden;
   }
 
-  .progress-bar::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100px;
-    width: 100px;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    animation: shimmer 2s infinite;
-  }
-
-  @keyframes shimmer {
-    0% { left: -100px; }
-    100% { left: 100%; }
-  }
-
-  /* Category Navigation */
   .category-nav {
     display: flex;
     gap: 0.75rem;
@@ -121,8 +101,6 @@
     background: var(--gray-600);
     cursor: pointer;
     transition: all 0.3s ease;
-    position: relative;
-    border: 2px solid transparent;
   }
   
   .category-dot.completed { 
@@ -132,14 +110,11 @@
   .category-dot.active { 
     background: var(--primary); 
     transform: scale(1.3); 
-    border-color: rgba(99, 102, 241, 0.3);
   }
   .category-dot:hover { 
     transform: scale(1.2); 
-    box-shadow: 0 0 8px rgba(255,255,255,0.2);
   }
 
-  /* Action Buttons */
   .action-buttons {
     display: flex;
     gap: 0.75rem;
@@ -155,9 +130,6 @@
     font-size: 0.875rem;
     font-weight: 500;
     transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     backdrop-filter: blur(8px);
   }
   
@@ -165,7 +137,6 @@
     background: var(--gray-700);
     border-color: var(--gray-600);
     transform: translateY(-1px);
-    box-shadow: var(--shadow);
   }
   
   .btn.primary {
@@ -175,7 +146,23 @@
   
   .btn.primary:hover {
     background: var(--primary-dark);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  }
+
+  .autosave-indicator {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .autosave-indicator.saving {
+    color: var(--warning);
+  }
+  
+  .autosave-indicator.saved {
+    color: var(--success);
   }
 
   /* Main Layout */
@@ -188,7 +175,7 @@
     gap: 2rem;
   }
 
-  /* Score Panel - Enhanced */
+  /* Score Panel */
   .score-panel {
     background: var(--glass-bg);
     border: 1px solid var(--border-color);
@@ -284,26 +271,12 @@
     font-weight: 500;
   }
 
-  /* Hero Section - Enhanced */
+  /* Hero Section */
   .hero-section {
     text-align: center;
     padding: 4rem 0 3rem;
     margin-bottom: 2rem;
     border-bottom: 1px solid var(--border-color);
-    position: relative;
-  }
-
-  .hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.1), transparent);
-    border-radius: 50%;
-    transform: translateX(-50%);
-    z-index: -1;
   }
   
   .main-title {
@@ -333,7 +306,7 @@
     font-weight: 400;
   }
 
-  /* Categories - Enhanced */
+  /* Categories */
   .categories {
     display: flex;
     flex-direction: column;
@@ -365,7 +338,7 @@
   
   .category.active {
     border-color: var(--primary);
-    box-shadow: 0 0 0 1px var(--primary), var(--shadow-lg);
+    box-shadow: 0 0 0 1px var(--primary);
     transform: translateY(-2px);
   }
 
@@ -410,12 +383,11 @@
     height: 100%;
     background: linear-gradient(90deg, var(--primary), var(--success));
     border-radius: 3px;
-    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.4s ease;
     width: 0%;
-    position: relative;
   }
 
-  /* Questions - Enhanced */
+  /* Questions */
   .question {
     margin-bottom: 2rem;
     padding: 1.5rem;
@@ -450,7 +422,7 @@
     font-size: 0.875rem;
   }
 
-  /* Radio Groups - Enhanced */
+  /* Radio Groups */
   .radio-group {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -481,19 +453,6 @@
     font-weight: 500;
     text-align: center;
     min-height: 52px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .radio-option label::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-    transition: left 0.5s ease;
   }
   
   .radio-option label:hover {
@@ -501,47 +460,217 @@
     background: var(--gray-700);
     transform: translateY(-1px);
   }
-
-  .radio-option label:hover::before {
-    left: 100%;
-  }
   
   .radio-option input:checked + label {
     border-color: var(--primary);
     background: rgba(99, 102, 241, 0.15);
     color: var(--primary);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
   }
   
   .radio-option:nth-child(1) input:checked + label {
     border-color: var(--error);
     background: rgba(239, 68, 68, 0.15);
     color: var(--error);
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
   }
   
   .radio-option:nth-child(2) input:checked + label {
     border-color: var(--warning);
     background: rgba(245, 158, 11, 0.15);
     color: var(--warning);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
   }
   
   .radio-option:nth-child(3) input:checked + label {
     border-color: var(--success);
     background: rgba(16, 185, 129, 0.15);
     color: var(--success);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
   }
 
-  /* Keyboard Navigation */
-  .radio-option input:focus + label {
-    outline: 2px solid var(--primary);
-    outline-offset: 2px;
+  /* Final Assessment Modal */
+  .assessment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s ease;
   }
 
-  /* Notifications - Enhanced */
+  .assessment-modal.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 3rem;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.4s ease;
+  }
+
+  .assessment-modal.show .modal-content {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .completion-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, var(--success), #059669);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+  }
+
+  .final-score-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+
+  .final-score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: conic-gradient(var(--primary) 0deg, var(--gray-700) 0deg);
+  }
+
+  .final-score-circle::before {
+    content: '';
+    width: 80px;
+    height: 80px;
+    background: var(--bg-secondary);
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  .final-score-text {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .final-score-number {
+    font-size: 1.75rem;
+    color: var(--text-primary);
+  }
+
+  .final-score-percentage {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .score-rating {
+    text-align: center;
+  }
+
+  .rating-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .rating-excellent { color: var(--success); }
+  .rating-very-good { color: #06b6d4; }
+  .rating-good { color: var(--warning); }
+  .rating-needs-improvement { color: #f97316; }
+  .rating-critical { color: var(--error); }
+
+  .rating-description {
+    color: var(--text-secondary);
+    font-size: 1rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .modal-btn {
+    padding: 0.75rem 2rem;
+    border: 1px solid var(--border-color);
+    background: var(--glass-bg);
+    color: var(--text-primary);
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
+  }
+
+  .modal-btn:hover {
+    background: var(--gray-700);
+    border-color: var(--gray-600);
+    transform: translateY(-1px);
+  }
+
+  .modal-btn.primary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+
+  .modal-btn.primary:hover {
+    background: var(--primary-dark);
+  }
+
+  .close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+
+  .close-modal:hover {
+    background: var(--gray-700);
+    color: var(--text-primary);
+  }
+
+  /* Notifications */
   .notification {
     position: fixed;
     top: 1rem;
@@ -553,7 +682,7 @@
     font-weight: 500;
     z-index: 1000;
     transform: translateX(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s ease;
     box-shadow: var(--shadow-lg);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
@@ -564,54 +693,6 @@
   
   .notification.error {
     background: var(--error);
-  }
-
-  /* Auto-save indicator - Enhanced */
-  .autosave-indicator {
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-  }
-  
-  .autosave-indicator.saving {
-    color: var(--warning);
-  }
-  
-  .autosave-indicator.saved {
-    color: var(--success);
-  }
-
-  .autosave-indicator .status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: currentColor;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-
-  /* Loading states */
-  .loading {
-    opacity: 0.6;
-    pointer-events: none;
-  }
-
-  /* Error states */
-  .error-state {
-    text-align: center;
-    padding: 2rem;
-    color: var(--error);
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid var(--error);
-    border-radius: 8px;
-    margin: 1rem 0;
   }
 
   /* Responsive Design */
@@ -625,10 +706,11 @@
     .score-panel {
       position: static;
       order: -1;
+      top: auto;
     }
     
     .hero-section {
-      padding: 2rem 0 2rem;
+      padding: 2rem 0;
     }
   }
   
@@ -636,14 +718,28 @@
     .progress-content {
       flex-direction: column;
       gap: 1rem;
+      align-items: stretch;
     }
     
     .progress-info {
       order: 1;
       min-width: auto;
+      justify-content: center;
+    }
+    
+    .progress-bar-container {
+      order: 2;
+      max-width: none;
+    }
+    
+    .category-nav {
+      order: 3;
+      justify-content: center;
     }
     
     .action-buttons {
+      order: 4;
+      justify-content: center;
       flex-wrap: wrap;
     }
     
@@ -653,7 +749,7 @@
     }
     
     .hero-section {
-      padding: 1rem 0 1.5rem;
+      padding: 1.5rem 0;
     }
     
     .main-title {
@@ -661,39 +757,148 @@
     }
     
     .subtitle {
-      font-size: clamp(0.9375rem, 3.5vw, 1.125rem);
+      font-size: clamp(0.9375rem, 4vw, 1.125rem);
+      padding: 0 1rem;
     }
     
     .category {
       padding: 1.5rem;
+      margin: 0 0.5rem;
+    }
+    
+    .category-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    
+    .category-score {
+      align-self: flex-end;
     }
     
     .container {
-      padding: 1rem;
+      padding: 1rem 0.5rem;
     }
 
     .score-panel {
       padding: 1.5rem;
+      margin: 0 0.5rem;
     }
 
     .question {
       padding: 1.25rem;
     }
-  }
 
-  /* Accessibility improvements */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+    .question-label {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .radio-option label {
+      padding: 0.875rem 1rem;
+      font-size: 0.9375rem;
+      min-height: 48px;
+    }
+
+    .final-score-display {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .modal-content {
+      margin: 1rem;
+      padding: 2rem 1.5rem;
+      max-width: calc(100% - 2rem);
+    }
+
+    .modal-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .modal-btn {
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+    }
+
+    .score-stats {
+      gap: 1rem;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+    }
+
+    .autosave-indicator {
+      font-size: 0.75rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
     }
   }
 
-  @media (prefers-contrast: high) {
-    :root {
-      --border-color: rgba(148, 163, 184, 0.3);
-      --text-secondary: #e2e8f0;
+  @media (max-width: 480px) {
+    .progress-header {
+      padding: 0.75rem 0;
+    }
+
+    .container {
+      padding: 0.75rem 0.25rem;
+    }
+
+    .hero-section {
+      padding: 1rem 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .category {
+      padding: 1.25rem;
+      margin: 0 0.25rem;
+    }
+
+    .score-panel {
+      padding: 1.25rem;
+      margin: 0 0.25rem;
+    }
+
+    .question {
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .radio-option label {
+      padding: 0.75rem 0.875rem;
+      font-size: 0.875rem;
+      min-height: 44px;
+    }
+
+    .modal-content {
+      padding: 1.5rem 1rem;
+    }
+
+    .score-ring {
+      width: 120px;
+      height: 120px;
+    }
+
+    .score-circle {
+      width: 120px;
+      height: 120px;
+    }
+
+    .score-circle::before {
+      width: 80px;
+      height: 80px;
+    }
+
+    .score-value {
+      font-size: 1.5rem;
+    }
+
+    .category-nav {
+      gap: 0.5rem;
     }
   }
 </style>
@@ -704,7 +909,7 @@
       <div class="progress-info">
         <span id="progressText">Frage 0 von 50</span>
         <div class="autosave-indicator" id="autosaveIndicator">
-          <div class="status-dot"></div>
+          <span>●</span>
           <span>Automatisch gespeichert</span>
         </div>
       </div>
@@ -713,13 +918,13 @@
         <div class="progress-bar" id="progressBar"></div>
       </div>
       
-      <div class="category-nav" id="categoryNav" role="navigation" aria-label="Kategorien Navigation"></div>
+      <div class="category-nav" id="categoryNav"></div>
       
       <div class="action-buttons">
-        <button class="btn" onclick="window.exportPDF()" title="Als PDF exportieren" aria-label="Ergebnisse als PDF exportieren">
+        <button class="btn" onclick="window.exportPDF()" title="Als PDF exportieren">
           Export
         </button>
-        <button class="btn primary" onclick="window.resetAll()" title="Alle Antworten zurücksetzen" aria-label="Assessment zurücksetzen">
+        <button class="btn primary" onclick="window.resetAll()" title="Alle Antworten zurücksetzen">
           Reset
         </button>
       </div>
@@ -734,17 +939,17 @@
         <p class="subtitle">Wissenschaftlich fundiertes 100-Punkte-System für umfassende Gesundheit & Leistungsfähigkeit</p>
       </header>
 
-      <main class="categories" id="categories" role="main"></main>
+      <main class="categories" id="categories"></main>
     </div>
     
-    <aside class="score-panel" role="complementary" aria-label="Aktueller Gesundheitsscore">
+    <aside class="score-panel">
       <div class="score-header">
         <h3>Gesundheitsscore</h3>
         <div class="score-date" id="scoreDate"></div>
       </div>
       
       <div class="score-ring">
-        <div class="score-circle" id="scoreCircle" role="img" aria-label="Score Kreis">
+        <div class="score-circle" id="scoreCircle">
           <div class="score-value">
             <div id="totalScore">0</div>
             <div class="score-percentage" id="scorePercentage">0%</div>
@@ -773,10 +978,48 @@
     </aside>
   </div>
 
-  <div class="notification" id="notification" role="alert"></div>
+  <div class="notification" id="notification"></div>
+
+  <!-- Final Assessment Modal -->
+  <div class="assessment-modal" id="assessmentModal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="window.healthApp.closeFinalAssessment()">×</button>
+      
+      <div class="modal-header">
+        <div class="completion-badge">
+          <span>✓</span>
+          <span>Assessment abgeschlossen</span>
+        </div>
+        <h2>Ihre persönliche Gesundheitsauswertung</h2>
+      </div>
+
+      <div class="final-score-display">
+        <div class="final-score-circle" id="finalScoreCircle">
+          <div class="final-score-text">
+            <div class="final-score-number" id="finalScoreNumber">0</div>
+            <div class="final-score-percentage" id="finalScorePercentage">0%</div>
+          </div>
+        </div>
+        
+        <div class="score-rating">
+          <div class="rating-title" id="ratingTitle">Bewertung</div>
+          <div class="rating-description" id="ratingDescription">Beschreibung</div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-btn" onclick="window.healthApp.closeFinalAssessment()">
+          Schließen
+        </button>
+        <button class="modal-btn primary" onclick="window.exportPDF(); window.healthApp.closeFinalAssessment();">
+          PDF herunterladen
+        </button>
+      </div>
+    </div>
+  </div>
 
   <script>
-    // Enhanced ES6+ Implementation with enterprise patterns
+    // Clean Health Assessment Implementation
     class HealthAssessment {
       constructor() {
         this.categories = [
@@ -861,7 +1104,6 @@
         this.startTime = Date.now();
         this.autosaveInterval = null;
         this.updateTimeInterval = null;
-        this.isInitialized = false;
         
         this.init();
       }
@@ -878,16 +1120,15 @@
           this.setupKeyboardNavigation();
           this.startAutosave();
           this.updateTimeSpent();
-          this.isInitialized = true;
         } catch (error) {
           console.error('Initialization error:', error);
-          this.showError('Fehler beim Laden der Anwendung. Bitte laden Sie die Seite neu.');
+          this.showNotification('Fehler beim Laden der Anwendung', 'error');
         }
       }
       
       renderCategories() {
         const container = document.getElementById('categories');
-        if (!container) throw new Error('Categories container not found');
+        if (!container) return;
         
         container.innerHTML = '';
         
@@ -901,14 +1142,13 @@
         const categoryEl = document.createElement('section');
         categoryEl.className = 'category';
         categoryEl.id = `category-${catIdx}`;
-        categoryEl.setAttribute('aria-labelledby', `category-title-${catIdx}`);
         
         categoryEl.innerHTML = `
           <div class="category-header">
-            <h2 class="category-title" id="category-title-${catIdx}">${category.title}</h2>
-            <div class="category-score" id="score-${catIdx}" aria-label="Aktuelle Punkte">0 / 20</div>
+            <h2 class="category-title">${category.title}</h2>
+            <div class="category-score" id="score-${catIdx}">0 / 20</div>
           </div>
-          <div class="category-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="category-progress">
             <div class="category-progress-fill" id="progress-${catIdx}"></div>
           </div>
           <div class="questions">
@@ -927,26 +1167,23 @@
         
         return `
           <div class="question ${isAnswered ? 'answered' : ''}" id="question-${catIdx}-${qIdx}">
-            <fieldset>
-              <legend class="question-label">
-                <span class="question-number">${qIdx + 1}.</span>
-                ${question}
-              </legend>
-              <div class="radio-group" role="radiogroup" aria-labelledby="legend-${fieldsetId}">
-                ${['Nein', 'Teilweise', 'Ja'].map((text, val) => `
-                  <div class="radio-option">
-                    <input type="radio" 
-                           name="${fieldsetId}" 
-                           value="${val}" 
-                           id="${fieldsetId}_v${val}"
-                           ${this.answers[catIdx][qIdx] === val ? 'checked' : ''}
-                           onchange="window.healthApp.handleAnswer(${catIdx}, ${qIdx}, ${val})"
-                           aria-describedby="question-${catIdx}-${qIdx}">
-                    <label for="${fieldsetId}_v${val}">${text}</label>
-                  </div>
-                `).join('')}
-              </div>
-            </fieldset>
+            <label class="question-label">
+              <span class="question-number">${qIdx + 1}.</span>
+              ${question}
+            </label>
+            <div class="radio-group">
+              ${['Nein', 'Teilweise', 'Ja'].map((text, val) => `
+                <div class="radio-option">
+                  <input type="radio" 
+                         name="${fieldsetId}" 
+                         value="${val}" 
+                         id="${fieldsetId}_v${val}"
+                         ${this.answers[catIdx][qIdx] === val ? 'checked' : ''}
+                         onchange="window.healthApp.handleAnswer(${catIdx}, ${qIdx}, ${val})">
+                  <label for="${fieldsetId}_v${val}">${text}</label>
+                </div>
+              `).join('')}
+            </div>
           </div>
         `;
       }
@@ -961,38 +1198,24 @@
           const dot = document.createElement('div');
           dot.className = 'category-dot';
           dot.title = cat.title;
-          dot.setAttribute('role', 'button');
-          dot.setAttribute('aria-label', `Springe zu ${cat.title}`);
           dot.onclick = () => this.scrollToCategory(idx);
-          dot.onkeydown = (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              this.scrollToCategory(idx);
-            }
-          };
-          dot.tabIndex = 0;
           nav.appendChild(dot);
         });
       }
       
       handleAnswer(catIdx, qIdx, value) {
-        if (!this.isInitialized) return;
-        
         try {
           this.answers[catIdx][qIdx] = parseInt(value);
           
-          // Update question state with smooth transition
           const questionEl = document.getElementById(`question-${catIdx}-${qIdx}`);
           if (questionEl) {
             questionEl.classList.add('answered');
           }
           
-          // Debounced UI update for better performance
-          this.debouncedUpdateUI();
+          this.updateUI();
           this.saveData();
           this.showAutosaveIndicator('saving');
           
-          // Auto-advance to next question
           setTimeout(() => this.focusNextQuestion(catIdx, qIdx), 150);
           
         } catch (error) {
@@ -1001,39 +1224,18 @@
         }
       }
       
-      // Debounced UI update for better performance
-      debouncedUpdateUI = this.debounce(() => {
-        this.updateUI();
-      }, 100);
-      
-      debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-          const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-          };
-          clearTimeout(timeout);
-          timeout = setTimeout(later, wait);
-        };
-      }
-      
       focusNextQuestion(catIdx, qIdx) {
-        // Find next unanswered question with improved logic
         for (let c = catIdx; c < this.categories.length; c++) {
           const startQ = (c === catIdx) ? qIdx + 1 : 0;
           for (let q = startQ; q < this.categories[c].questions.length; q++) {
             if (this.answers[c][q] === null) {
               const nextQuestion = document.getElementById(`question-${c}-${q}`);
               if (nextQuestion) {
-                // Smooth scroll with better positioning
                 nextQuestion.scrollIntoView({ 
                   behavior: 'smooth', 
-                  block: 'center',
-                  inline: 'nearest'
+                  block: 'center'
                 });
                 
-                // Focus first radio button after scroll completes
                 setTimeout(() => {
                   const firstRadio = nextQuestion.querySelector('input[type="radio"]');
                   if (firstRadio) firstRadio.focus();
@@ -1044,8 +1246,15 @@
           }
         }
         
-        // If all questions are answered, show completion notification
-        this.showNotification('🎉 Alle Fragen beantwortet! Sie können jetzt Ihr Ergebnis exportieren.', 'success');
+        if (this.isAssessmentComplete()) {
+          setTimeout(() => this.showFinalAssessment(), 1000);
+        }
+      }
+      
+      isAssessmentComplete() {
+        const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
+        const answeredQuestions = this.answers.flat().filter(answer => answer !== null).length;
+        return answeredQuestions === totalQuestions;
       }
       
       updateUI() {
@@ -1069,7 +1278,6 @@
         
         if (progressBar) {
           progressBar.style.width = `${progress}%`;
-          progressBar.setAttribute('aria-valuenow', progress.toFixed(1));
         }
         
         if (progressText) {
@@ -1079,22 +1287,20 @@
       
       updateScorePanel() {
         const totalScore = this.calculateTotalScore();
-        const maxScore = this.categories.reduce((sum, cat) => sum + cat.questions.length * 2, 0);
-        const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
+        const maxScore = 100;
+        const percentage = Math.round((totalScore / maxScore) * 100);
         const answeredCount = this.answers.flat().filter(answer => answer !== null).length;
         const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
         const completedCategories = this.answers.filter(catAnswers => 
           catAnswers.every(answer => answer !== null)
         ).length;
         
-        // Update score circle with smooth animation
         const scoreCircle = document.getElementById('scoreCircle');
         if (scoreCircle) {
           const degrees = (percentage / 100) * 360;
           scoreCircle.style.background = `conic-gradient(var(--primary) ${degrees}deg, var(--gray-700) ${degrees}deg)`;
         }
         
-        // Update values with null checks
         this.updateElementText('totalScore', totalScore);
         this.updateElementText('scorePercentage', `${percentage}%`);
         this.updateElementText('answeredCount', `${answeredCount}/${totalQuestions}`);
@@ -1117,42 +1323,29 @@
             
             dots[idx].classList.toggle('completed', isCompleted);
             dots[idx].classList.toggle('active', hasAnswers && !isCompleted);
-            
-            // Update aria-label for screen readers
-            const status = isCompleted ? 'abgeschlossen' : hasAnswers ? 'teilweise beantwortet' : 'nicht beantwortet';
-            dots[idx].setAttribute('aria-label', `${this.categories[idx].title} - ${status}`);
           }
         });
       }
       
       updateCategoryStates() {
         this.categories.forEach((category, catIdx) => {
-          const categoryEl = document.getElementById(`category-${catIdx}`);
           const categoryAnswers = this.answers[catIdx];
           const answered = categoryAnswers.filter(answer => answer !== null).length;
           const score = categoryAnswers.reduce((sum, answer) => sum + (answer || 0), 0);
           const progress = category.questions.length > 0 ? (answered / category.questions.length) * 100 : 0;
           
-          // Update category score and progress with null checks
           const scoreEl = document.getElementById(`score-${catIdx}`);
           const progressEl = document.getElementById(`progress-${catIdx}`);
-          const progressContainer = progressEl?.parentElement;
+          const categoryEl = document.getElementById(`category-${catIdx}`);
           
           if (scoreEl) {
             scoreEl.textContent = `${score} / 20`;
-            scoreEl.setAttribute('aria-label', `${score} von 20 Punkten erreicht`);
           }
           
           if (progressEl) {
             progressEl.style.width = `${progress}%`;
           }
           
-          if (progressContainer) {
-            progressContainer.setAttribute('aria-valuenow', progress.toFixed(1));
-            progressContainer.setAttribute('aria-label', `Fortschritt: ${progress.toFixed(1)}%`);
-          }
-          
-          // Update category visual state
           if (categoryEl) {
             const isCompleted = answered === category.questions.length;
             categoryEl.classList.toggle('active', answered > 0 && !isCompleted);
@@ -1169,25 +1362,13 @@
         if (categoryEl) {
           categoryEl.scrollIntoView({ 
             behavior: 'smooth', 
-            block: 'start',
-            inline: 'nearest'
+            block: 'start'
           });
-          
-          // Focus first unanswered question in category
-          setTimeout(() => {
-            const firstUnanswered = this.answers[index].findIndex(answer => answer === null);
-            if (firstUnanswered !== -1) {
-              const questionEl = document.getElementById(`question-${index}-${firstUnanswered}`);
-              const firstRadio = questionEl?.querySelector('input[type="radio"]');
-              if (firstRadio) firstRadio.focus();
-            }
-          }, 500);
         }
       }
       
       setupKeyboardNavigation() {
         document.addEventListener('keydown', (e) => {
-          // Enhanced keyboard navigation for radio buttons
           if (e.target.type === 'radio') {
             const name = e.target.name;
             const radios = document.querySelectorAll(`input[name="${name}"]`);
@@ -1197,16 +1378,12 @@
               case 'ArrowLeft':
               case 'ArrowUp':
                 e.preventDefault();
-                if (currentIndex > 0) {
-                  radios[currentIndex - 1].focus();
-                }
+                if (currentIndex > 0) radios[currentIndex - 1].focus();
                 break;
               case 'ArrowRight':
               case 'ArrowDown':
                 e.preventDefault();
-                if (currentIndex < radios.length - 1) {
-                  radios[currentIndex + 1].focus();
-                }
+                if (currentIndex < radios.length - 1) radios[currentIndex + 1].focus();
                 break;
               case 'Enter':
               case ' ':
@@ -1217,7 +1394,6 @@
             }
           }
           
-          // Global shortcuts
           if (e.ctrlKey || e.metaKey) {
             switch(e.key) {
               case 's':
@@ -1236,7 +1412,6 @@
       }
       
       startAutosave() {
-        // Clear existing interval
         if (this.autosaveInterval) {
           clearInterval(this.autosaveInterval);
         }
@@ -1244,11 +1419,10 @@
         this.autosaveInterval = setInterval(() => {
           this.saveData();
           this.showAutosaveIndicator('saved');
-        }, 30000); // Save every 30 seconds
+        }, 30000);
       }
       
       updateTimeSpent() {
-        // Clear existing interval
         if (this.updateTimeInterval) {
           clearInterval(this.updateTimeInterval);
         }
@@ -1256,7 +1430,7 @@
         this.updateTimeInterval = setInterval(() => {
           const elapsed = Math.floor((Date.now() - this.startTime) / 60000);
           this.updateElementText('timeSpent', `${elapsed}m`);
-        }, 60000); // Update every minute
+        }, 60000);
       }
       
       showAutosaveIndicator(state) {
@@ -1266,10 +1440,10 @@
         indicator.className = `autosave-indicator ${state}`;
         
         if (state === 'saving') {
-          indicator.innerHTML = '<div class="status-dot"></div><span>Speichere...</span>';
+          indicator.innerHTML = '<span>●</span><span>Speichere...</span>';
           setTimeout(() => this.showAutosaveIndicator('saved'), 1000);
         } else if (state === 'saved') {
-          indicator.innerHTML = '<div class="status-dot"></div><span>Automatisch gespeichert</span>';
+          indicator.innerHTML = '<span>●</span><span>Automatisch gespeichert</span>';
         }
       }
       
@@ -1300,7 +1474,6 @@
           }
         } catch (e) {
           console.warn('Failed to load saved data:', e);
-          this.showNotification('Gespeicherte Daten konnten nicht geladen werden', 'error');
         }
         return null;
       }
@@ -1310,7 +1483,6 @@
           return false;
         }
         
-        // Check if structure matches current categories
         if (data.answers.length !== this.categories.length) {
           return false;
         }
@@ -1320,193 +1492,405 @@
           catAnswers.length === this.categories[idx].questions.length
         );
       }
+
+      showFinalAssessment() {
+        const modal = document.getElementById('assessmentModal');
+        if (!modal) return;
+        
+        const totalScore = this.calculateTotalScore();
+        const percentage = Math.round((totalScore / 100) * 100);
+        
+        const scoreCircle = document.getElementById('finalScoreCircle');
+        const scoreNumber = document.getElementById('finalScoreNumber');
+        const scorePercentage = document.getElementById('finalScorePercentage');
+        
+        if (scoreCircle && scoreNumber && scorePercentage) {
+          const degrees = (percentage / 100) * 360;
+          scoreCircle.style.background = `conic-gradient(var(--primary) ${degrees}deg, var(--gray-700) ${degrees}deg)`;
+          scoreNumber.textContent = totalScore;
+          scorePercentage.textContent = `${percentage}%`;
+        }
+        
+        this.updateFinalRating(percentage);
+        
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+      
+      updateFinalRating(percentage) {
+        const ratingTitle = document.getElementById('ratingTitle');
+        const ratingDescription = document.getElementById('ratingDescription');
+        
+        if (!ratingTitle || !ratingDescription) return;
+        
+        let rating, description, className;
+        
+        if (percentage >= 85) {
+          rating = 'Ausgezeichnet';
+          description = 'Sie haben einen vorbildlichen Gesundheitsstatus erreicht.';
+          className = 'rating-excellent';
+        } else if (percentage >= 70) {
+          rating = 'Sehr gut';
+          description = 'Sie haben eine solide Gesundheitsbasis.';
+          className = 'rating-very-good';
+        } else if (percentage >= 55) {
+          rating = 'Gut';
+          description = 'Sie sind auf dem richtigen Weg.';
+          className = 'rating-good';
+        } else if (percentage >= 40) {
+          rating = 'Verbesserungswürdig';
+          description = 'Ihre Gesundheit hat Optimierungspotential.';
+          className = 'rating-needs-improvement';
+        } else {
+          rating = 'Handlungsbedarf';
+          description = 'Ihre Gesundheit benötigt dringende Aufmerksamkeit.';
+          className = 'rating-critical';
+        }
+        
+        ratingTitle.textContent = rating;
+        ratingTitle.className = `rating-title ${className}`;
+        ratingDescription.textContent = description;
+      }
+      
+      closeFinalAssessment() {
+        const modal = document.getElementById('assessmentModal');
+        if (modal) {
+          modal.classList.remove('show');
+          document.body.style.overflow = '';
+        }
+      }
       
       exportData() {
         try {
           const totalScore = this.calculateTotalScore();
-          const maxScore = this.categories.reduce((sum, cat) => sum + cat.questions.length * 2, 0);
-          const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
+          const percentage = Math.round((totalScore / 100) * 100);
           const date = new Date().toLocaleDateString('de-DE');
+          const time = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
           const answeredQuestions = this.answers.flat().filter(answer => answer !== null).length;
           const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
           
-          // Enhanced category breakdown with insights
           const categoryBreakdown = this.categories.map((cat, idx) => {
             const score = this.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0);
             const answered = this.answers[idx].filter(answer => answer !== null).length;
             const catPercentage = answered > 0 ? Math.round((score / (cat.questions.length * 2)) * 100) : 0;
-            const status = catPercentage >= 80 ? '🟢 Sehr gut' : 
-                          catPercentage >= 60 ? '🟡 Gut' : 
-                          catPercentage >= 40 ? '🟠 Verbesserbar' : '🔴 Handlungsbedarf';
             
-            return `
-              <tr>
-                <td style="padding: 12px; border-bottom: 1px solid #ddd; font-weight: 500;">${cat.title}</td>
-                <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: center; font-weight: 600;">${score}/20</td>
-                <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: center; font-weight: 600;">${catPercentage}%</td>
-                <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: center;">${answered}/${cat.questions.length}</td>
-                <td style="padding: 12px; border-bottom: 1px solid #ddd; text-align: center;">${status}</td>
-              </tr>
-            `;
+            let statusIcon = '';
+            let statusColor = '';
+            if (catPercentage >= 80) { statusIcon = '●'; statusColor = '#10b981'; }
+            else if (catPercentage >= 65) { statusIcon = '●'; statusColor = '#3b82f6'; }
+            else if (catPercentage >= 50) { statusIcon = '●'; statusColor = '#f59e0b'; }
+            else if (catPercentage >= 35) { statusIcon = '●'; statusColor = '#f97316'; }
+            else { statusIcon = '●'; statusColor = '#ef4444'; }
+            
+            return `<tr>
+              <td style="padding: 8px 12px; border-bottom: 1px solid #e5e7eb; font-weight: 500; color: #374151;">${cat.title}</td>
+              <td style="padding: 8px 12px; border-bottom: 1px solid #e5e7eb; text-align: center; font-weight: 600; color: #1f2937;">${score}/20</td>
+              <td style="padding: 8px 12px; border-bottom: 1px solid #e5e7eb; text-align: center; font-weight: 600; color: #1f2937;">${catPercentage}%</td>
+              <td style="padding: 8px 12px; border-bottom: 1px solid #e5e7eb; text-align: center; color: #6b7280;">${answered}/${cat.questions.length}</td>
+              <td style="padding: 8px 12px; border-bottom: 1px solid #e5e7eb; text-align: center;"><span style="color: ${statusColor}; font-size: 14px;">${statusIcon}</span></td>
+            </tr>`;
           }).join('');
-          
-          const recommendations = this.generateRecommendations(percentage);
+
+          const getRating = (perc) => {
+            if (perc >= 85) return { rating: 'AUSGEZEICHNET', color: '#10b981', icon: '▲' };
+            if (perc >= 70) return { rating: 'SEHR GUT', color: '#3b82f6', icon: '▲' };
+            if (perc >= 55) return { rating: 'GUT', color: '#f59e0b', icon: '■' };
+            if (perc >= 40) return { rating: 'VERBESSERUNG', color: '#f97316', icon: '▼' };
+            return { rating: 'HANDLUNGSBEDARF', color: '#ef4444', icon: '▼' };
+          };
+
+          const ratingInfo = getRating(percentage);
           
           const printWindow = window.open('', '_blank');
-          printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <title>NH Score Auswertung - ${date}</title>
-              <meta charset="UTF-8">
-              <style>
-                body { 
-                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
-                  margin: 40px; 
-                  color: #1f2937; 
-                  line-height: 1.6;
-                  background: #f9fafb;
-                }
-                .header { 
-                  text-align: center; 
-                  margin-bottom: 40px; 
-                  background: white;
-                  padding: 30px;
-                  border-radius: 12px;
-                  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-                }
-                .score-circle {
-                  width: 160px;
-                  height: 160px;
-                  border-radius: 50%;
-                  background: conic-gradient(#6366f1 ${(percentage/100)*360}deg, #e5e7eb ${(percentage/100)*360}deg);
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  margin: 20px auto;
-                  position: relative;
-                  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.2);
-                }
-                .score-circle::before {
-                  content: '';
-                  width: 110px;
-                  height: 110px;
-                  background: white;
-                  border-radius: 50%;
-                  position: absolute;
-                }
-                .score-text {
-                  position: relative;
-                  z-index: 1;
-                  text-align: center;
-                  font-weight: bold;
-                  color: #1f2937;
-                }
-                table { 
-                  width: 100%; 
-                  border-collapse: collapse; 
-                  margin: 30px 0;
-                  background: white;
-                  border-radius: 8px;
-                  overflow: hidden;
-                  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-                }
-                th { 
-                  background: #6366f1; 
-                  color: white;
-                  padding: 16px 12px; 
-                  text-align: left;
-                  font-weight: 600;
-                }
-                .summary, .recommendation {
-                  background: white;
-                  padding: 24px;
-                  border-radius: 12px;
-                  margin: 20px 0;
-                  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-                }
-                .recommendation {
-                  border-left: 4px solid #6366f1;
-                }
-                .metric {
-                  display: inline-block;
-                  background: #f3f4f6;
-                  padding: 8px 16px;
-                  border-radius: 20px;
-                  margin: 4px 8px 4px 0;
-                  font-weight: 600;
-                }
-                h1 { color: #6366f1; margin-bottom: 8px; }
-                h2 { color: #374151; margin-bottom: 16px; }
-                h3 { color: #6366f1; margin-bottom: 12px; }
-                .footer {
-                  margin-top: 40px;
-                  text-align: center;
-                  color: #6b7280;
-                  font-size: 14px;
-                  border-top: 1px solid #e5e7eb;
-                  padding-top: 20px;
-                }
-                @media print {
-                  body { background: white; margin: 20px; }
-                  .header, .summary, .recommendation, table { box-shadow: none; }
-                }
-              </style>
-            </head>
-            <body>
-              <div class="header">
-                <h1>NH Score Gesundheitsauswertung</h1>
-                <p style="font-size: 18px; color: #6b7280;"><strong>Datum:</strong> ${date}</p>
-                <div class="score-circle">
-                  <div class="score-text">
-                    <div style="font-size: 28px;">${totalScore}</div>
-                    <div style="font-size: 16px; color: #6b7280;">${percentage}%</div>
+          const htmlContent = `<!DOCTYPE html>
+<html lang="de">
+<head>
+  <title>NH Score Health Assessment Report</title>
+  <meta charset="UTF-8">
+  <style>
+    @page { size: A4; margin: 20mm; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.4; color: #1f2937; background: #ffffff; font-size: 11px;
+    }
+    .page { width: 210mm; min-height: 297mm; margin: 0 auto; background: white; display: flex; flex-direction: column; }
+    .header { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white; padding: 20px; margin-bottom: 25px; }
+    .header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+    .logo-section h1 { font-size: 28px; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; }
+    .logo-section .tagline { font-size: 11px; opacity: 0.8; font-weight: 400; }
+    .meta-data { text-align: right; font-size: 10px; opacity: 0.9; }
+    .meta-data div { margin-bottom: 2px; }
+    .score-section { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; }
+    .score-display { display: flex; align-items: center; gap: 25px; }
+    .score-circle { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(#6366f1 ${(percentage/100)*360}deg, rgba(255,255,255,0.3) ${(percentage/100)*360}deg); display: flex; align-items: center; justify-content: center; position: relative; }
+    .score-circle::before { content: ''; width: 60px; height: 60px; background: #1e293b; border-radius: 50%; position: absolute; }
+    .score-text { position: relative; z-index: 1; text-align: center; color: white; }
+    .score-number { font-size: 20px; font-weight: 700; line-height: 1; }
+    .score-percentage { font-size: 10px; opacity: 0.8; }
+    .score-info h2 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .score-rating { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: ${ratingInfo.color}; }
+    .content { flex: 1; padding: 0 20px; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+    .metric-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px 12px; text-align: center; }
+    .metric-value { font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+    .metric-label { font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+    .section-title { font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; display: flex; align-items: center; gap: 8px; }
+    .section-icon { width: 16px; height: 16px; background: #6366f1; border-radius: 3px; display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 600; }
+    .category-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden; margin-bottom: 20px; }
+    .category-table th { background: #f1f5f9; color: #374151; padding: 10px 12px; font-weight: 600; font-size: 10px; text-align: left; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e5e7eb; }
+    .category-table th:nth-child(2), .category-table th:nth-child(3), .category-table th:nth-child(4), .category-table th:nth-child(5) { text-align: center; }
+    .category-table tr:nth-child(even) { background: #fafbfc; }
+    .footer { margin-top: auto; padding: 15px 20px; border-top: 1px solid #e5e7eb; background: #f8fafc; display: flex; justify-content: space-between; align-items: center; font-size: 9px; color: #6b7280; }
+    .footer-left { font-weight: 500; }
+    .footer-right { text-align: right; }
+    .legend { display: flex; gap: 15px; justify-content: center; margin-top: 15px; padding: 10px; background: #f8fafc; border-radius: 4px; font-size: 9px; }
+    .legend-item { display: flex; align-items: center; gap: 4px; color: #6b7280; }
+    @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .page { margin: 0; box-shadow: none; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="header">
+      <div class="header-top">
+        <div class="logo-section">
+          <h1>NH SCORE</h1>
+          <div class="tagline">Professional Health Assessment Report</div>
+        </div>
+        <div class="meta-data">
+          <div>Report ID: NHS-${Date.now().toString().slice(-6)}</div>
+          <div>Generated: ${date} ${time}</div>
+          <div>Version: 3.1</div>
+          <div>Status: Confidential</div>
+        </div>
+      </div>
+      <div class="score-section">
+        <div class="score-display">
+          <div class="score-circle">
+            <div class="score-text">
+              <div class="score-number">${totalScore}</div>
+              <div class="score-percentage">${percentage}%</div>
+            </div>
+          </div>
+          <div class="score-info">
+            <h2>Gesamt-Gesundheitsscore</h2>
+            <div class="score-rating">
+              <span>${ratingInfo.icon}</span>
+              <span>${ratingInfo.rating}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">${totalScore}/100</div>
+          <div class="metric-label">Gesamtpunkte</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">${answeredQuestions}/${totalQuestions}</div>
+          <div class="metric-label">Fragen beantwortet</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">${this.answers.filter(cat => cat.every(a => a !== null)).length}/5</div>
+          <div class="metric-label">Kategorien komplett</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">${percentage}%</div>
+          <div class="metric-label">Effektivität</div>
+        </div>
+      </div>
+      <h3 class="section-title">
+        <div class="section-icon">📊</div>
+        Detailanalyse nach Gesundheitsbereichen
+      </h3>
+      <table class="category-table">
+        <thead>
+          <tr>
+            <th>Gesundheitsbereich</th>
+            <th>Punkte</th>
+            <th>Prozent</th>
+            <th>Vollständigkeit</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${categoryBreakdown}
+        </tbody>
+      </table>
+      <div class="legend">
+        <div class="legend-item"><span style="color: #10b981;">●</span><span>≥80% Ausgezeichnet</span></div>
+        <div class="legend-item"><span style="color: #3b82f6;">●</span><span>≥65% Sehr gut</span></div>
+        <div class="legend-item"><span style="color: #f59e0b;">●</span><span>≥50% Gut</span></div>
+        <div class="legend-item"><span style="color: #f97316;">●</span><span>≥35% Verbesserung</span></div>
+        <div class="legend-item"><span style="color: #ef4444;">●</span><span><35% Handlungsbedarf</span></div>
+      </div>
+    </div>
+    <div class="footer">
+      <div class="footer-left"><strong>NH Score</strong> - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</div>
+      <div class="footer-right">Erstellt am ${date} um ${time}<br>Dieses Dokument ist vertraulich und ausschließlich für den Empfänger bestimmt.</div>
+    </div>
+  </div>
+</body>
+</html>`;
+          
+          printWindow.document.write(htmlContent);
+          printWindow.document.close();
+          
+          setTimeout(() => {
+            printWindow.print();
+          }, 1000);
+          
+          printWindow.document.write(htmlContent);
+          printWindow.document.close();
+          
+          setTimeout(() => {
+            printWindow.print();
+          }, 1000);
+          
+          this.showNotification('PDF wird erstellt...', 'success');
+          
+        } catch (error) {
+          console.error('Export error:', error);
+          this.showNotification('Fehler beim Exportieren', 'error');
+        }
+      }>
+                    <div class="legend-item">
+                      <span style="color: #f59e0b;">●</span>
+                      <span>≥50% Gut</span>
+                    </div>
+                    <div class="legend-item">
+                      <span style="color: #f97316;">●</span>
+                      <span>≥35% Verbesserung</span>
+                    </div>
+                    <div class="legend-item">
+                      <span style="color: #ef4444;">●</span>
+                      <span><35% Handlungsbedarf</span>
+                    </div>
                   </div>
                 </div>
-                <h2 style="color: #6366f1;">Gesamtergebnis: ${totalScore} von 100 Punkten</h2>
-              </div>
-              
-              <div class="summary">
-                <h3>📊 Zusammenfassung</h3>
-                <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0;">
-                  <span class="metric">✅ ${answeredQuestions}/${totalQuestions} Fragen</span>
-                  <span class="metric">🎯 ${percentage}% Score</span>
-                  <span class="metric">📁 ${this.answers.filter(cat => cat.every(a => a !== null)).length}/5 Kategorien</span>
+                
+                <div class="footer">
+                  <div class="footer-left">
+                    <strong>NH Score</strong> - Wissenschaftlich fundiertes Gesundheitsbewertungssystem
+                  </div>
+                  <div class="footer-right">
+                    Erstellt am ${date} um ${time}<br>
+                    Dieses Dokument ist vertraulich und ausschließlich für den Empfänger bestimmt.
+                  </div>
                 </div>
-                <p><strong>Bewertung:</strong> ${this.getScoreRating(percentage)}</p>
-              </div>
-              
-              <h3>📋 Detailauswertung nach Kategorien</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Kategorie</th>
-                    <th style="text-align: center;">Punkte</th>
-                    <th style="text-align: center;">Prozent</th>
-                    <th style="text-align: center;">Beantwortet</th>
-                    <th style="text-align: center;">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${categoryBreakdown}
-                </tbody>
-              </table>
-              
-              <div class="recommendation">
-                <h3>💡 Persönliche Empfehlungen</h3>
-                ${recommendations}
-              </div>
-              
-              <div class="footer">
-                <p><strong>NH Score</strong> - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</p>
-                <p>Erstellt am ${date} | Version 3.1</p>
               </div>
             </body>
             </html>
           `);
           printWindow.document.close();
           
-          // Wait for content to load, then print
+          setTimeout(() => {
+            printWindow.print();
+          }, 1000);
+          
+          this.showNotification('PDF wird erstellt...', 'success');
+          
+        } catch (error) {
+          console.error('Export error:', error);
+          this.showNotification('Fehler beim Exportieren', 'error');
+        }
+      };
+                  }
+                  
+                  .summary-grid {
+                    grid-template-columns: 1fr;
+                  }
+                  
+                  .main-title {
+                    font-size: 2rem;
+                  }
+                }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <div class="header">
+                  <div class="logo-area">
+                    <h1 class="main-title">NH SCORE</h1>
+                    <p class="subtitle">Professional Health Assessment Report</p>
+                  </div>
+                  
+                  <div class="meta-info">
+                    <div class="meta-item">📅 ${date}</div>
+                    <div class="meta-item">🕐 ${time}</div>
+                    <div class="meta-item">📊 Version 3.1</div>
+                  </div>
+                  
+                  <div class="score-container">
+                    <div class="score-circle">
+                      <div class="score-text">
+                        <div class="score-number">${totalScore}</div>
+                        <div class="score-percentage">${percentage}%</div>
+                      </div>
+                    </div>
+                    
+                    <div class="score-info">
+                      <div class="overall-rating">${ratingInfo.rating}</div>
+                      <div class="rating-description">${ratingInfo.description}</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="summary-section">
+                  <h2 class="summary-title">📈 Übersicht</h2>
+                  <div class="summary-grid">
+                    <div class="summary-item">
+                      <div class="summary-value">${totalScore}/100</div>
+                      <div class="summary-label">Gesamtpunkte</div>
+                    </div>
+                    <div class="summary-item">
+                      <div class="summary-value">${answeredQuestions}/${totalQuestions}</div>
+                      <div class="summary-label">Fragen beantwortet</div>
+                    </div>
+                    <div class="summary-item">
+                      <div class="summary-value">${this.answers.filter(cat => cat.every(a => a !== null)).length}/5</div>
+                      <div class="summary-label">Kategorien abgeschlossen</div>
+                    </div>
+                    <div class="summary-item">
+                      <div class="summary-value">${percentage}%</div>
+                      <div class="summary-label">Gesundheitsscore</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="breakdown-section">
+                  <h2 class="section-title">📋 Kategorien-Auswertung</h2>
+                  <table class="category-table">
+                    <thead>
+                      <tr>
+                        <th>Gesundheitsbereich</th>
+                        <th>Punkte</th>
+                        <th>Prozent</th>
+                        <th>Vollständigkeit</th>
+                        <th>Bewertung</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${categoryBreakdown}
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div class="footer">
+                  <div class="footer-title">NH Score - Professional Health Assessment</div>
+                  <div class="footer-subtitle">Wissenschaftlich fundiertes 100-Punkte-System für umfassende Gesundheit</div>
+                  <div class="footer-meta">
+                    Generiert am ${date} um ${time} | Vertraulich
+                  </div>
+                </div>
+              </div>
+            </body>
+            </html>
+          `);
+          printWindow.document.close();
+          
           setTimeout(() => {
             printWindow.print();
           }, 800);
@@ -1519,76 +1903,17 @@
         }
       }
       
-      getScoreRating(percentage) {
-        if (percentage >= 85) return '🌟 Ausgezeichnet - Vorbildlicher Gesundheitsstatus';
-        if (percentage >= 70) return '✅ Sehr gut - Solide Gesundheitsbasis';
-        if (percentage >= 55) return '👍 Gut - Optimierungspotential vorhanden';
-        if (percentage >= 40) return '⚠️ Verbesserungswürdig - Fokus auf Schlüsselbereiche';
-        return '🚨 Handlungsbedarf - Professionelle Beratung empfohlen';
-      }
-      
-      generateRecommendations(overallPercentage) {
-        const categoryScores = this.categories.map((cat, idx) => {
-          const score = this.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0);
-          const answered = this.answers[idx].filter(answer => answer !== null).length;
-          const percentage = answered > 0 ? Math.round((score / (cat.questions.length * 2)) * 100) : 0;
-          return { title: cat.title, percentage, index: idx };
-        });
-        
-        const weakestCategories = categoryScores
-          .filter(cat => cat.percentage < 60)
-          .sort((a, b) => a.percentage - b.percentage)
-          .slice(0, 2);
-        
-        let recommendations = [];
-        
-        if (overallPercentage >= 80) {
-          recommendations.push('<p><strong>🎉 Herzlichen Glückwunsch!</strong> Sie haben einen ausgezeichneten Gesundheitsstatus erreicht. Halten Sie Ihre guten Gewohnheiten bei und optimieren Sie gezielt die verbleibenden Bereiche.</p>');
-        } else if (overallPercentage >= 60) {
-          recommendations.push('<p><strong>👏 Sehr gute Ausgangslage!</strong> Sie haben bereits eine solide Gesundheitsbasis. Konzentrieren Sie sich auf die schwächeren Bereiche für weitere Verbesserungen.</p>');
-        } else {
-          recommendations.push('<p><strong>💪 Guter Start!</strong> Sie haben Verbesserungspotential erkannt. Beginnen Sie mit den wichtigsten Grundlagen und arbeiten Sie sich systematisch vor.</p>');
-        }
-        
-        if (weakestCategories.length > 0) {
-          recommendations.push('<p><strong>🎯 Prioritäre Handlungsfelder:</strong></p><ul>');
-          weakestCategories.forEach(cat => {
-            const advice = this.getCategoryAdvice(cat.index);
-            recommendations.push(`<li><strong>${cat.title}</strong> (${cat.percentage}%): ${advice}</li>`);
-          });
-          recommendations.push('</ul>');
-        }
-        
-        recommendations.push('<p><strong>📈 Nächste Schritte:</strong> Wählen Sie 1-2 Bereiche aus und implementieren Sie schrittweise kleine, nachhaltige Veränderungen. Überprüfen Sie Ihren Fortschritt in 4-6 Wochen erneut.</p>');
-        
-        return recommendations.join('');
-      }
-      
-      getCategoryAdvice(categoryIndex) {
-        const advice = [
-          'Etablieren Sie feste Schlafzeiten und schaffen Sie eine optimale Schlafumgebung.',
-          'Reduzieren Sie verarbeitete Lebensmittel und erhöhen Sie den Anteil an frischen, nährstoffreichen Nahrungsmitteln.',
-          'Integrieren Sie tägliche Bewegung in Ihren Alltag und entwickeln Sie einen strukturierten Trainingsplan.',
-          'Praktizieren Sie regelmäßig Stressmanagement-Techniken wie Meditation oder Achtsamkeitsübungen.',
-          'Reduzieren Sie schädliche Umwelteinflüsse und schaffen Sie einen gesünderen Lebensraum.'
-        ];
-        return advice[categoryIndex] || 'Fokussieren Sie sich auf nachhaltige, kleine Verbesserungen in diesem Bereich.';
-      }
-      
       resetData() {
-        if (!confirm('⚠️ Möchten Sie wirklich alle Antworten zurücksetzen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.')) {
+        if (!confirm('Möchten Sie wirklich alle Antworten zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
           return;
         }
         
         try {
-          // Reset answers array
           this.answers = this.initializeAnswers();
           this.startTime = Date.now();
           
-          // Clear localStorage
           localStorage.removeItem('nh-score-data');
           
-          // Clear intervals
           if (this.autosaveInterval) {
             clearInterval(this.autosaveInterval);
           }
@@ -1596,18 +1921,15 @@
             clearInterval(this.updateTimeInterval);
           }
           
-          // Completely re-render everything from scratch
           this.renderCategories();
           this.renderCategoryNav();
           this.updateUI();
           
-          // Restart intervals
           this.startAutosave();
           this.updateTimeSpent();
           
           this.showNotification('Alle Daten wurden erfolgreich zurückgesetzt', 'success');
           
-          // Scroll to top
           window.scrollTo({ top: 0, behavior: 'smooth' });
           
         } catch (error) {
@@ -1624,49 +1946,16 @@
         notification.className = `notification ${type}`;
         notification.classList.add('show');
         
-        // Auto-hide after 4 seconds
         setTimeout(() => {
           notification.classList.remove('show');
         }, 4000);
       }
-      
-      showError(message) {
-        const container = document.getElementById('categories');
-        if (container) {
-          container.innerHTML = `
-            <div class="error-state">
-              <h3>Fehler aufgetreten</h3>
-              <p>${message}</p>
-              <button class="btn primary" onclick="location.reload()">
-                Seite neu laden
-              </button>
-            </div>
-          `;
-        }
-        console.error('Application error:', message);
-      }
-      
-      // Cleanup method for proper resource management
-      destroy() {
-        if (this.autosaveInterval) {
-          clearInterval(this.autosaveInterval);
-        }
-        if (this.updateTimeInterval) {
-          clearInterval(this.updateTimeInterval);
-        }
-        
-        // Remove event listeners
-        document.removeEventListener('keydown', this.setupKeyboardNavigation);
-      }
     }
     
-    // Enhanced global functions with error handling
     window.exportPDF = function() {
       try {
         if (window.healthApp) {
           window.healthApp.exportData();
-        } else {
-          console.error('Health app not initialized');
         }
       } catch (error) {
         console.error('Export error:', error);
@@ -1678,8 +1967,6 @@
       try {
         if (window.healthApp) {
           window.healthApp.resetData();
-        } else {
-          console.error('Health app not initialized');
         }
       } catch (error) {
         console.error('Reset error:', error);
@@ -1687,38 +1974,20 @@
       }
     };
     
-    // Initialize app when DOM is ready with error handling
     document.addEventListener('DOMContentLoaded', () => {
       try {
         window.healthApp = new HealthAssessment();
-        
-        // Add performance monitoring
-        if ('performance' in window) {
-          window.addEventListener('load', () => {
-            const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
-            console.log(`NH Score loaded in ${loadTime}ms`);
-          });
-        }
-        
-        // Add visibility change handling for better UX
-        document.addEventListener('visibilitychange', () => {
-          if (!document.hidden && window.healthApp) {
-            // Refresh UI when user returns to tab
-            window.healthApp.updateUI();
-          }
-        });
-        
+        console.log('NH Score loaded successfully');
       } catch (error) {
         console.error('Failed to initialize health assessment:', error);
         
-        // Fallback error display
         const container = document.getElementById('categories');
         if (container) {
           container.innerHTML = `
-            <div class="error-state">
+            <div style="text-align: center; padding: 2rem; color: #ef4444; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px; margin: 1rem 0;">
               <h3>Anwendung konnte nicht geladen werden</h3>
               <p>Es ist ein technischer Fehler aufgetreten. Bitte laden Sie die Seite neu.</p>
-              <button class="btn primary" onclick="location.reload()">
+              <button style="margin-top: 1rem; padding: 0.5rem 1rem; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;" onclick="location.reload()">
                 Seite neu laden
               </button>
             </div>
@@ -1727,15 +1996,12 @@
       }
     });
     
-    // Add beforeunload handler to prevent accidental data loss
     window.addEventListener('beforeunload', (e) => {
       if (window.healthApp) {
         const answeredQuestions = window.healthApp.answers.flat().filter(answer => answer !== null).length;
         if (answeredQuestions > 0) {
-          // Save data before leaving
           window.healthApp.saveData();
           
-          // Show warning for significant progress
           if (answeredQuestions > 10) {
             e.preventDefault();
             e.returnValue = 'Sie haben ungespeicherte Änderungen. Möchten Sie die Seite wirklich verlassen?';
@@ -1744,14 +2010,6 @@
         }
       }
     });
-    
-    // Service Worker registration for potential PWA features (optional)
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        // Could be implemented for offline functionality
-        console.log('Service Worker support detected');
-      });
-    }
   </script>
 </body>
 </html>
