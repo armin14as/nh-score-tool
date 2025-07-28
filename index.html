@@ -45,6 +45,178 @@
     overflow-x: hidden;
   }
 
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+  }
+
+  .modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .modal-overlay.show .modal {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--success), #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .modal-body {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .completion-score {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--success);
+    margin: 1rem 0;
+    text-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  }
+
+  .completion-message {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .completion-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .completion-stat {
+    background: var(--glass-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+  }
+
+  .completion-stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .completion-stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .modal-btn {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    min-width: 140px;
+    justify-content: center;
+  }
+
+  .modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .modal-btn.primary {
+    background: var(--success);
+    border-color: var(--success);
+    color: white;
+  }
+
+  .modal-btn.secondary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+
+  .modal-btn.tertiary {
+    background: var(--glass-bg);
+    color: var(--text-primary);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .modal-close:hover {
+    background: var(--glass-bg);
+    color: var(--text-primary);
+  }
+
   /* Enhanced Progress Bar */
   .progress-header {
     position: sticky;
@@ -653,6 +825,18 @@
     .score-stats {
       grid-template-columns: repeat(2, 1fr);
     }
+
+    .modal {
+      padding: 1.5rem;
+    }
+
+    .completion-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .modal-actions {
+      flex-direction: column;
+    }
   }
 
   /* Accessibility improvements */
@@ -678,7 +862,8 @@
 
   /* Focus indicators for better accessibility */
   .btn:focus-visible,
-  .category-dot:focus-visible {
+  .category-dot:focus-visible,
+  .modal-btn:focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
   }
@@ -694,6 +879,46 @@
 </style>
 </head>
 <body>
+  <!-- Completion Modal -->
+  <div class="modal-overlay" id="completionModal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" aria-label="Modal schließen" onclick="closeCompletionModal()">×</button>
+      <div class="modal-header">
+        <h2 id="modal-title">🎉 Assessment abgeschlossen!</h2>
+      </div>
+      
+      <div class="modal-body">
+        <div class="completion-score" id="completionScore">0%</div>
+        <div class="completion-message" id="completionMessage">
+          Herzlichen Glückwunsch! Sie haben das NH Score Assessment erfolgreich abgeschlossen.
+        </div>
+        
+        <div class="completion-stats">
+          <div class="completion-stat">
+            <div class="completion-stat-value" id="completionTotalScore">0</div>
+            <div class="completion-stat-label">Gesamtpunkte</div>
+          </div>
+          <div class="completion-stat">
+            <div class="completion-stat-value" id="completionCategory">0</div>
+            <div class="completion-stat-label">Kategorien</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-actions">
+        <button class="modal-btn primary" onclick="exportCompletionPDF()">
+          📄 PDF herunterladen
+        </button>
+        <button class="modal-btn secondary" onclick="shareResults()">
+          📤 Teilen
+        </button>
+        <button class="modal-btn tertiary" onclick="closeCompletionModal()">
+          Weiter bearbeiten
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="progress-header">
     <div class="progress-content">
       <div class="progress-info">
@@ -773,12 +998,12 @@
   <div class="notification" id="notification" role="alert" aria-live="polite"></div>
 
   <script>
-    // Modern ES6+ Implementation with optimized patterns
+    // Enhanced HealthAssessment class with completion detection and optimized PDF
     class HealthAssessment {
       // Static configuration
       static CONFIG = {
         STORAGE_KEY: 'nh-score-data',
-        VERSION: '4.0',
+        VERSION: '4.1',
         AUTOSAVE_INTERVAL: 30000,
         ANIMATION_DELAY: 100,
         NOTIFICATION_DURATION: 3000,
@@ -871,7 +1096,8 @@
           startTime: this.loadData()?.startTime || Date.now(),
           isLoading: false,
           autosaveTimer: null,
-          timeUpdateTimer: null
+          timeUpdateTimer: null,
+          wasCompleted: false
         };
 
         // Cache DOM elements for better performance
@@ -913,12 +1139,13 @@
           'categories', 'categoryNav', 'progressBar', 'progressText',
           'autosaveIndicator', 'scoreCircle', 'totalScore', 'scorePercentage',
           'answeredCount', 'completedCategories', 'averageScore', 'timeSpent',
-          'scoreDate', 'notification', 'exportBtn', 'resetBtn'
+          'scoreDate', 'notification', 'exportBtn', 'resetBtn', 'completionModal',
+          'completionScore', 'completionMessage', 'completionTotalScore', 'completionCategory'
         ];
 
         elementIds.forEach(id => {
           this.elements[id] = document.getElementById(id);
-          if (!this.elements[id]) {
+          if (!this.elements[id] && !['completionModal', 'completionScore', 'completionMessage', 'completionTotalScore', 'completionCategory'].includes(id)) {
             console.warn(`Element with id "${id}" not found`);
           }
         });
@@ -958,6 +1185,124 @@
 
         // Observe categories after they're rendered
         this.observer = observer;
+      }
+
+      // Check if assessment is completed
+      isAssessmentCompleted() {
+        return this.state.answers.every(categoryAnswers => 
+          categoryAnswers.every(answer => answer !== null)
+        );
+      }
+
+      // Show completion modal
+      showCompletionModal() {
+        const stats = this.calculateStats();
+        const modal = this.elements.completionModal;
+        if (!modal) return;
+
+        // Update modal content
+        if (this.elements.completionScore) {
+          this.elements.completionScore.textContent = `${stats.percentage}%`;
+        }
+        
+        if (this.elements.completionTotalScore) {
+          this.elements.completionTotalScore.textContent = `${stats.totalScore}/100`;
+        }
+        
+        if (this.elements.completionCategory) {
+          this.elements.completionCategory.textContent = `${stats.completedCategories}/5`;
+        }
+
+        // Update completion message based on score
+        if (this.elements.completionMessage) {
+          this.elements.completionMessage.textContent = this.getCompletionMessage(stats.percentage);
+        }
+
+        // Show modal with animation
+        modal.classList.add('show');
+        
+        // Focus management for accessibility
+        const firstButton = modal.querySelector('.modal-btn');
+        if (firstButton) {
+          setTimeout(() => firstButton.focus(), 300);
+        }
+
+        // Trap focus in modal
+        this.trapFocus(modal);
+      }
+
+      // Get personalized completion message
+      getCompletionMessage(percentage) {
+        if (percentage >= 90) {
+          return 'Außergewöhnlich! Sie leben bereits einen vorbildlichen Lebensstil. Sie gehören zu den top 5% der Bevölkerung.';
+        } else if (percentage >= 80) {
+          return 'Hervorragend! Sie haben eine ausgezeichnete Gesundheitsbasis geschaffen. Kleine Optimierungen bringen Sie zur Perfektion.';
+        } else if (percentage >= 70) {
+          return 'Sehr gut! Sie sind auf dem richtigen Weg. Konzentrieren Sie sich auf die schwächeren Bereiche für weitere Verbesserungen.';
+        } else if (percentage >= 60) {
+          return 'Gut! Eine solide Grundlage ist vorhanden. Mit gezielten Verbesserungen erreichen Sie das nächste Level.';
+        } else if (percentage >= 50) {
+          return 'Durchschnittlich. Es gibt viel Potenzial für Verbesserungen. Beginnen Sie mit den wichtigsten Gesundheitssäulen.';
+        } else {
+          return 'Verbesserungsbedürftig. Fokussieren Sie sich auf die Grundlagen: Schlaf, Ernährung und Bewegung.';
+        }
+      }
+
+      // Trap focus within modal for accessibility
+      trapFocus(modal) {
+        const focusableElements = modal.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        
+        if (focusableElements.length === 0) return;
+        
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        const handleTabKey = (e) => {
+          if (e.key === 'Tab') {
+            if (e.shiftKey) {
+              if (document.activeElement === firstElement) {
+                e.preventDefault();
+                lastElement.focus();
+              }
+            } else {
+              if (document.activeElement === lastElement) {
+                e.preventDefault();
+                firstElement.focus();
+              }
+            }
+          }
+          
+          if (e.key === 'Escape') {
+            this.closeCompletionModal();
+          }
+        };
+
+        modal.addEventListener('keydown', handleTabKey);
+        
+        // Store handler to remove later
+        modal._trapFocusHandler = handleTabKey;
+      }
+
+      // Close completion modal
+      closeCompletionModal() {
+        const modal = this.elements.completionModal;
+        if (!modal) return;
+
+        modal.classList.remove('show');
+        
+        // Remove focus trap
+        if (modal._trapFocusHandler) {
+          modal.removeEventListener('keydown', modal._trapFocusHandler);
+          delete modal._trapFocusHandler;
+        }
+
+        // Return focus to main content
+        const firstQuestion = document.querySelector('.question input[type="radio"]');
+        if (firstQuestion) {
+          firstQuestion.focus();
+        }
       }
 
       // Optimized rendering with fragments
@@ -1102,7 +1447,7 @@
         this.updateAnswer(categoryIndex, questionIndex, answerValue);
       }
 
-      // Update answer with optimized UI updates
+      // Update answer with optimized UI updates and completion check
       updateAnswer(catIdx, qIdx, value) {
         // Update state
         this.state.answers[catIdx][qIdx] = value;
@@ -1118,8 +1463,531 @@
         this.saveData();
         this.showAutosaveIndicator('saving');
 
+        // Check for completion
+        if (this.isAssessmentCompleted() && !this.state.wasCompleted) {
+          this.state.wasCompleted = true;
+          setTimeout(() => {
+            this.showCompletionModal();
+          }, 1000); // Small delay for better UX
+        }
+
         // Auto-advance with slight delay for better UX
         setTimeout(() => this.focusNextQuestion(catIdx, qIdx), HealthAssessment.CONFIG.ANIMATION_DELAY);
+      }
+
+      // Calculate all stats in one pass for efficiency
+      calculateStats() {
+        const totalQuestions = HealthAssessment.CATEGORIES.reduce((sum, cat) => sum + cat.questions.length, 0);
+        const answeredQuestions = this.state.answers.flat().filter(answer => answer !== null).length;
+        const totalScore = this.state.answers.flat().reduce((sum, answer) => sum + (answer || 0), 0);
+        const maxScore = totalQuestions * 2;
+        const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
+        const completedCategories = this.state.answers.filter(catAnswers => 
+          catAnswers.every(answer => answer !== null)
+        ).length;
+
+        return {
+          totalQuestions,
+          answeredQuestions,
+          totalScore,
+          maxScore,
+          percentage,
+          completedCategories
+        };
+      }
+
+      // Enhanced export functionality with single-page optimization
+      handleExport() {
+        if (this.state.isLoading) return;
+        
+        this.state.isLoading = true;
+        this.updateLoadingState();
+
+        try {
+          this.exportToPDF();
+          this.showNotification('PDF wird erstellt...', 'success');
+        } catch (error) {
+          console.error('Export failed:', error);
+          this.showNotification('Export fehlgeschlagen', 'error');
+        } finally {
+          this.state.isLoading = false;
+          this.updateLoadingState();
+        }
+      }
+
+      // Generate optimized single-page PDF report
+      exportToPDF() {
+        const stats = this.calculateStats();
+        const date = new Date().toLocaleDateString('de-DE');
+        
+        const categoryBreakdown = this.generateCategoryBreakdown();
+        const recommendations = this.generateRecommendations(stats.percentage);
+        
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+          throw new Error('Popup blockiert - bitte erlauben Sie Popups für diese Seite');
+        }
+
+        printWindow.document.write(this.generateOptimizedPDFContent(stats, date, categoryBreakdown, recommendations));
+        printWindow.document.close();
+        
+        // Print after content loads
+        setTimeout(() => {
+          printWindow.print();
+        }, 500);
+      }
+
+      // Generate category breakdown for PDF
+      generateCategoryBreakdown() {
+        return HealthAssessment.CATEGORIES.map((cat, idx) => {
+          const score = this.state.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0);
+          const answered = this.state.answers[idx].filter(answer => answer !== null).length;
+          const catPercentage = answered > 0 ? Math.round((score / (cat.questions.length * 2)) * 100) : 0;
+          
+          return {
+            title: cat.title,
+            score,
+            percentage: catPercentage,
+            answered,
+            total: cat.questions.length,
+            status: this.getCategoryStatus(catPercentage)
+          };
+        });
+      }
+
+      // Get category status emoji and text
+      getCategoryStatus(percentage) {
+        if (percentage >= 85) return { emoji: '🟢', text: 'Exzellent' };
+        if (percentage >= 70) return { emoji: '🟡', text: 'Gut' };
+        if (percentage >= 55) return { emoji: '🟠', text: 'Verbesserung' };
+        return { emoji: '🔴', text: 'Kritisch' };
+      }
+
+      // Generate personalized recommendations
+      generateRecommendations(percentage) {
+        if (percentage >= 85) {
+          return 'Ausgezeichnet! Sie haben einen vorbildlichen Gesundheitsstatus. Halten Sie Ihre guten Gewohnheiten bei und verfeinern Sie Details in den schwächeren Bereichen.';
+        } else if (percentage >= 70) {
+          return 'Sehr gut! Sie haben eine solide Gesundheitsbasis. Konzentrieren Sie sich auf 1-2 Bereiche mit dem größten Verbesserungspotential.';
+        } else if (percentage >= 55) {
+          return 'Gut! Es gibt deutliches Optimierungspotential. Implementieren Sie schrittweise Verbesserungen, beginnend mit den Grundlagen.';
+        } else if (percentage >= 40) {
+          return 'Verbesserungswürdig. Fokussieren Sie sich auf die wichtigsten Gesundheitssäulen: Schlaf, Ernährung und Bewegung.';
+        } else {
+          return 'Handlungsbedarf! Beginnen Sie mit den absoluten Grundlagen und ziehen Sie professionelle Beratung in Betracht.';
+        }
+      }
+
+      // Generate optimized single-page PDF content
+      generateOptimizedPDFContent(stats, date, categoryBreakdown, recommendations) {
+        const topCategories = [...categoryBreakdown]
+          .sort((a, b) => b.percentage - a.percentage)
+          .slice(0, 3);
+
+        const categoryRows = categoryBreakdown.map(cat => `
+          <tr>
+            <td style="padding: 6px 8px; border-bottom: 1px solid #ddd; font-weight: 500; font-size: 13px;">
+              ${cat.status.emoji} ${cat.title}
+            </td>
+            <td style="padding: 6px 8px; border-bottom: 1px solid #ddd; text-align: center; font-weight: 600; font-size: 13px;">
+              ${cat.score}/20
+            </td>
+            <td style="padding: 6px 8px; border-bottom: 1px solid #ddd; text-align: center; font-size: 13px;">
+              ${cat.percentage}%
+            </td>
+            <td style="padding: 6px 8px; border-bottom: 1px solid #ddd; text-align: center; font-size: 13px; color: ${cat.status.text === 'Exzellent' ? '#10b981' : cat.status.text === 'Gut' ? '#f59e0b' : '#ef4444'};">
+              ${cat.status.text}
+            </td>
+          </tr>
+        `).join('');
+
+        return `
+          <!DOCTYPE html>
+          <html lang="de">
+          <head>
+            <title>NH Score Auswertung - ${date}</title>
+            <meta charset="UTF-8">
+            <style>
+              * { margin: 0; padding: 0; box-sizing: border-box; }
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                color: #333;
+                line-height: 1.4;
+                background: #fff;
+                padding: 20px;
+                font-size: 12px;
+              }
+              
+              .container {
+                max-width: 100%;
+                margin: 0 auto;
+              }
+              
+              .header { 
+                text-align: center;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #6366f1;
+                padding-bottom: 15px;
+              }
+              
+              .main-title {
+                font-size: 28px;
+                font-weight: 900;
+                color: #6366f1;
+                margin-bottom: 5px;
+              }
+              
+              .subtitle {
+                font-size: 12px;
+                color: #666;
+                margin-bottom: 10px;
+              }
+              
+              .score-section {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin: 15px 0;
+                gap: 20px;
+              }
+              
+              .score-circle {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: conic-gradient(#6366f1 ${(stats.percentage/100)*360}deg, #e5e7eb ${(stats.percentage/100)*360}deg);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                flex-shrink: 0;
+              }
+              
+              .score-circle::before {
+                content: '';
+                width: 55px;
+                height: 55px;
+                background: white;
+                border-radius: 50%;
+                position: absolute;
+              }
+              
+              .score-text {
+                position: relative;
+                z-index: 1;
+                text-align: center;
+                font-weight: bold;
+              }
+              
+              .score-number {
+                font-size: 16px;
+                color: #6366f1;
+                line-height: 1;
+              }
+              
+              .score-percent {
+                font-size: 10px;
+                color: #666;
+              }
+              
+              .score-details {
+                flex: 1;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+              }
+              
+              .score-detail {
+                text-align: center;
+                padding: 8px;
+                background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+                border-radius: 6px;
+                border: 1px solid #e0e7ff;
+              }
+              
+              .score-detail-value {
+                font-size: 14px;
+                font-weight: 600;
+                color: #6366f1;
+                line-height: 1;
+              }
+              
+              .score-detail-label {
+                font-size: 9px;
+                color: #666;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-top: 2px;
+              }
+              
+              .content-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+                margin: 15px 0;
+              }
+              
+              .section {
+                background: #f9fafb;
+                padding: 12px;
+                border-radius: 8px;
+                border: 1px solid #e5e7eb;
+              }
+              
+              .section h3 {
+                font-size: 14px;
+                margin-bottom: 8px;
+                color: #6366f1;
+                border-bottom: 1px solid #e0e7ff;
+                padding-bottom: 4px;
+              }
+              
+              table { 
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 11px;
+              }
+              
+              th { 
+                background: linear-gradient(135deg, #6366f1, #8b5cf6);
+                color: white;
+                padding: 6px 4px;
+                text-align: left;
+                font-weight: 600;
+                font-size: 11px;
+              }
+              
+              th:nth-child(2), th:nth-child(3), th:nth-child(4) {
+                text-align: center;
+              }
+              
+              .recommendation {
+                background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+                padding: 12px;
+                border-left: 3px solid #6366f1;
+                border-radius: 6px;
+                font-size: 11px;
+                line-height: 1.4;
+              }
+              
+              .top-categories {
+                display: flex;
+                justify-content: space-between;
+                gap: 8px;
+                margin: 10px 0;
+              }
+              
+              .top-category {
+                flex: 1;
+                text-align: center;
+                padding: 8px;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 6px;
+              }
+              
+              .top-category-score {
+                font-size: 16px;
+                font-weight: bold;
+                color: #10b981;
+              }
+              
+              .top-category-name {
+                font-size: 9px;
+                color: #666;
+                margin-top: 2px;
+              }
+              
+              .footer {
+                margin-top: 15px;
+                text-align: center;
+                color: #666;
+                font-size: 9px;
+                border-top: 1px solid #e5e7eb;
+                padding-top: 8px;
+              }
+              
+              .highlight {
+                color: #6366f1;
+                font-weight: 600;
+              }
+              
+              @media print {
+                body { 
+                  margin: 0; 
+                  padding: 15px; 
+                  -webkit-print-color-adjust: exact;
+                  print-color-adjust: exact;
+                }
+                .container { max-width: none; }
+                .score-circle { 
+                  -webkit-print-color-adjust: exact;
+                  print-color-adjust: exact;
+                }
+                * {
+                  -webkit-print-color-adjust: exact !important;
+                  print-color-adjust: exact !important;
+                }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1 class="main-title">NH Score</h1>
+                <p class="subtitle">Wissenschaftlich fundierte Gesundheitsauswertung</p>
+              </div>
+              
+              <div class="score-section">
+                <div class="score-circle">
+                  <div class="score-text">
+                    <div class="score-number">${stats.totalScore}</div>
+                    <div class="score-percent">${stats.percentage}%</div>
+                  </div>
+                </div>
+                
+                <div class="score-details">
+                  <div class="score-detail">
+                    <div class="score-detail-value">${stats.totalScore}/100</div>
+                    <div class="score-detail-label">Gesamtpunkte</div>
+                  </div>
+                  <div class="score-detail">
+                    <div class="score-detail-value">${stats.answeredQuestions}/${stats.totalQuestions}</div>
+                    <div class="score-detail-label">Beantwortet</div>
+                  </div>
+                  <div class="score-detail">
+                    <div class="score-detail-value">${stats.completedCategories}/5</div>
+                    <div class="score-detail-label">Kategorien</div>
+                  </div>
+                  <div class="score-detail">
+                    <div class="score-detail-value">${
+                      stats.percentage >= 85 ? '⭐⭐⭐⭐⭐' :
+                      stats.percentage >= 70 ? '⭐⭐⭐⭐' :
+                      stats.percentage >= 55 ? '⭐⭐⭐' :
+                      stats.percentage >= 40 ? '⭐⭐' : '⭐'
+                    }</div>
+                    <div class="score-detail-label">Bewertung</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="top-categories">
+                <h3 style="width: 100%; text-align: center; margin: 0 0 8px 0; font-size: 12px; color: #6366f1;">🏆 Top 3 Kategorien</h3>
+              </div>
+              
+              <div class="top-categories">
+                ${topCategories.map((cat, idx) => `
+                  <div class="top-category">
+                    <div class="top-category-score">${cat.percentage}%</div>
+                    <div class="top-category-name">${cat.title}</div>
+                  </div>
+                `).join('')}
+              </div>
+              
+              <div class="content-grid">
+                <div class="section">
+                  <h3>📊 Kategorien-Übersicht</h3>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Kategorie</th>
+                        <th>Score</th>
+                        <th>%</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${categoryRows}
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div class="section">
+                  <h3>💡 Empfehlung</h3>
+                  <div class="recommendation">
+                    ${recommendations}
+                  </div>
+                  
+                  <div style="margin-top: 10px;">
+                    <h4 style="font-size: 11px; color: #6366f1; margin-bottom: 6px;">🎯 Nächste Schritte:</h4>
+                    <ul style="font-size: 10px; margin-left: 15px; line-height: 1.4;">
+                      ${this.generateActionItems(categoryBreakdown).map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                  </div>
+                  
+                  <div style="margin-top: 10px; padding: 8px; background: #f0f9ff; border-radius: 4px; border: 1px solid #bae6fd;">
+                    <div style="font-size: 10px; color: #0369a1;">
+                      <strong>💪 Motivations-Tipp:</strong> ${this.getMotivationTip(stats.percentage)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="footer">
+                <p><strong>NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</strong></p>
+                <p>Erstellt am ${date} | Version ${HealthAssessment.CONFIG.VERSION} | Bearbeitungszeit: ${Math.floor((Date.now() - this.state.startTime) / 60000)} Minuten</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `;
+      }
+
+      // Generate personalized action items
+      generateActionItems(categoryBreakdown) {
+        const sortedCategories = [...categoryBreakdown].sort((a, b) => a.percentage - b.percentage);
+        const weakestCategory = sortedCategories[0];
+        const secondWeakest = sortedCategories[1];
+        
+        const actions = [
+          `Fokus auf "${weakestCategory.title}" - hier liegt das größte Verbesserungspotential`,
+          `"${secondWeakest.title}" als zweite Priorität angehen`,
+          'Realistische Ziele setzen: 1-2 Gewohnheiten pro Monat ändern'
+        ];
+        
+        // Add specific recommendations based on categories
+        if (weakestCategory.title.includes('Schlaf')) {
+          actions.push('Feste Schlafzeiten einführen und Schlafumgebung optimieren');
+        } else if (weakestCategory.title.includes('Ernährung')) {
+          actions.push('Meal-Prep beginnen und Zuckerkonsum reduzieren');
+        } else if (weakestCategory.title.includes('Training')) {
+          actions.push('Mit 2-3 Trainingseinheiten pro Woche starten');
+        } else if (weakestCategory.title.includes('Mindset')) {
+          actions.push('Tägliche 10-Minuten Meditation einführen');
+        } else if (weakestCategory.title.includes('Lifestyle')) {
+          actions.push('Schädliche Gewohnheiten schrittweise eliminieren');
+        }
+        
+        return actions.slice(0, 4); // Limit to 4 items for space
+      }
+
+      // Generate motivation tip based on score
+      getMotivationTip(percentage) {
+        const tips = {
+          high: [
+            'Sie sind bereits Vorbild für andere - teilen Sie Ihre Erfolgsgeheimnisse!',
+            'Perfektion ist das Ziel - Sie sind schon sehr nah dran!',
+            'Ihre Disziplin zahlt sich aus - bleiben Sie konsequent!'
+          ],
+          medium: [
+            'Jede kleine Verbesserung bringt Sie dem Ziel näher!',
+            'Sie haben bereits eine gute Basis - bauen Sie darauf auf!',
+            'Konsistenz ist der Schlüssel - kleine Schritte führen zum Erfolg!'
+          ],
+          low: [
+            'Jeder Experte war einmal Anfänger - Sie schaffen das!',
+            'Große Reisen beginnen mit dem ersten Schritt!',
+            'Ihre Gesundheit ist die beste Investition in Ihre Zukunft!'
+          ]
+        };
+        
+        let category;
+        if (percentage >= 70) category = 'high';
+        else if (percentage >= 50) category = 'medium';
+        else category = 'low';
+        
+        const categoryTips = tips[category];
+        return categoryTips[Math.floor(Math.random() * categoryTips.length)];
       }
 
       // Debounced UI updates for better performance
@@ -1168,27 +2036,6 @@
         this.updateCategoryStates();
       }
 
-      // Calculate all stats in one pass for efficiency
-      calculateStats() {
-        const totalQuestions = HealthAssessment.CATEGORIES.reduce((sum, cat) => sum + cat.questions.length, 0);
-        const answeredQuestions = this.state.answers.flat().filter(answer => answer !== null).length;
-        const totalScore = this.state.answers.flat().reduce((sum, answer) => sum + (answer || 0), 0);
-        const maxScore = totalQuestions * 2;
-        const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
-        const completedCategories = this.state.answers.filter(catAnswers => 
-          catAnswers.every(answer => answer !== null)
-        ).length;
-
-        return {
-          totalQuestions,
-          answeredQuestions,
-          totalScore,
-          maxScore,
-          percentage,
-          completedCategories
-        };
-      }
-
       // Update progress with smooth animations
       updateProgress(stats) {
         const progress = (stats.answeredQuestions / stats.totalQuestions) * 100;
@@ -1229,6 +2076,12 @@
         // Update date
         if (this.elements.scoreDate) {
           this.elements.scoreDate.textContent = `Stand: ${new Date().toLocaleDateString('de-DE')}`;
+        }
+
+        // Update time spent
+        if (this.elements.timeSpent) {
+          const elapsed = Math.floor((Date.now() - this.state.startTime) / 60000);
+          this.elements.timeSpent.textContent = `${elapsed}m`;
         }
       }
 
@@ -1305,6 +2158,13 @@
         // Global shortcuts
         if (event.ctrlKey || event.metaKey) {
           this.handleGlobalShortcuts(event);
+        }
+
+        // Modal shortcuts
+        if (this.elements.completionModal?.classList.contains('show')) {
+          if (event.key === 'Escape') {
+            this.closeCompletionModal();
+          }
         }
       }
 
@@ -1405,7 +2265,8 @@
             answers: this.state.answers,
             timestamp: Date.now(),
             version: HealthAssessment.CONFIG.VERSION,
-            startTime: this.state.startTime
+            startTime: this.state.startTime,
+            wasCompleted: this.state.wasCompleted
           };
           
           localStorage.setItem(HealthAssessment.CONFIG.STORAGE_KEY, JSON.stringify(data));
@@ -1433,270 +2294,6 @@
         return null;
       }
 
-      // Enhanced export functionality
-      handleExport() {
-        if (this.state.isLoading) return;
-        
-        this.state.isLoading = true;
-        this.updateLoadingState();
-
-        try {
-          this.exportToPDF();
-          this.showNotification('PDF wird erstellt...', 'success');
-        } catch (error) {
-          console.error('Export failed:', error);
-          this.showNotification('Export fehlgeschlagen', 'error');
-        } finally {
-          this.state.isLoading = false;
-          this.updateLoadingState();
-        }
-      }
-
-      // Generate comprehensive PDF report
-      exportToPDF() {
-        const stats = this.calculateStats();
-        const date = new Date().toLocaleDateString('de-DE');
-        
-        const categoryBreakdown = this.generateCategoryBreakdown();
-        const recommendations = this.generateRecommendations(stats.percentage);
-        
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) {
-          throw new Error('Popup blockiert - bitte erlauben Sie Popups für diese Seite');
-        }
-
-        printWindow.document.write(this.generatePDFContent(stats, date, categoryBreakdown, recommendations));
-        printWindow.document.close();
-        
-        // Print after content loads
-        setTimeout(() => {
-          printWindow.print();
-        }, 500);
-      }
-
-      // Generate category breakdown for PDF
-      generateCategoryBreakdown() {
-        return HealthAssessment.CATEGORIES.map((cat, idx) => {
-          const score = this.state.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0);
-          const answered = this.state.answers[idx].filter(answer => answer !== null).length;
-          const catPercentage = answered > 0 ? Math.round((score / (cat.questions.length * 2)) * 100) : 0;
-          
-          return {
-            title: cat.title,
-            score,
-            percentage: catPercentage,
-            answered,
-            total: cat.questions.length
-          };
-        });
-      }
-
-      // Generate personalized recommendations
-      generateRecommendations(percentage) {
-        if (percentage >= 85) {
-          return 'Ausgezeichnet! Sie haben einen vorbildlichen Gesundheitsstatus. Halten Sie Ihre guten Gewohnheiten bei und verfeinern Sie Details in den schwächeren Bereichen.';
-        } else if (percentage >= 70) {
-          return 'Sehr gut! Sie haben eine solide Gesundheitsbasis. Konzentrieren Sie sich auf 1-2 Bereiche mit dem größten Verbesserungspotential.';
-        } else if (percentage >= 55) {
-          return 'Gut! Es gibt deutliches Optimierungspotential. Implementieren Sie schrittweise Verbesserungen, beginnend mit den Grundlagen.';
-        } else if (percentage >= 40) {
-          return 'Verbesserungswürdig. Fokussieren Sie sich auf die wichtigsten Gesundheitssäulen: Schlaf, Ernährung und Bewegung.';
-        } else {
-          return 'Handlungsbedarf! Beginnen Sie mit den absoluten Grundlagen und ziehen Sie professionelle Beratung in Betracht.';
-        }
-      }
-
-      // Generate complete PDF content
-      generatePDFContent(stats, date, categoryBreakdown, recommendations) {
-        const categoryRows = categoryBreakdown.map(cat => `
-          <tr>
-            <td style="padding: 12px 8px; border-bottom: 1px solid #ddd; font-weight: 500;">${cat.title}</td>
-            <td style="padding: 12px 8px; border-bottom: 1px solid #ddd; text-align: center; font-weight: 600;">${cat.score}/20</td>
-            <td style="padding: 12px 8px; border-bottom: 1px solid #ddd; text-align: center;">${cat.percentage}%</td>
-            <td style="padding: 12px 8px; border-bottom: 1px solid #ddd; text-align: center;">${cat.answered}/${cat.total}</td>
-          </tr>
-        `).join('');
-
-        return `
-          <!DOCTYPE html>
-          <html lang="de">
-          <head>
-            <title>NH Score Auswertung - ${date}</title>
-            <meta charset="UTF-8">
-            <style>
-              body { 
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                margin: 0;
-                padding: 40px;
-                color: #333;
-                line-height: 1.6;
-                background: #fff;
-              }
-              .header { 
-                text-align: center;
-                margin-bottom: 40px;
-                border-bottom: 3px solid #6366f1;
-                padding-bottom: 30px;
-              }
-              .main-title {
-                font-size: 2.5rem;
-                font-weight: 900;
-                color: #6366f1;
-                margin-bottom: 10px;
-              }
-              .subtitle {
-                font-size: 1.1rem;
-                color: #666;
-                margin-bottom: 20px;
-              }
-              .score-circle {
-                width: 150px;
-                height: 150px;
-                border-radius: 50%;
-                background: conic-gradient(#6366f1 ${(stats.percentage/100)*360}deg, #e5e7eb ${(stats.percentage/100)*360}deg);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 20px auto;
-                position: relative;
-                box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
-              }
-              .score-circle::before {
-                content: '';
-                width: 100px;
-                height: 100px;
-                background: white;
-                border-radius: 50%;
-                position: absolute;
-              }
-              .score-text {
-                position: relative;
-                z-index: 1;
-                text-align: center;
-                font-weight: bold;
-              }
-              .score-number {
-                font-size: 28px;
-                color: #6366f1;
-              }
-              .score-percent {
-                font-size: 16px;
-                color: #666;
-              }
-              .summary {
-                background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
-                padding: 25px;
-                border-radius: 12px;
-                margin: 30px 0;
-                border-left: 4px solid #6366f1;
-              }
-              .summary h3 {
-                margin-top: 0;
-                color: #6366f1;
-              }
-              table { 
-                width: 100%;
-                border-collapse: collapse;
-                margin: 30px 0;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-                border-radius: 8px;
-                overflow: hidden;
-              }
-              th { 
-                background: linear-gradient(135deg, #6366f1, #8b5cf6);
-                color: white;
-                padding: 15px 8px;
-                text-align: left;
-                font-weight: 600;
-              }
-              th:nth-child(2), th:nth-child(3), th:nth-child(4) {
-                text-align: center;
-              }
-              .recommendation {
-                background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-                padding: 20px;
-                border-left: 4px solid #6366f1;
-                margin: 30px 0;
-                border-radius: 8px;
-              }
-              .recommendation h3 {
-                margin-top: 0;
-                color: #6366f1;
-              }
-              .footer {
-                margin-top: 50px;
-                text-align: center;
-                color: #666;
-                font-size: 12px;
-                border-top: 1px solid #e5e7eb;
-                padding-top: 20px;
-              }
-              .highlight {
-                color: #6366f1;
-                font-weight: 600;
-              }
-              @media print {
-                body { margin: 20px; padding: 0; }
-                .score-circle { box-shadow: none; }
-              }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <h1 class="main-title">NH Score</h1>
-              <p class="subtitle">Wissenschaftlich fundierte Gesundheitsauswertung</p>
-              <div class="score-circle">
-                <div class="score-text">
-                  <div class="score-number">${stats.totalScore}</div>
-                  <div class="score-percent">${stats.percentage}%</div>
-                </div>
-              </div>
-              <h2 style="color: #6366f1; margin: 20px 0;">Gesamtergebnis: ${stats.totalScore} von 100 Punkten</h2>
-            </div>
-            
-            <div class="summary">
-              <h3>📊 Zusammenfassung</h3>
-              <p><strong>Beantwortete Fragen:</strong> <span class="highlight">${stats.answeredQuestions} von ${stats.totalQuestions}</span></p>
-              <p><strong>Gesamtscore:</strong> <span class="highlight">${stats.percentage}% (${stats.totalScore}/100 Punkte)</span></p>
-              <p><strong>Abgeschlossene Kategorien:</strong> <span class="highlight">${stats.completedCategories} von 5</span></p>
-              <p><strong>Bewertung:</strong> <span class="highlight">${
-                stats.percentage >= 85 ? 'Ausgezeichnet ⭐⭐⭐⭐⭐' :
-                stats.percentage >= 70 ? 'Sehr gut ⭐⭐⭐⭐' :
-                stats.percentage >= 55 ? 'Gut ⭐⭐⭐' :
-                stats.percentage >= 40 ? 'Verbesserungswürdig ⭐⭐' :
-                'Handlungsbedarf ⭐'
-              }</span></p>
-            </div>
-            
-            <h3>📋 Detailauswertung nach Kategorien</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Kategorie</th>
-                  <th>Punkte</th>
-                  <th>Prozent</th>
-                  <th>Fortschritt</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${categoryRows}
-              </tbody>
-            </table>
-            
-            <div class="recommendation">
-              <h3>💡 Persönliche Empfehlung</h3>
-              <p>${recommendations}</p>
-            </div>
-            
-            <div class="footer">
-              <p><strong>NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</strong></p>
-              <p>Erstellt am ${date} | Version ${HealthAssessment.CONFIG.VERSION}</p>
-            </div>
-          </body>
-          </html>
-        `;
-      }
-
       // Reset functionality with confirmation
       handleReset() {
         if (this.state.isLoading) return;
@@ -1716,9 +2313,13 @@
           // Reset state
           this.state.answers = this.initializeAnswers();
           this.state.startTime = Date.now();
+          this.state.wasCompleted = false;
 
           // Clear storage
           localStorage.removeItem(HealthAssessment.CONFIG.STORAGE_KEY);
+
+          // Close modal if open
+          this.closeCompletionModal();
 
           // Re-render everything
           await this.render();
@@ -1824,6 +2425,46 @@
       }
     }
 
+    // Global functions for modal interactions
+    function closeCompletionModal() {
+      if (window.healthApp) {
+        window.healthApp.closeCompletionModal();
+      }
+    }
+
+    function exportCompletionPDF() {
+      if (window.healthApp) {
+        window.healthApp.handleExport();
+        window.healthApp.closeCompletionModal();
+      }
+    }
+
+    function shareResults() {
+      if (navigator.share && window.healthApp) {
+        const stats = window.healthApp.calculateStats();
+        navigator.share({
+          title: 'Mein NH Score Ergebnis',
+          text: `Ich habe ${stats.percentage}% (${stats.totalScore}/100 Punkte) im NH Score Assessment erreicht! 🎯`,
+          url: window.location.href
+        }).catch(console.error);
+      } else {
+        // Fallback: Copy to clipboard
+        if (window.healthApp) {
+          const stats = window.healthApp.calculateStats();
+          const text = `Mein NH Score Ergebnis: ${stats.percentage}% (${stats.totalScore}/100 Punkte) 🎯`;
+          
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+              window.healthApp.showNotification('Ergebnis in Zwischenablage kopiert!', 'success');
+            });
+          } else {
+            // Ultra-fallback
+            window.healthApp.showNotification('Teilen-Funktion nicht verfügbar', 'warning');
+          }
+        }
+      }
+    }
+
     // Enhanced initialization with error handling
     class AppInitializer {
       static async init() {
@@ -1871,6 +2512,13 @@
         document.addEventListener('change', (event) => {
           if (event.target.type === 'radio' && window.healthApp) {
             window.healthApp.handleAnswer(event);
+          }
+        });
+
+        // Handle modal close on overlay click
+        document.addEventListener('click', (event) => {
+          if (event.target.classList.contains('modal-overlay')) {
+            closeCompletionModal();
           }
         });
       }
@@ -1945,6 +2593,16 @@
             }
           } catch (e) {
             console.error('Import failed:', e);
+          }
+        },
+        showModal: () => window.healthApp?.showCompletionModal(),
+        completeAll: () => {
+          if (window.healthApp) {
+            // Fill all answers with random values for testing
+            window.healthApp.state.answers = window.healthApp.state.answers.map(cat => 
+              cat.map(() => Math.floor(Math.random() * 3))
+            );
+            window.healthApp.render();
           }
         }
       };
