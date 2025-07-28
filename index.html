@@ -1578,95 +1578,142 @@
         }
       }
 
-      // Generate optimized single-page PDF content
+      // Generate professional single-page PDF content
       generateOptimizedPDFContent(stats, date, categoryBreakdown, recommendations) {
-        const topCategories = [...categoryBreakdown]
-          .sort((a, b) => b.percentage - a.percentage)
-          .slice(0, 3);
-
-        const categoryRows = categoryBreakdown.map(cat => `
-          <tr>
-            <td style="padding: 6px 8px; border-bottom: 1px solid #ddd; font-weight: 500; font-size: 13px;">
-              ${cat.status.emoji} ${cat.title}
-            </td>
-            <td style="padding: 6px 8px; border-bottom: 1px solid #ddd; text-align: center; font-weight: 600; font-size: 13px;">
-              ${cat.score}/20
-            </td>
-            <td style="padding: 6px 8px; border-bottom: 1px solid #ddd; text-align: center; font-size: 13px;">
-              ${cat.percentage}%
-            </td>
-            <td style="padding: 6px 8px; border-bottom: 1px solid #ddd; text-align: center; font-size: 13px; color: ${cat.status.text === 'Exzellent' ? '#10b981' : cat.status.text === 'Gut' ? '#f59e0b' : '#ef4444'};">
-              ${cat.status.text}
-            </td>
-          </tr>
+        const categoryBars = categoryBreakdown.map(cat => `
+          <div class="category-row">
+            <div class="category-info">
+              <span class="category-name">${cat.title}</span>
+              <span class="category-score">${cat.score}/20</span>
+            </div>
+            <div class="progress-container">
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: ${cat.percentage}%; background: ${this.getCategoryColor(cat.percentage)};"></div>
+              </div>
+              <span class="percentage">${cat.percentage}%</span>
+            </div>
+          </div>
         `).join('');
+
+        const getScoreRating = (percentage) => {
+          if (percentage >= 90) return { text: 'Außergewöhnlich', color: '#059669', bg: '#d1fae5' };
+          if (percentage >= 80) return { text: 'Hervorragend', color: '#0891b2', bg: '#cffafe' };
+          if (percentage >= 70) return { text: 'Sehr gut', color: '#7c3aed', bg: '#ede9fe' };
+          if (percentage >= 60) return { text: 'Gut', color: '#ea580c', bg: '#fed7aa' };
+          if (percentage >= 50) return { text: 'Durchschnittlich', color: '#d97706', bg: '#fef3c7' };
+          return { text: 'Verbesserungsbedürftig', color: '#dc2626', bg: '#fee2e2' };
+        };
+
+        const rating = getScoreRating(stats.percentage);
 
         return `
           <!DOCTYPE html>
           <html lang="de">
           <head>
-            <title>NH Score Auswertung - ${date}</title>
+            <title>NH Score Gesundheitsauswertung - ${date}</title>
             <meta charset="UTF-8">
             <style>
-              * { margin: 0; padding: 0; box-sizing: border-box; }
+              @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+              
+              * { 
+                margin: 0; 
+                padding: 0; 
+                box-sizing: border-box; 
+              }
+              
               body { 
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                color: #333;
-                line-height: 1.4;
-                background: #fff;
-                padding: 20px;
-                font-size: 12px;
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                color: #1f2937;
+                line-height: 1.5;
+                background: #ffffff;
+                font-size: 14px;
               }
               
-              .container {
-                max-width: 100%;
+              .page {
+                width: 210mm;
+                min-height: 297mm;
                 margin: 0 auto;
+                background: white;
+                padding: 25mm;
+                box-shadow: 0 0 20px rgba(0,0,0,0.1);
               }
               
-              .header { 
+              .header {
                 text-align: center;
-                margin-bottom: 20px;
-                border-bottom: 2px solid #6366f1;
-                padding-bottom: 15px;
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 3px solid #6366f1;
+                position: relative;
+              }
+              
+              .logo-section {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 15px;
               }
               
               .main-title {
-                font-size: 28px;
+                font-size: 36px;
                 font-weight: 900;
                 color: #6366f1;
-                margin-bottom: 5px;
+                letter-spacing: -0.5px;
+                margin-right: 15px;
               }
               
               .subtitle {
-                font-size: 12px;
-                color: #666;
-                margin-bottom: 10px;
+                font-size: 13px;
+                color: #6b7280;
+                font-weight: 500;
+                max-width: 400px;
+                margin: 0 auto;
               }
               
-              .score-section {
+              .report-date {
+                position: absolute;
+                top: 0;
+                right: 0;
+                font-size: 11px;
+                color: #9ca3af;
+                background: #f9fafb;
+                padding: 4px 8px;
+                border-radius: 4px;
+              }
+              
+              .score-overview {
                 display: flex;
+                align-items: stretch;
+                gap: 25px;
+                margin-bottom: 35px;
+                padding: 25px;
+                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+                border-radius: 12px;
+                border: 1px solid #e2e8f0;
+              }
+              
+              .score-visual {
+                display: flex;
+                flex-direction: column;
                 align-items: center;
-                justify-content: space-between;
-                margin: 15px 0;
-                gap: 20px;
+                min-width: 140px;
               }
               
               .score-circle {
-                width: 80px;
-                height: 80px;
+                width: 100px;
+                height: 100px;
                 border-radius: 50%;
-                background: conic-gradient(#6366f1 ${(stats.percentage/100)*360}deg, #e5e7eb ${(stats.percentage/100)*360}deg);
+                background: conic-gradient(#6366f1 0deg, #6366f1 ${(stats.percentage/100)*360}deg, #e5e7eb ${(stats.percentage/100)*360}deg, #e5e7eb 360deg);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 position: relative;
-                flex-shrink: 0;
+                margin-bottom: 10px;
               }
               
               .score-circle::before {
                 content: '';
-                width: 55px;
-                height: 55px;
+                width: 70px;
+                height: 70px;
                 background: white;
                 border-radius: 50%;
                 position: absolute;
@@ -1676,153 +1723,264 @@
                 position: relative;
                 z-index: 1;
                 text-align: center;
-                font-weight: bold;
               }
               
               .score-number {
-                font-size: 16px;
+                font-size: 24px;
+                font-weight: 900;
                 color: #6366f1;
                 line-height: 1;
               }
               
               .score-percent {
-                font-size: 10px;
-                color: #666;
+                font-size: 12px;
+                color: #6b7280;
+                font-weight: 600;
+              }
+              
+              .score-rating {
+                background: ${rating.bg};
+                color: ${rating.color};
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                border: 1px solid ${rating.color}20;
               }
               
               .score-details {
                 flex: 1;
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 10px;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
               }
               
-              .score-detail {
+              .detail-card {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
                 text-align: center;
-                padding: 8px;
-                background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
-                border-radius: 6px;
-                border: 1px solid #e0e7ff;
+                border: 1px solid #e5e7eb;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
               }
               
-              .score-detail-value {
-                font-size: 14px;
-                font-weight: 600;
-                color: #6366f1;
-                line-height: 1;
+              .detail-value {
+                font-size: 20px;
+                font-weight: 700;
+                color: #1f2937;
+                margin-bottom: 4px;
               }
               
-              .score-detail-label {
-                font-size: 9px;
-                color: #666;
+              .detail-label {
+                font-size: 11px;
+                color: #6b7280;
                 text-transform: uppercase;
                 letter-spacing: 0.5px;
-                margin-top: 2px;
+                font-weight: 500;
               }
               
-              .content-grid {
+              .content-section {
+                margin-bottom: 30px;
+              }
+              
+              .section-title {
+                font-size: 18px;
+                font-weight: 700;
+                color: #1f2937;
+                margin-bottom: 15px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+              }
+              
+              .categories-grid {
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                overflow: hidden;
+              }
+              
+              .category-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 15px 20px;
+                border-bottom: 1px solid #f3f4f6;
+              }
+              
+              .category-row:last-child {
+                border-bottom: none;
+              }
+              
+              .category-info {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                min-width: 200px;
+              }
+              
+              .category-name {
+                font-weight: 600;
+                color: #374151;
+                font-size: 14px;
+              }
+              
+              .category-score {
+                font-size: 13px;
+                color: #6b7280;
+                font-weight: 500;
+                background: #f3f4f6;
+                padding: 2px 8px;
+                border-radius: 12px;
+              }
+              
+              .progress-container {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                flex: 1;
+                margin-left: 20px;
+              }
+              
+              .progress-bar-bg {
+                flex: 1;
+                height: 8px;
+                background: #e5e7eb;
+                border-radius: 4px;
+                overflow: hidden;
+              }
+              
+              .progress-bar-fill {
+                height: 100%;
+                border-radius: 4px;
+                transition: width 0.3s ease;
+              }
+              
+              .percentage {
+                font-size: 13px;
+                font-weight: 600;
+                color: #374151;
+                min-width: 40px;
+                text-align: right;
+              }
+              
+              .recommendations-section {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
-                gap: 15px;
-                margin: 15px 0;
+                gap: 25px;
+                margin-top: 25px;
               }
               
-              .section {
-                background: #f9fafb;
-                padding: 12px;
+              .recommendation-card {
+                background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+                padding: 20px;
                 border-radius: 8px;
-                border: 1px solid #e5e7eb;
+                border-left: 4px solid #6366f1;
               }
               
-              .section h3 {
-                font-size: 14px;
-                margin-bottom: 8px;
-                color: #6366f1;
-                border-bottom: 1px solid #e0e7ff;
-                padding-bottom: 4px;
-              }
-              
-              table { 
-                width: 100%;
-                border-collapse: collapse;
-                font-size: 11px;
-              }
-              
-              th { 
-                background: linear-gradient(135deg, #6366f1, #8b5cf6);
-                color: white;
-                padding: 6px 4px;
-                text-align: left;
+              .recommendation-title {
+                font-size: 16px;
                 font-weight: 600;
-                font-size: 11px;
+                color: #5b21b6;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
               }
               
-              th:nth-child(2), th:nth-child(3), th:nth-child(4) {
-                text-align: center;
+              .recommendation-text {
+                font-size: 13px;
+                color: #4c1d95;
+                line-height: 1.6;
+                margin-bottom: 15px;
               }
               
-              .recommendation {
-                background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
-                padding: 12px;
-                border-left: 3px solid #6366f1;
-                border-radius: 6px;
-                font-size: 11px;
+              .action-list {
+                font-size: 12px;
+                color: #5b21b6;
+              }
+              
+              .action-list ul {
+                margin-left: 16px;
+                margin-top: 8px;
+              }
+              
+              .action-list li {
+                margin-bottom: 4px;
                 line-height: 1.4;
               }
               
-              .top-categories {
-                display: flex;
-                justify-content: space-between;
-                gap: 8px;
-                margin: 10px 0;
+              .insights-card {
+                background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+                padding: 20px;
+                border-radius: 8px;
+                border-left: 4px solid #10b981;
               }
               
-              .top-category {
-                flex: 1;
-                text-align: center;
-                padding: 8px;
-                background: white;
-                border: 1px solid #e5e7eb;
-                border-radius: 6px;
-              }
-              
-              .top-category-score {
+              .insights-title {
                 font-size: 16px;
-                font-weight: bold;
-                color: #10b981;
+                font-weight: 600;
+                color: #065f46;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
               }
               
-              .top-category-name {
-                font-size: 9px;
-                color: #666;
-                margin-top: 2px;
+              .insights-text {
+                font-size: 13px;
+                color: #047857;
+                line-height: 1.6;
+                margin-bottom: 12px;
+              }
+              
+              .motivation-tip {
+                background: #f0f9ff;
+                border: 1px solid #bae6fd;
+                padding: 12px;
+                border-radius: 6px;
+                margin-top: 10px;
+              }
+              
+              .motivation-tip strong {
+                color: #0369a1;
+                font-size: 12px;
+              }
+              
+              .motivation-tip-text {
+                color: #0c4a6e;
+                font-size: 12px;
+                font-style: italic;
+                margin-top: 4px;
               }
               
               .footer {
-                margin-top: 15px;
-                text-align: center;
-                color: #666;
-                font-size: 9px;
+                margin-top: 40px;
+                padding-top: 20px;
                 border-top: 1px solid #e5e7eb;
-                padding-top: 8px;
+                text-align: center;
+                color: #6b7280;
+                font-size: 11px;
               }
               
-              .highlight {
-                color: #6366f1;
+              .footer-title {
                 font-weight: 600;
+                color: #374151;
+                margin-bottom: 4px;
+              }
+              
+              .footer-details {
+                color: #9ca3af;
               }
               
               @media print {
                 body { 
-                  margin: 0; 
-                  padding: 15px; 
                   -webkit-print-color-adjust: exact;
                   print-color-adjust: exact;
                 }
-                .container { max-width: none; }
-                .score-circle { 
-                  -webkit-print-color-adjust: exact;
-                  print-color-adjust: exact;
+                .page {
+                  box-shadow: none;
+                  margin: 0;
                 }
                 * {
                   -webkit-print-color-adjust: exact !important;
@@ -1832,105 +1990,107 @@
             </style>
           </head>
           <body>
-            <div class="container">
-              <div class="header">
-                <h1 class="main-title">NH Score</h1>
-                <p class="subtitle">Wissenschaftlich fundierte Gesundheitsauswertung</p>
-              </div>
+            <div class="page">
+              <header class="header">
+                <div class="report-date">Erstellt am ${date}</div>
+                <div class="logo-section">
+                  <h1 class="main-title">NH Score</h1>
+                </div>
+                <p class="subtitle">Wissenschaftlich fundierte Gesundheitsauswertung • Personalisierter Bericht</p>
+              </header>
               
-              <div class="score-section">
-                <div class="score-circle">
-                  <div class="score-text">
-                    <div class="score-number">${stats.totalScore}</div>
-                    <div class="score-percent">${stats.percentage}%</div>
+              <section class="score-overview">
+                <div class="score-visual">
+                  <div class="score-circle">
+                    <div class="score-text">
+                      <div class="score-number">${stats.totalScore}</div>
+                      <div class="score-percent">${stats.percentage}%</div>
+                    </div>
                   </div>
+                  <div class="score-rating">${rating.text}</div>
                 </div>
                 
                 <div class="score-details">
-                  <div class="score-detail">
-                    <div class="score-detail-value">${stats.totalScore}/100</div>
-                    <div class="score-detail-label">Gesamtpunkte</div>
+                  <div class="detail-card">
+                    <div class="detail-value">${stats.totalScore}/100</div>
+                    <div class="detail-label">Gesamtpunkte</div>
                   </div>
-                  <div class="score-detail">
-                    <div class="score-detail-value">${stats.answeredQuestions}/${stats.totalQuestions}</div>
-                    <div class="score-detail-label">Beantwortet</div>
+                  <div class="detail-card">
+                    <div class="detail-value">${stats.completedCategories}/5</div>
+                    <div class="detail-label">Kategorien</div>
                   </div>
-                  <div class="score-detail">
-                    <div class="score-detail-value">${stats.completedCategories}/5</div>
-                    <div class="score-detail-label">Kategorien</div>
-                  </div>
-                  <div class="score-detail">
-                    <div class="score-detail-value">${
-                      stats.percentage >= 85 ? '⭐⭐⭐⭐⭐' :
-                      stats.percentage >= 70 ? '⭐⭐⭐⭐' :
-                      stats.percentage >= 55 ? '⭐⭐⭐' :
-                      stats.percentage >= 40 ? '⭐⭐' : '⭐'
-                    }</div>
-                    <div class="score-detail-label">Bewertung</div>
+                  <div class="detail-card">
+                    <div class="detail-value">${Math.floor((Date.now() - this.state.startTime) / 60000)}min</div>
+                    <div class="detail-label">Bearbeitungszeit</div>
                   </div>
                 </div>
-              </div>
+              </section>
               
-              <div class="top-categories">
-                <h3 style="width: 100%; text-align: center; margin: 0 0 8px 0; font-size: 12px; color: #6366f1;">🏆 Top 3 Kategorien</h3>
-              </div>
-              
-              <div class="top-categories">
-                ${topCategories.map((cat, idx) => `
-                  <div class="top-category">
-                    <div class="top-category-score">${cat.percentage}%</div>
-                    <div class="top-category-name">${cat.title}</div>
-                  </div>
-                `).join('')}
-              </div>
-              
-              <div class="content-grid">
-                <div class="section">
-                  <h3>📊 Kategorien-Übersicht</h3>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Kategorie</th>
-                        <th>Score</th>
-                        <th>%</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${categoryRows}
-                    </tbody>
-                  </table>
+              <section class="content-section">
+                <h2 class="section-title">📊 Detailauswertung nach Kategorien</h2>
+                <div class="categories-grid">
+                  ${categoryBars}
                 </div>
-                
-                <div class="section">
-                  <h3>💡 Empfehlung</h3>
-                  <div class="recommendation">
-                    ${recommendations}
-                  </div>
-                  
-                  <div style="margin-top: 10px;">
-                    <h4 style="font-size: 11px; color: #6366f1; margin-bottom: 6px;">🎯 Nächste Schritte:</h4>
-                    <ul style="font-size: 10px; margin-left: 15px; line-height: 1.4;">
-                      ${this.generateActionItems(categoryBreakdown).map(item => `<li>${item}</li>`).join('')}
+              </section>
+              
+              <section class="recommendations-section">
+                <div class="recommendation-card">
+                  <h3 class="recommendation-title">💡 Persönliche Empfehlung</h3>
+                  <p class="recommendation-text">${recommendations}</p>
+                  <div class="action-list">
+                    <strong>🎯 Nächste Schritte:</strong>
+                    <ul>
+                      ${this.generateActionItems(categoryBreakdown).slice(0, 3).map(item => `<li>${item}</li>`).join('')}
                     </ul>
                   </div>
+                </div>
+                
+                <div class="insights-card">
+                  <h3 class="insights-title">🎯 Einordnung & Potenzial</h3>
+                  <p class="insights-text">${this.getInsightText(stats.percentage)}</p>
                   
-                  <div style="margin-top: 10px; padding: 8px; background: #f0f9ff; border-radius: 4px; border: 1px solid #bae6fd;">
-                    <div style="font-size: 10px; color: #0369a1;">
-                      <strong>💪 Motivations-Tipp:</strong> ${this.getMotivationTip(stats.percentage)}
-                    </div>
+                  <div class="motivation-tip">
+                    <strong>💪 Ihr Motivations-Tipp:</strong>
+                    <div class="motivation-tip-text">${this.getMotivationTip(stats.percentage)}</div>
                   </div>
                 </div>
-              </div>
+              </section>
               
-              <div class="footer">
-                <p><strong>NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</strong></p>
-                <p>Erstellt am ${date} | Version ${HealthAssessment.CONFIG.VERSION} | Bearbeitungszeit: ${Math.floor((Date.now() - this.state.startTime) / 60000)} Minuten</p>
-              </div>
+              <footer class="footer">
+                <div class="footer-title">NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</div>
+                <div class="footer-details">
+                  Version ${HealthAssessment.CONFIG.VERSION} • ${stats.answeredQuestions} von ${stats.totalQuestions} Fragen beantwortet
+                </div>
+              </footer>
             </div>
           </body>
           </html>
         `;
+      }
+
+      // Get category color based on percentage
+      getCategoryColor(percentage) {
+        if (percentage >= 85) return '#10b981'; // Green
+        if (percentage >= 70) return '#3b82f6'; // Blue  
+        if (percentage >= 55) return '#f59e0b'; // Yellow
+        return '#ef4444'; // Red
+      }
+
+      // Get detailed insight text
+      getInsightText(percentage) {
+        if (percentage >= 90) {
+          return 'Sie befinden sich in den oberen 5% der Bevölkerung. Ihr Lebensstil ist vorbildlich und nachhaltig. Sie sind ein Gesundheitsvorbild für andere.';
+        } else if (percentage >= 80) {
+          return 'Sie gehören zu den oberen 15% und haben bereits eine ausgezeichnete Gesundheitsbasis. Kleine Optimierungen können Sie zur Perfektion führen.';
+        } else if (percentage >= 70) {
+          return 'Sie liegen deutlich über dem Durchschnitt (obere 30%). Mit gezielten Verbesserungen erreichen Sie schnell das nächste Level.';
+        } else if (percentage >= 60) {
+          return 'Sie bewegen sich im oberen Mittelfeld. Eine solide Grundlage ist vorhanden - jetzt gilt es, konsequent zu optimieren.';
+        } else if (percentage >= 50) {
+          return 'Sie liegen im Durchschnitt der Bevölkerung. Es gibt großes Potenzial für Verbesserungen, die Ihre Lebensqualität steigern werden.';
+        } else {
+          return 'Hier liegt enormes Verbesserungspotenzial. Konzentrieren Sie sich auf die Grundlagen und ziehen Sie professionelle Beratung in Betracht.';
+        }
       }
 
       // Generate personalized action items
