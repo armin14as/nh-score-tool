@@ -30,7 +30,11 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+  }
   
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -38,6 +42,179 @@
     color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Modal Styles */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+  }
+
+  .modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .modal-overlay.show .modal {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--success), #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .modal-body {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .completion-score {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--success);
+    margin: 1rem 0;
+    text-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  }
+
+  .completion-message {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+
+  .completion-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .completion-stat {
+    background: var(--glass-bg);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+  }
+
+  .completion-stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .completion-stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.25rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .modal-btn {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    min-width: 140px;
+    justify-content: center;
+  }
+
+  .modal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .modal-btn.primary {
+    background: var(--success);
+    border-color: var(--success);
+    color: white;
+  }
+
+  .modal-btn.secondary {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+
+  .modal-btn.tertiary {
+    background: var(--glass-bg);
+    color: var(--text-primary);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .modal-close:hover {
+    background: var(--glass-bg);
+    color: var(--text-primary);
   }
 
   /* Enhanced Progress Bar */
@@ -49,6 +226,7 @@
     border-bottom: 1px solid var(--border-color);
     z-index: 100;
     padding: 1rem 0;
+    transition: all 0.3s ease;
   }
   
   .progress-content {
@@ -67,6 +245,7 @@
     gap: 1rem;
     font-size: 0.875rem;
     color: var(--text-secondary);
+    white-space: nowrap;
   }
   
   .progress-bar-container {
@@ -76,14 +255,33 @@
     background: var(--gray-800);
     border-radius: 4px;
     overflow: hidden;
+    position: relative;
   }
   
   .progress-bar {
     height: 100%;
     background: linear-gradient(90deg, var(--primary), var(--success));
     border-radius: 4px;
-    transition: width 0.3s ease;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     width: 0%;
+    position: relative;
+  }
+
+  .progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
   }
 
   /* Category Navigation */
@@ -99,12 +297,24 @@
     border-radius: 50%;
     background: var(--gray-600);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
   }
   
-  .category-dot.completed { background: var(--success); }
-  .category-dot.active { background: var(--primary); transform: scale(1.2); }
-  .category-dot:hover { transform: scale(1.1); }
+  .category-dot.completed { 
+    background: var(--success);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  }
+  
+  .category-dot.active { 
+    background: var(--primary); 
+    transform: scale(1.2);
+    box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+  }
+  
+  .category-dot:hover { 
+    transform: scale(1.1); 
+  }
 
   /* Action Buttons */
   .action-buttons {
@@ -120,15 +330,17 @@
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.875rem;
-    transition: all 0.15s ease;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    white-space: nowrap;
   }
   
   .btn:hover {
     background: var(--gray-700);
     border-color: var(--gray-600);
+    transform: translateY(-1px);
   }
   
   .btn.primary {
@@ -138,6 +350,12 @@
   
   .btn.primary:hover {
     background: var(--primary-dark);
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
   }
 
   /* Main Layout */
@@ -160,11 +378,13 @@
     height: fit-content;
     position: sticky;
     top: 120px;
+    transition: all 0.3s ease;
   }
   
   .score-header h3 {
     font-size: 1.125rem;
     margin-bottom: 0.5rem;
+    color: var(--text-primary);
   }
   
   .score-date {
@@ -189,6 +409,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .score-circle::before {
@@ -207,6 +428,7 @@
     font-weight: 700;
     text-align: center;
     line-height: 1.2;
+    transition: all 0.3s ease;
   }
   
   .score-percentage {
@@ -231,6 +453,7 @@
     font-size: 1.25rem;
     font-weight: 600;
     color: var(--success);
+    transition: all 0.3s ease;
   }
   
   .stat-label {
@@ -286,12 +509,29 @@
     border-radius: 12px;
     padding: 2rem;
     backdrop-filter: blur(12px);
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideInUp 0.6s ease forwards;
+  }
+
+  .category:nth-child(1) { animation-delay: 0.1s; }
+  .category:nth-child(2) { animation-delay: 0.2s; }
+  .category:nth-child(3) { animation-delay: 0.3s; }
+  .category:nth-child(4) { animation-delay: 0.4s; }
+  .category:nth-child(5) { animation-delay: 0.5s; }
+
+  @keyframes slideInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   
   .category.active {
     border-color: var(--primary);
-    box-shadow: 0 0 0 1px var(--primary);
+    box-shadow: 0 0 0 1px var(--primary), 0 8px 25px rgba(99, 102, 241, 0.15);
+    transform: translateY(-2px);
   }
   
   .category-header {
@@ -306,6 +546,7 @@
     font-size: 1.25rem;
     font-weight: 600;
     flex: 1;
+    color: var(--text-primary);
   }
   
   .category-score {
@@ -315,6 +556,7 @@
     font-size: 0.875rem;
     font-weight: 500;
     color: var(--text-secondary);
+    transition: all 0.3s ease;
   }
   
   .category-progress {
@@ -330,7 +572,7 @@
     height: 100%;
     background: linear-gradient(90deg, var(--primary), var(--success));
     border-radius: 2px;
-    transition: width 0.3s ease;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     width: 0%;
   }
 
@@ -340,16 +582,18 @@
     padding: 1rem;
     border: 1px solid transparent;
     border-radius: 8px;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .question:hover {
     background: rgba(255, 255, 255, 0.02);
+    border-color: var(--border-color);
   }
   
   .question.answered {
     border-color: var(--success);
     background: rgba(16, 185, 129, 0.05);
+    transform: scale(1.01);
   }
   
   .question-label {
@@ -357,6 +601,8 @@
     margin-bottom: 1rem;
     font-weight: 500;
     font-size: 1rem;
+    color: var(--text-primary);
+    cursor: pointer;
   }
   
   .question-number {
@@ -391,40 +637,47 @@
     border: 2px solid var(--gray-700);
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     font-size: 0.875rem;
     font-weight: 500;
     text-align: center;
     min-height: 48px;
+    user-select: none;
   }
   
   .radio-option label:hover {
     border-color: var(--gray-600);
     background: var(--gray-700);
+    transform: translateY(-1px);
   }
   
   .radio-option input:checked + label {
     border-color: var(--primary);
     background: rgba(99, 102, 241, 0.1);
     color: var(--primary);
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
   }
   
   .radio-option:nth-child(1) input:checked + label {
     border-color: var(--error);
     background: rgba(239, 68, 68, 0.1);
     color: var(--error);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
   }
   
   .radio-option:nth-child(2) input:checked + label {
     border-color: var(--warning);
     background: rgba(245, 158, 11, 0.1);
     color: var(--warning);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
   }
   
   .radio-option:nth-child(3) input:checked + label {
     border-color: var(--success);
     background: rgba(16, 185, 129, 0.1);
     color: var(--success);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
   }
 
   /* Keyboard Navigation */
@@ -445,7 +698,8 @@
     font-weight: 500;
     z-index: 1000;
     transform: translateX(100%);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-lg);
   }
   
   .notification.show {
@@ -456,6 +710,10 @@
     background: var(--error);
   }
 
+  .notification.warning {
+    background: var(--warning);
+  }
+
   /* Auto-save indicator */
   .autosave-indicator {
     font-size: 0.75rem;
@@ -463,6 +721,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    transition: all 0.3s ease;
   }
   
   .autosave-indicator.saving {
@@ -471,6 +730,40 @@
   
   .autosave-indicator.saved {
     color: var(--success);
+  }
+
+  .autosave-indicator .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .autosave-indicator.saving .dot {
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Loading states */
+  .loading {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+  }
+
+  .loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: inherit;
   }
 
   /* Responsive Design */
@@ -528,12 +821,22 @@
     .container {
       padding: 1rem;
     }
-  }
 
-  /* Loading states */
-  .loading {
-    opacity: 0.6;
-    pointer-events: none;
+    .score-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .modal {
+      padding: 1.5rem;
+    }
+
+    .completion-stats {
+      grid-template-columns: 1fr;
+    }
+
+    .modal-actions {
+      flex-direction: column;
+    }
   }
 
   /* Accessibility improvements */
@@ -543,16 +846,85 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+
+    .progress-bar::after {
+      display: none;
+    }
+  }
+
+  /* High contrast mode */
+  @media (prefers-contrast: high) {
+    :root {
+      --border-color: #ffffff40;
+      --glass-bg: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  /* Focus indicators for better accessibility */
+  .btn:focus-visible,
+  .category-dot:focus-visible,
+  .modal-btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  /* Performance optimizations */
+  .category {
+    contain: layout style paint;
+  }
+
+  .question {
+    contain: layout style;
   }
 </style>
 </head>
 <body>
+  <!-- Completion Modal -->
+  <div class="modal-overlay" id="completionModal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" aria-label="Modal schließen" onclick="closeCompletionModal()">×</button>
+      <div class="modal-header">
+        <h2 id="modal-title">🎉 Assessment abgeschlossen!</h2>
+      </div>
+      
+      <div class="modal-body">
+        <div class="completion-score" id="completionScore">0%</div>
+        <div class="completion-message" id="completionMessage">
+          Herzlichen Glückwunsch! Sie haben das NH Score Assessment erfolgreich abgeschlossen.
+        </div>
+        
+        <div class="completion-stats">
+          <div class="completion-stat">
+            <div class="completion-stat-value" id="completionTotalScore">0</div>
+            <div class="completion-stat-label">Gesamtpunkte</div>
+          </div>
+          <div class="completion-stat">
+            <div class="completion-stat-value" id="completionCategory">0</div>
+            <div class="completion-stat-label">Kategorien</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-actions">
+        <button class="modal-btn primary" onclick="exportCompletionPDF()">
+          📄 PDF herunterladen
+        </button>
+        <button class="modal-btn secondary" onclick="shareResults()">
+          📤 Teilen
+        </button>
+        <button class="modal-btn tertiary" onclick="closeCompletionModal()">
+          Weiter bearbeiten
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="progress-header">
     <div class="progress-content">
       <div class="progress-info">
         <span id="progressText">Frage 0 von 50</span>
         <div class="autosave-indicator" id="autosaveIndicator">
-          <span>●</span>
+          <div class="dot"></div>
           <span>Automatisch gespeichert</span>
         </div>
       </div>
@@ -564,10 +936,10 @@
       <div class="category-nav" id="categoryNav"></div>
       
       <div class="action-buttons">
-        <button class="btn" onclick="window.exportPDF()" title="Als PDF exportieren">
+        <button class="btn" id="exportBtn" title="Als PDF exportieren">
           <span>📄</span> Export
         </button>
-        <button class="btn primary" onclick="window.resetAll()" title="Zurücksetzen">
+        <button class="btn primary" id="resetBtn" title="Zurücksetzen">
           Reset
         </button>
       </div>
@@ -582,19 +954,21 @@
         <p class="subtitle">Wissenschaftlich fundiertes 100-Punkte-System für umfassende Gesundheit & Leistungsfähigkeit</p>
       </header>
 
-      <main class="categories" id="categories"></main>
+      <main class="categories" id="categories" role="main">
+        <!-- Categories will be rendered here -->
+      </main>
     </div>
     
-    <aside class="score-panel">
+    <aside class="score-panel" role="complementary" aria-label="Ergebnis-Panel">
       <div class="score-header">
         <h3>Gesundheitsscore</h3>
         <div class="score-date" id="scoreDate"></div>
       </div>
       
       <div class="score-ring">
-        <div class="score-circle" id="scoreCircle">
+        <div class="score-circle" id="scoreCircle" role="img" aria-label="Score Kreis">
           <div class="score-value">
-            <div id="totalScore">0</div>
+            <div id="totalScore" aria-label="Gesamtpunktzahl">0</div>
             <div class="score-percentage" id="scorePercentage">0%</div>
           </div>
         </div>
@@ -621,601 +995,1780 @@
     </aside>
   </div>
 
-  <div class="notification" id="notification"></div>
+  <div class="notification" id="notification" role="alert" aria-live="polite"></div>
 
   <script>
-    // Modern ES6+ Implementation with enterprise patterns
+    // Enhanced HealthAssessment class with completion detection and optimized PDF
     class HealthAssessment {
+      // Static configuration
+      static CONFIG = {
+        STORAGE_KEY: 'nh-score-data',
+        VERSION: '4.1',
+        AUTOSAVE_INTERVAL: 30000,
+        ANIMATION_DELAY: 100,
+        NOTIFICATION_DURATION: 3000,
+        SCROLL_BEHAVIOR: { behavior: 'smooth', block: 'center' }
+      };
+
+      // Category data with immutable structure
+      static CATEGORIES = Object.freeze([
+        {
+          title: 'Schlaf & Erholung',
+          questions: Object.freeze([
+            'Schläfst du mindestens 7–8 Stunden pro Nacht?',
+            'Hast du einen regelmäßigen Schlaf-Wach-Rhythmus?',
+            'Wachst du ohne Wecker erholt auf?',
+            'Schläfst du ohne Unterbrechungen durch?',
+            'Vermeidest du Blaulicht 2h vor dem Schlafengehen?',
+            'Schläfst du in einem völlig dunklen Raum?',
+            'Wachst du erfrischt und energiegeladen auf?',
+            'Vermeidest du späte und schwere Mahlzeiten?',
+            'Kommst du ohne Schlafmittel oder Alkohol aus?',
+            'Fühlst du dich tagsüber wach und konzentriert?'
+          ])
+        },
+        {
+          title: 'Ernährung & Supplements',
+          questions: Object.freeze([
+            'Verzichtest du weitgehend auf raffinierten Zucker?',
+            'Isst du täglich mindestens 5 Portionen Gemüse/Obst?',
+            'Trinkst du täglich 2-3 Liter reines Wasser?',
+            'Verwendest du Supplements gezielt nach Bedarf?',
+            'Hast du regelmäßige und bewusste Essenszeiten?',
+            'Isst du ballaststoffreich und nährstoffdicht?',
+            'Vermeidest du hochverarbeitete Fertigprodukte?',
+            'Meidest du künstliche Zusätze und Konservierungsstoffe?',
+            'Hast du eine gesunde Verdauung ohne Probleme?',
+            'Verzichtest du auf künstliche Süßstoffe?'
+          ])
+        },
+        {
+          title: 'Training & Bewegung',
+          questions: Object.freeze([
+            'Bewegst du dich täglich mindestens 30 Minuten?',
+            'Trainierst du 3-4x pro Woche strukturiert?',
+            'Schaffst du problemlos 10.000 Schritte täglich?',
+            'Bist du schmerzfrei und beweglich?',
+            'Hast du klare sportliche Ziele und Motivation?',
+            'Folgst du einem durchdachten Trainingsplan?',
+            'Trainierst du regelmäßig deine Ausdauer?',
+            'Trainierst du systematisch deine Kraft?',
+            'Bist du flexibel und hast gute Mobilität?',
+            'Kannst du problemlos länger laufen/gehen?'
+          ])
+        },
+        {
+          title: 'Mindset & Stressmanagement',
+          questions: Object.freeze([
+            'Fühlst du dich selten überwältigt oder gestresst?',
+            'Praktizierst du regelmäßig Meditation oder Achtsamkeit?',
+            'Umgibst du dich mit positiven Einflüssen?',
+            'Hast du klare Lebensziele und Prioritäten?',
+            'Lebst du nach deinen persönlichen Werten?',
+            'Hast du eine grundsätzlich optimistische Einstellung?',
+            'Vermeidest du Multitasking und Ablenkungen?',
+            'Hast du starke soziale Verbindungen und Unterstützung?',
+            'Kannst du nach der Arbeit wirklich abschalten?',
+            'Fühlst du dich meistens glücklich und erfüllt?'
+          ])
+        },
+        {
+          title: 'Lifestyle & Umwelt',
+          questions: Object.freeze([
+            'Rauchst du nicht und meidest Passivrauchen?',
+            'Trinkst du maximal 1-2 Gläser Alkohol pro Woche?',
+            'Vermeidest du Plastik bei Lebensmitteln und Getränken?',
+            'Hast du Zugang zu sauberem, gefiltertem Wasser?',
+            'Meidest du schädliche Chemikalien im Alltag?',
+            'Verwendest du natürliche Körperpflege ohne Toxine?',
+            'Schläfst du in einem schadstofffreien Umfeld?',
+            'Bekommst du täglich natürliches Tageslicht?',
+            'Verbringst du regelmäßig Zeit in der Natur?',
+            'Führst du einen bewusst nachhaltigen Lebensstil?'
+          ])
+        }
+      ]);
+
       constructor() {
-        this.categories = [
-          {
-            title: 'Schlaf & Erholung',
-            questions: [
-              'Schläfst du mindestens 7–8 Stunden pro Nacht?',
-              'Hast du einen regelmäßigen Schlaf-Wach-Rhythmus?',
-              'Wachst du ohne Wecker erholt auf?',
-              'Schläfst du ohne Unterbrechungen durch?',
-              'Vermeidest du Blaulicht 2h vor dem Schlafengehen?',
-              'Schläfst du in einem völlig dunklen Raum?',
-              'Wachst du erfrischt und energiegeladen auf?',
-              'Vermeidest du späte und schwere Mahlzeiten?',
-              'Kommst du ohne Schlafmittel oder Alkohol aus?',
-              'Fühlst du dich tagsüber wach und konzentriert?'
-            ]
-          },
-          {
-            title: 'Ernährung & Supplements',
-            questions: [
-              'Verzichtest du weitgehend auf raffinierten Zucker?',
-              'Isst du täglich mindestens 5 Portionen Gemüse/Obst?',
-              'Trinkst du täglich 2-3 Liter reines Wasser?',
-              'Verwendest du Supplements gezielt nach Bedarf?',
-              'Hast du regelmäßige und bewusste Essenszeiten?',
-              'Isst du ballaststoffreich und nährstoffdicht?',
-              'Vermeidest du hochverarbeitete Fertigprodukte?',
-              'Meidest du künstliche Zusätze und Konservierungsstoffe?',
-              'Hast du eine gesunde Verdauung ohne Probleme?',
-              'Verzichtest du auf künstliche Süßstoffe?'
-            ]
-          },
-          {
-            title: 'Training & Bewegung',
-            questions: [
-              'Bewegst du dich täglich mindestens 30 Minuten?',
-              'Trainierst du 3-4x pro Woche strukturiert?',
-              'Schaffst du problemlos 10.000 Schritte täglich?',
-              'Bist du schmerzfrei und beweglich?',
-              'Hast du klare sportliche Ziele und Motivation?',
-              'Folgst du einem durchdachten Trainingsplan?',
-              'Trainierst du regelmäßig deine Ausdauer?',
-              'Trainierst du systematisch deine Kraft?',
-              'Bist du flexibel und hast gute Mobilität?',
-              'Kannst du problemlos länger laufen/gehen?'
-            ]
-          },
-          {
-            title: 'Mindset & Stressmanagement',
-            questions: [
-              'Fühlst du dich selten überwältigt oder gestresst?',
-              'Praktizierst du regelmäßig Meditation oder Achtsamkeit?',
-              'Umgibst du dich mit positiven Einflüssen?',
-              'Hast du klare Lebensziele und Prioritäten?',
-              'Lebst du nach deinen persönlichen Werten?',
-              'Hast du eine grundsätzlich optimistische Einstellung?',
-              'Vermeidest du Multitasking und Ablenkungen?',
-              'Hast du starke soziale Verbindungen und Unterstützung?',
-              'Kannst du nach der Arbeit wirklich abschalten?',
-              'Fühlst du dich meistens glücklich und erfüllt?'
-            ]
-          },
-          {
-            title: 'Lifestyle & Umwelt',
-            questions: [
-              'Rauchst du nicht und meidest Passivrauchen?',
-              'Trinkst du maximal 1-2 Gläser Alkohol pro Woche?',
-              'Vermeidest du Plastik bei Lebensmitteln und Getränken?',
-              'Hast du Zugang zu sauberem, gefiltertem Wasser?',
-              'Meidest du schädliche Chemikalien im Alltag?',
-              'Verwendest du natürliche Körperpflege ohne Toxine?',
-              'Schläfst du in einem schadstofffreien Umfeld?',
-              'Bekommst du täglich natürliches Tageslicht?',
-              'Verbringst du regelmäßig Zeit in der Natur?',
-              'Führst du einen bewusst nachhaltigen Lebensstil?'
-            ]
-          }
-        ];
+        // Initialize state
+        this.state = {
+          answers: this.loadData()?.answers || this.initializeAnswers(),
+          startTime: this.loadData()?.startTime || Date.now(),
+          isLoading: false,
+          autosaveTimer: null,
+          timeUpdateTimer: null,
+          wasCompleted: false
+        };
+
+        // Cache DOM elements for better performance
+        this.elements = {};
         
-        this.answers = this.loadData() || this.initializeAnswers();
-        this.startTime = Date.now();
-        this.autosaveInterval = null;
+        // Bind methods to preserve context
+        this.handleAnswer = this.handleAnswer.bind(this);
+        this.handleExport = this.handleExport.bind(this);
+        this.handleReset = this.handleReset.bind(this);
+        this.handleKeydown = this.handleKeydown.bind(this);
         
         this.init();
       }
-      
+
+      // Initialize answers array with proper structure
       initializeAnswers() {
-        return this.categories.map(cat => new Array(cat.questions.length).fill(null));
+        return HealthAssessment.CATEGORIES.map(cat => 
+          new Array(cat.questions.length).fill(null)
+        );
       }
-      
-      init() {
-        this.renderCategories();
-        this.renderCategoryNav();
-        this.updateUI();
-        this.setupKeyboardNavigation();
-        this.startAutosave();
-        this.updateTimeSpent();
+
+      // Main initialization method
+      async init() {
+        try {
+          this.cacheElements();
+          this.setupEventListeners();
+          await this.render();
+          this.startTimers();
+          this.showNotification('Willkommen beim NH Score Assessment!', 'success');
+        } catch (error) {
+          console.error('Initialization failed:', error);
+          this.showNotification('Fehler beim Laden der Anwendung', 'error');
+        }
       }
-      
-      renderCategories() {
-        const container = document.getElementById('categories');
-        container.innerHTML = '';
-        
-        this.categories.forEach((category, catIdx) => {
-          const categoryEl = this.createCategoryElement(category, catIdx);
-          container.appendChild(categoryEl);
+
+      // Cache frequently used DOM elements
+      cacheElements() {
+        const elementIds = [
+          'categories', 'categoryNav', 'progressBar', 'progressText',
+          'autosaveIndicator', 'scoreCircle', 'totalScore', 'scorePercentage',
+          'answeredCount', 'completedCategories', 'averageScore', 'timeSpent',
+          'scoreDate', 'notification', 'exportBtn', 'resetBtn', 'completionModal',
+          'completionScore', 'completionMessage', 'completionTotalScore', 'completionCategory'
+        ];
+
+        elementIds.forEach(id => {
+          this.elements[id] = document.getElementById(id);
+          if (!this.elements[id] && !['completionModal', 'completionScore', 'completionMessage', 'completionTotalScore', 'completionCategory'].includes(id)) {
+            console.warn(`Element with id "${id}" not found`);
+          }
         });
       }
-      
+
+      // Setup all event listeners
+      setupEventListeners() {
+        // Button events
+        this.elements.exportBtn?.addEventListener('click', this.handleExport);
+        this.elements.resetBtn?.addEventListener('click', this.handleReset);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', this.handleKeydown);
+        
+        // Intersection Observer for category activation
+        this.setupIntersectionObserver();
+        
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => this.cleanup());
+      }
+
+      // Setup intersection observer for better UX
+      setupIntersectionObserver() {
+        if (!('IntersectionObserver' in window)) return;
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const categoryIndex = parseInt(entry.target.dataset.categoryIndex);
+                this.updateActiveCategoryDot(categoryIndex);
+              }
+            });
+          },
+          { threshold: 0.5, rootMargin: '-100px 0px' }
+        );
+
+        // Observe categories after they're rendered
+        this.observer = observer;
+      }
+
+      // Check if assessment is completed
+      isAssessmentCompleted() {
+        return this.state.answers.every(categoryAnswers => 
+          categoryAnswers.every(answer => answer !== null)
+        );
+      }
+
+      // Show completion modal
+      showCompletionModal() {
+        const stats = this.calculateStats();
+        const modal = this.elements.completionModal;
+        if (!modal) return;
+
+        // Update modal content
+        if (this.elements.completionScore) {
+          this.elements.completionScore.textContent = `${stats.percentage}%`;
+        }
+        
+        if (this.elements.completionTotalScore) {
+          this.elements.completionTotalScore.textContent = `${stats.totalScore}/100`;
+        }
+        
+        if (this.elements.completionCategory) {
+          this.elements.completionCategory.textContent = `${stats.completedCategories}/5`;
+        }
+
+        // Update completion message based on score
+        if (this.elements.completionMessage) {
+          this.elements.completionMessage.textContent = this.getCompletionMessage(stats.percentage);
+        }
+
+        // Show modal with animation
+        modal.classList.add('show');
+        
+        // Focus management for accessibility
+        const firstButton = modal.querySelector('.modal-btn');
+        if (firstButton) {
+          setTimeout(() => firstButton.focus(), 300);
+        }
+
+        // Trap focus in modal
+        this.trapFocus(modal);
+      }
+
+      // Get personalized completion message
+      getCompletionMessage(percentage) {
+        if (percentage >= 90) {
+          return 'Außergewöhnlich! Sie leben bereits einen vorbildlichen Lebensstil. Sie gehören zu den top 5% der Bevölkerung.';
+        } else if (percentage >= 80) {
+          return 'Hervorragend! Sie haben eine ausgezeichnete Gesundheitsbasis geschaffen. Kleine Optimierungen bringen Sie zur Perfektion.';
+        } else if (percentage >= 70) {
+          return 'Sehr gut! Sie sind auf dem richtigen Weg. Konzentrieren Sie sich auf die schwächeren Bereiche für weitere Verbesserungen.';
+        } else if (percentage >= 60) {
+          return 'Gut! Eine solide Grundlage ist vorhanden. Mit gezielten Verbesserungen erreichen Sie das nächste Level.';
+        } else if (percentage >= 50) {
+          return 'Durchschnittlich. Es gibt viel Potenzial für Verbesserungen. Beginnen Sie mit den wichtigsten Gesundheitssäulen.';
+        } else {
+          return 'Verbesserungsbedürftig. Fokussieren Sie sich auf die Grundlagen: Schlaf, Ernährung und Bewegung.';
+        }
+      }
+
+      // Trap focus within modal for accessibility
+      trapFocus(modal) {
+        const focusableElements = modal.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        
+        if (focusableElements.length === 0) return;
+        
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        const handleTabKey = (e) => {
+          if (e.key === 'Tab') {
+            if (e.shiftKey) {
+              if (document.activeElement === firstElement) {
+                e.preventDefault();
+                lastElement.focus();
+              }
+            } else {
+              if (document.activeElement === lastElement) {
+                e.preventDefault();
+                firstElement.focus();
+              }
+            }
+          }
+          
+          if (e.key === 'Escape') {
+            this.closeCompletionModal();
+          }
+        };
+
+        modal.addEventListener('keydown', handleTabKey);
+        
+        // Store handler to remove later
+        modal._trapFocusHandler = handleTabKey;
+      }
+
+      // Close completion modal
+      closeCompletionModal() {
+        const modal = this.elements.completionModal;
+        if (!modal) return;
+
+        modal.classList.remove('show');
+        
+        // Remove focus trap
+        if (modal._trapFocusHandler) {
+          modal.removeEventListener('keydown', modal._trapFocusHandler);
+          delete modal._trapFocusHandler;
+        }
+
+        // Return focus to main content
+        const firstQuestion = document.querySelector('.question input[type="radio"]');
+        if (firstQuestion) {
+          firstQuestion.focus();
+        }
+      }
+
+      // Optimized rendering with fragments
+      async render() {
+        this.state.isLoading = true;
+        this.updateLoadingState();
+
+        try {
+          await Promise.all([
+            this.renderCategories(),
+            this.renderCategoryNav(),
+            this.updateUI()
+          ]);
+        } finally {
+          this.state.isLoading = false;
+          this.updateLoadingState();
+        }
+      }
+
+      // Render categories with DocumentFragment for better performance
+      renderCategories() {
+        return new Promise((resolve) => {
+          const fragment = document.createDocumentFragment();
+          
+          HealthAssessment.CATEGORIES.forEach((category, catIdx) => {
+            const categoryEl = this.createCategoryElement(category, catIdx);
+            fragment.appendChild(categoryEl);
+          });
+
+          this.elements.categories.innerHTML = '';
+          this.elements.categories.appendChild(fragment);
+
+          // Setup intersection observer for rendered categories
+          if (this.observer) {
+            this.elements.categories.querySelectorAll('.category').forEach(el => {
+              this.observer.observe(el);
+            });
+          }
+
+          // Resolve after a short delay to allow DOM updates
+          requestAnimationFrame(() => resolve());
+        });
+      }
+
+      // Create optimized category element
       createCategoryElement(category, catIdx) {
         const categoryEl = document.createElement('section');
         categoryEl.className = 'category';
         categoryEl.id = `category-${catIdx}`;
-        
+        categoryEl.dataset.categoryIndex = catIdx;
+        categoryEl.setAttribute('aria-labelledby', `category-title-${catIdx}`);
+
         categoryEl.innerHTML = `
           <div class="category-header">
-            <h2 class="category-title">${category.title}</h2>
-            <div class="category-score" id="score-${catIdx}">0 / 20</div>
+            <h2 class="category-title" id="category-title-${catIdx}">${category.title}</h2>
+            <div class="category-score" id="score-${catIdx}" aria-label="Kategorie Punkte">0 / 20</div>
           </div>
-          <div class="category-progress">
+          <div class="category-progress" role="progressbar" aria-valuenow="0" aria-valuemax="100">
             <div class="category-progress-fill" id="progress-${catIdx}"></div>
           </div>
-          <div class="questions">
-            ${category.questions.map((question, qIdx) => 
-              this.createQuestionHTML(question, catIdx, qIdx)
-            ).join('')}
+          <div class="questions" role="group" aria-labelledby="category-title-${catIdx}">
+            ${this.renderQuestions(category.questions, catIdx)}
           </div>
         `;
-        
+
         return categoryEl;
       }
-      
-      createQuestionHTML(question, catIdx, qIdx) {
-        const isAnswered = this.answers[catIdx][qIdx] !== null;
-        return `
-          <div class="question ${isAnswered ? 'answered' : ''}" id="question-${catIdx}-${qIdx}">
-            <label class="question-label">
-              <span class="question-number">${qIdx + 1}.</span>
-              ${question}
-            </label>
-            <div class="radio-group">
-              ${['Nein', 'Teilweise', 'Ja'].map((text, val) => `
-                <div class="radio-option">
-                  <input type="radio" 
-                         name="cat${catIdx}_q${qIdx}" 
-                         value="${val}" 
-                         id="cat${catIdx}_q${qIdx}_v${val}"
-                         ${this.answers[catIdx][qIdx] === val ? 'checked' : ''}
-                         onchange="window.healthApp.handleAnswer(${catIdx}, ${qIdx}, ${val})">
-                  <label for="cat${catIdx}_q${qIdx}_v${val}">${text}</label>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
+
+      // Render questions with better structure
+      renderQuestions(questions, catIdx) {
+        return questions.map((question, qIdx) => {
+          const isAnswered = this.state.answers[catIdx][qIdx] !== null;
+          const fieldsetId = `question-${catIdx}-${qIdx}`;
+          
+          return `
+            <fieldset class="question ${isAnswered ? 'answered' : ''}" id="${fieldsetId}">
+              <legend class="question-label">
+                <span class="question-number">${qIdx + 1}.</span>
+                ${question}
+              </legend>
+              <div class="radio-group" role="radiogroup" aria-labelledby="${fieldsetId}-legend">
+                ${this.renderRadioOptions(catIdx, qIdx)}
+              </div>
+            </fieldset>
+          `;
+        }).join('');
       }
-      
+
+      // Render radio options with better accessibility
+      renderRadioOptions(catIdx, qIdx) {
+        const options = ['Nein', 'Teilweise', 'Ja'];
+        return options.map((text, val) => {
+          const inputId = `cat${catIdx}_q${qIdx}_v${val}`;
+          const isChecked = this.state.answers[catIdx][qIdx] === val;
+          
+          return `
+            <div class="radio-option">
+              <input type="radio" 
+                     name="cat${catIdx}_q${qIdx}" 
+                     value="${val}" 
+                     id="${inputId}"
+                     ${isChecked ? 'checked' : ''}
+                     data-category="${catIdx}"
+                     data-question="${qIdx}"
+                     data-value="${val}">
+              <label for="${inputId}">${text}</label>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Render category navigation dots
       renderCategoryNav() {
-        const nav = document.getElementById('categoryNav');
-        nav.innerHTML = '';
+        if (!this.elements.categoryNav) return;
+
+        const fragment = document.createDocumentFragment();
         
-        this.categories.forEach((cat, idx) => {
-          const dot = document.createElement('div');
+        HealthAssessment.CATEGORIES.forEach((cat, idx) => {
+          const dot = document.createElement('button');
           dot.className = 'category-dot';
           dot.title = cat.title;
-          dot.onclick = () => this.scrollToCategory(idx);
-          nav.appendChild(dot);
+          dot.type = 'button';
+          dot.setAttribute('aria-label', `Springe zu ${cat.title}`);
+          dot.dataset.categoryIndex = idx;
+          dot.addEventListener('click', () => this.scrollToCategory(idx));
+          fragment.appendChild(dot);
         });
+
+        this.elements.categoryNav.innerHTML = '';
+        this.elements.categoryNav.appendChild(fragment);
       }
-      
-      handleAnswer(catIdx, qIdx, value) {
-        this.answers[catIdx][qIdx] = parseInt(value);
-        
-        // Update question state
+
+      // Optimized event handling with delegation
+      handleAnswer(event) {
+        if (event.target.type !== 'radio') return;
+
+        const { category: catIdx, question: qIdx, value } = event.target.dataset;
+        const categoryIndex = parseInt(catIdx);
+        const questionIndex = parseInt(qIdx);
+        const answerValue = parseInt(value);
+
+        this.updateAnswer(categoryIndex, questionIndex, answerValue);
+      }
+
+      // Update answer with optimized UI updates and completion check
+      updateAnswer(catIdx, qIdx, value) {
+        // Update state
+        this.state.answers[catIdx][qIdx] = value;
+
+        // Update question visual state
         const questionEl = document.getElementById(`question-${catIdx}-${qIdx}`);
-        questionEl.classList.add('answered');
-        
-        this.updateUI();
+        if (questionEl) {
+          questionEl.classList.add('answered');
+        }
+
+        // Batch UI updates for better performance
+        this.scheduleUIUpdate();
         this.saveData();
         this.showAutosaveIndicator('saving');
-        
-        // Auto-advance to next question
-        setTimeout(() => this.focusNextQuestion(catIdx, qIdx), 100);
+
+        // Check for completion
+        if (this.isAssessmentCompleted() && !this.state.wasCompleted) {
+          this.state.wasCompleted = true;
+          setTimeout(() => {
+            this.showCompletionModal();
+          }, 1000); // Small delay for better UX
+        }
+
+        // Auto-advance with slight delay for better UX
+        setTimeout(() => this.focusNextQuestion(catIdx, qIdx), HealthAssessment.CONFIG.ANIMATION_DELAY);
       }
-      
+
+      // Calculate all stats in one pass for efficiency
+      calculateStats() {
+        const totalQuestions = HealthAssessment.CATEGORIES.reduce((sum, cat) => sum + cat.questions.length, 0);
+        const answeredQuestions = this.state.answers.flat().filter(answer => answer !== null).length;
+        const totalScore = this.state.answers.flat().reduce((sum, answer) => sum + (answer || 0), 0);
+        const maxScore = totalQuestions * 2;
+        const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
+        const completedCategories = this.state.answers.filter(catAnswers => 
+          catAnswers.every(answer => answer !== null)
+        ).length;
+
+        return {
+          totalQuestions,
+          answeredQuestions,
+          totalScore,
+          maxScore,
+          percentage,
+          completedCategories
+        };
+      }
+
+      // Enhanced export functionality with single-page optimization
+      handleExport() {
+        if (this.state.isLoading) return;
+        
+        this.state.isLoading = true;
+        this.updateLoadingState();
+
+        try {
+          this.exportToPDF();
+          this.showNotification('PDF wird erstellt...', 'success');
+        } catch (error) {
+          console.error('Export failed:', error);
+          this.showNotification('Export fehlgeschlagen', 'error');
+        } finally {
+          this.state.isLoading = false;
+          this.updateLoadingState();
+        }
+      }
+
+      // Generate optimized single-page PDF report
+      exportToPDF() {
+        const stats = this.calculateStats();
+        const date = new Date().toLocaleDateString('de-DE');
+        
+        const categoryBreakdown = this.generateCategoryBreakdown();
+        const recommendations = this.generateRecommendations(stats.percentage);
+        
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+          throw new Error('Popup blockiert - bitte erlauben Sie Popups für diese Seite');
+        }
+
+        printWindow.document.write(this.generateOptimizedPDFContent(stats, date, categoryBreakdown, recommendations));
+        printWindow.document.close();
+        
+        // Print after content loads
+        setTimeout(() => {
+          printWindow.print();
+        }, 500);
+      }
+
+      // Generate category breakdown for PDF
+      generateCategoryBreakdown() {
+        return HealthAssessment.CATEGORIES.map((cat, idx) => {
+          const score = this.state.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0);
+          const answered = this.state.answers[idx].filter(answer => answer !== null).length;
+          const catPercentage = answered > 0 ? Math.round((score / (cat.questions.length * 2)) * 100) : 0;
+          
+          return {
+            title: cat.title,
+            score,
+            percentage: catPercentage,
+            answered,
+            total: cat.questions.length,
+            status: this.getCategoryStatus(catPercentage)
+          };
+        });
+      }
+
+      // Get category status emoji and text
+      getCategoryStatus(percentage) {
+        if (percentage >= 85) return { emoji: '🟢', text: 'Exzellent' };
+        if (percentage >= 70) return { emoji: '🟡', text: 'Gut' };
+        if (percentage >= 55) return { emoji: '🟠', text: 'Verbesserung' };
+        return { emoji: '🔴', text: 'Kritisch' };
+      }
+
+      // Generate personalized recommendations
+      generateRecommendations(percentage) {
+        if (percentage >= 85) {
+          return 'Ausgezeichnet! Sie haben einen vorbildlichen Gesundheitsstatus. Halten Sie Ihre guten Gewohnheiten bei und verfeinern Sie Details in den schwächeren Bereichen.';
+        } else if (percentage >= 70) {
+          return 'Sehr gut! Sie haben eine solide Gesundheitsbasis. Konzentrieren Sie sich auf 1-2 Bereiche mit dem größten Verbesserungspotential.';
+        } else if (percentage >= 55) {
+          return 'Gut! Es gibt deutliches Optimierungspotential. Implementieren Sie schrittweise Verbesserungen, beginnend mit den Grundlagen.';
+        } else if (percentage >= 40) {
+          return 'Verbesserungswürdig. Fokussieren Sie sich auf die wichtigsten Gesundheitssäulen: Schlaf, Ernährung und Bewegung.';
+        } else {
+          return 'Handlungsbedarf! Beginnen Sie mit den absoluten Grundlagen und ziehen Sie professionelle Beratung in Betracht.';
+        }
+      }
+
+      // Generate professional single-page PDF content
+      generateOptimizedPDFContent(stats, date, categoryBreakdown, recommendations) {
+        const categoryBars = categoryBreakdown.map(cat => `
+          <div class="category-row">
+            <div class="category-info">
+              <span class="category-name">${cat.title}</span>
+              <span class="category-score">${cat.score}/20</span>
+            </div>
+            <div class="progress-container">
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: ${cat.percentage}%; background: ${this.getCategoryColor(cat.percentage)};"></div>
+              </div>
+              <span class="percentage">${cat.percentage}%</span>
+            </div>
+          </div>
+        `).join('');
+
+        const getScoreRating = (percentage) => {
+          if (percentage >= 90) return { text: 'Außergewöhnlich', color: '#059669', bg: '#d1fae5' };
+          if (percentage >= 80) return { text: 'Hervorragend', color: '#0891b2', bg: '#cffafe' };
+          if (percentage >= 70) return { text: 'Sehr gut', color: '#7c3aed', bg: '#ede9fe' };
+          if (percentage >= 60) return { text: 'Gut', color: '#ea580c', bg: '#fed7aa' };
+          if (percentage >= 50) return { text: 'Durchschnittlich', color: '#d97706', bg: '#fef3c7' };
+          return { text: 'Verbesserungsbedürftig', color: '#dc2626', bg: '#fee2e2' };
+        };
+
+        const rating = getScoreRating(stats.percentage);
+
+        return `
+          <!DOCTYPE html>
+          <html lang="de">
+          <head>
+            <title>NH Score Gesundheitsauswertung - ${date}</title>
+            <meta charset="UTF-8">
+            <style>
+              @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+              
+              * { 
+                margin: 0; 
+                padding: 0; 
+                box-sizing: border-box; 
+              }
+              
+              body { 
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                color: #1f2937;
+                line-height: 1.5;
+                background: #ffffff;
+                font-size: 14px;
+              }
+              
+              .page {
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0 auto;
+                background: white;
+                padding: 25mm;
+                box-shadow: 0 0 20px rgba(0,0,0,0.1);
+              }
+              
+              .header {
+                text-align: center;
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 3px solid #6366f1;
+                position: relative;
+              }
+              
+              .logo-section {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 15px;
+              }
+              
+              .main-title {
+                font-size: 36px;
+                font-weight: 900;
+                color: #6366f1;
+                letter-spacing: -0.5px;
+                margin-right: 15px;
+              }
+              
+              .subtitle {
+                font-size: 13px;
+                color: #6b7280;
+                font-weight: 500;
+                max-width: 400px;
+                margin: 0 auto;
+              }
+              
+              .report-date {
+                position: absolute;
+                top: 0;
+                right: 0;
+                font-size: 11px;
+                color: #9ca3af;
+                background: #f9fafb;
+                padding: 4px 8px;
+                border-radius: 4px;
+              }
+              
+              .score-overview {
+                display: flex;
+                align-items: stretch;
+                gap: 25px;
+                margin-bottom: 35px;
+                padding: 25px;
+                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+                border-radius: 12px;
+                border: 1px solid #e2e8f0;
+              }
+              
+              .score-visual {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-width: 140px;
+              }
+              
+              .score-circle {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                background: conic-gradient(#6366f1 0deg, #6366f1 ${(stats.percentage/100)*360}deg, #e5e7eb ${(stats.percentage/100)*360}deg, #e5e7eb 360deg);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                margin-bottom: 10px;
+              }
+              
+              .score-circle::before {
+                content: '';
+                width: 70px;
+                height: 70px;
+                background: white;
+                border-radius: 50%;
+                position: absolute;
+              }
+              
+              .score-text {
+                position: relative;
+                z-index: 1;
+                text-align: center;
+              }
+              
+              .score-number {
+                font-size: 24px;
+                font-weight: 900;
+                color: #6366f1;
+                line-height: 1;
+              }
+              
+              .score-percent {
+                font-size: 12px;
+                color: #6b7280;
+                font-weight: 600;
+              }
+              
+              .score-rating {
+                background: ${rating.bg};
+                color: ${rating.color};
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                border: 1px solid ${rating.color}20;
+              }
+              
+              .score-details {
+                flex: 1;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+              }
+              
+              .detail-card {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                text-align: center;
+                border: 1px solid #e5e7eb;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+              }
+              
+              .detail-value {
+                font-size: 20px;
+                font-weight: 700;
+                color: #1f2937;
+                margin-bottom: 4px;
+              }
+              
+              .detail-label {
+                font-size: 11px;
+                color: #6b7280;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-weight: 500;
+              }
+              
+              .content-section {
+                margin-bottom: 30px;
+              }
+              
+              .section-title {
+                font-size: 18px;
+                font-weight: 700;
+                color: #1f2937;
+                margin-bottom: 15px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+              }
+              
+              .categories-grid {
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                overflow: hidden;
+              }
+              
+              .category-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 15px 20px;
+                border-bottom: 1px solid #f3f4f6;
+              }
+              
+              .category-row:last-child {
+                border-bottom: none;
+              }
+              
+              .category-info {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                min-width: 200px;
+              }
+              
+              .category-name {
+                font-weight: 600;
+                color: #374151;
+                font-size: 14px;
+              }
+              
+              .category-score {
+                font-size: 13px;
+                color: #6b7280;
+                font-weight: 500;
+                background: #f3f4f6;
+                padding: 2px 8px;
+                border-radius: 12px;
+              }
+              
+              .progress-container {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                flex: 1;
+                margin-left: 20px;
+              }
+              
+              .progress-bar-bg {
+                flex: 1;
+                height: 8px;
+                background: #e5e7eb;
+                border-radius: 4px;
+                overflow: hidden;
+              }
+              
+              .progress-bar-fill {
+                height: 100%;
+                border-radius: 4px;
+                transition: width 0.3s ease;
+              }
+              
+              .percentage {
+                font-size: 13px;
+                font-weight: 600;
+                color: #374151;
+                min-width: 40px;
+                text-align: right;
+              }
+              
+              .recommendations-section {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 25px;
+                margin-top: 25px;
+              }
+              
+              .recommendation-card {
+                background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+                padding: 20px;
+                border-radius: 8px;
+                border-left: 4px solid #6366f1;
+              }
+              
+              .recommendation-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: #5b21b6;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+              }
+              
+              .recommendation-text {
+                font-size: 13px;
+                color: #4c1d95;
+                line-height: 1.6;
+                margin-bottom: 15px;
+              }
+              
+              .action-list {
+                font-size: 12px;
+                color: #5b21b6;
+              }
+              
+              .action-list ul {
+                margin-left: 16px;
+                margin-top: 8px;
+              }
+              
+              .action-list li {
+                margin-bottom: 4px;
+                line-height: 1.4;
+              }
+              
+              .insights-card {
+                background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+                padding: 20px;
+                border-radius: 8px;
+                border-left: 4px solid #10b981;
+              }
+              
+              .insights-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: #065f46;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+              }
+              
+              .insights-text {
+                font-size: 13px;
+                color: #047857;
+                line-height: 1.6;
+                margin-bottom: 12px;
+              }
+              
+              .motivation-tip {
+                background: #f0f9ff;
+                border: 1px solid #bae6fd;
+                padding: 12px;
+                border-radius: 6px;
+                margin-top: 10px;
+              }
+              
+              .motivation-tip strong {
+                color: #0369a1;
+                font-size: 12px;
+              }
+              
+              .motivation-tip-text {
+                color: #0c4a6e;
+                font-size: 12px;
+                font-style: italic;
+                margin-top: 4px;
+              }
+              
+              .footer {
+                margin-top: 40px;
+                padding-top: 20px;
+                border-top: 1px solid #e5e7eb;
+                text-align: center;
+                color: #6b7280;
+                font-size: 11px;
+              }
+              
+              .footer-title {
+                font-weight: 600;
+                color: #374151;
+                margin-bottom: 4px;
+              }
+              
+              .footer-details {
+                color: #9ca3af;
+              }
+              
+              @media print {
+                body { 
+                  -webkit-print-color-adjust: exact;
+                  print-color-adjust: exact;
+                }
+                .page {
+                  box-shadow: none;
+                  margin: 0;
+                }
+                * {
+                  -webkit-print-color-adjust: exact !important;
+                  print-color-adjust: exact !important;
+                }
+              }
+            </style>
+          </head>
+          <body>
+            <div class="page">
+              <header class="header">
+                <div class="report-date">Erstellt am ${date}</div>
+                <div class="logo-section">
+                  <h1 class="main-title">NH Score</h1>
+                </div>
+                <p class="subtitle">Wissenschaftlich fundierte Gesundheitsauswertung • Personalisierter Bericht</p>
+              </header>
+              
+              <section class="score-overview">
+                <div class="score-visual">
+                  <div class="score-circle">
+                    <div class="score-text">
+                      <div class="score-number">${stats.totalScore}</div>
+                      <div class="score-percent">${stats.percentage}%</div>
+                    </div>
+                  </div>
+                  <div class="score-rating">${rating.text}</div>
+                </div>
+                
+                <div class="score-details">
+                  <div class="detail-card">
+                    <div class="detail-value">${stats.totalScore}/100</div>
+                    <div class="detail-label">Gesamtpunkte</div>
+                  </div>
+                  <div class="detail-card">
+                    <div class="detail-value">${stats.completedCategories}/5</div>
+                    <div class="detail-label">Kategorien</div>
+                  </div>
+                  <div class="detail-card">
+                    <div class="detail-value">${Math.floor((Date.now() - this.state.startTime) / 60000)}min</div>
+                    <div class="detail-label">Bearbeitungszeit</div>
+                  </div>
+                </div>
+              </section>
+              
+              <section class="content-section">
+                <h2 class="section-title">📊 Detailauswertung nach Kategorien</h2>
+                <div class="categories-grid">
+                  ${categoryBars}
+                </div>
+              </section>
+              
+              <section class="recommendations-section">
+                <div class="recommendation-card">
+                  <h3 class="recommendation-title">💡 Persönliche Empfehlung</h3>
+                  <p class="recommendation-text">${recommendations}</p>
+                  <div class="action-list">
+                    <strong>🎯 Nächste Schritte:</strong>
+                    <ul>
+                      ${this.generateActionItems(categoryBreakdown).slice(0, 3).map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="insights-card">
+                  <h3 class="insights-title">🎯 Einordnung & Potenzial</h3>
+                  <p class="insights-text">${this.getInsightText(stats.percentage)}</p>
+                  
+                  <div class="motivation-tip">
+                    <strong>💪 Ihr Motivations-Tipp:</strong>
+                    <div class="motivation-tip-text">${this.getMotivationTip(stats.percentage)}</div>
+                  </div>
+                </div>
+              </section>
+              
+              <footer class="footer">
+                <div class="footer-title">NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</div>
+                <div class="footer-details">
+                  Version ${HealthAssessment.CONFIG.VERSION} • ${stats.answeredQuestions} von ${stats.totalQuestions} Fragen beantwortet
+                </div>
+              </footer>
+            </div>
+          </body>
+          </html>
+        `;
+      }
+
+      // Get category color based on percentage
+      getCategoryColor(percentage) {
+        if (percentage >= 85) return '#10b981'; // Green
+        if (percentage >= 70) return '#3b82f6'; // Blue  
+        if (percentage >= 55) return '#f59e0b'; // Yellow
+        return '#ef4444'; // Red
+      }
+
+      // Get detailed insight text
+      getInsightText(percentage) {
+        if (percentage >= 90) {
+          return 'Sie befinden sich in den oberen 5% der Bevölkerung. Ihr Lebensstil ist vorbildlich und nachhaltig. Sie sind ein Gesundheitsvorbild für andere.';
+        } else if (percentage >= 80) {
+          return 'Sie gehören zu den oberen 15% und haben bereits eine ausgezeichnete Gesundheitsbasis. Kleine Optimierungen können Sie zur Perfektion führen.';
+        } else if (percentage >= 70) {
+          return 'Sie liegen deutlich über dem Durchschnitt (obere 30%). Mit gezielten Verbesserungen erreichen Sie schnell das nächste Level.';
+        } else if (percentage >= 60) {
+          return 'Sie bewegen sich im oberen Mittelfeld. Eine solide Grundlage ist vorhanden - jetzt gilt es, konsequent zu optimieren.';
+        } else if (percentage >= 50) {
+          return 'Sie liegen im Durchschnitt der Bevölkerung. Es gibt großes Potenzial für Verbesserungen, die Ihre Lebensqualität steigern werden.';
+        } else {
+          return 'Hier liegt enormes Verbesserungspotenzial. Konzentrieren Sie sich auf die Grundlagen und ziehen Sie professionelle Beratung in Betracht.';
+        }
+      }
+
+      // Generate personalized action items
+      generateActionItems(categoryBreakdown) {
+        const sortedCategories = [...categoryBreakdown].sort((a, b) => a.percentage - b.percentage);
+        const weakestCategory = sortedCategories[0];
+        const secondWeakest = sortedCategories[1];
+        
+        const actions = [
+          `Fokus auf "${weakestCategory.title}" - hier liegt das größte Verbesserungspotential`,
+          `"${secondWeakest.title}" als zweite Priorität angehen`,
+          'Realistische Ziele setzen: 1-2 Gewohnheiten pro Monat ändern'
+        ];
+        
+        // Add specific recommendations based on categories
+        if (weakestCategory.title.includes('Schlaf')) {
+          actions.push('Feste Schlafzeiten einführen und Schlafumgebung optimieren');
+        } else if (weakestCategory.title.includes('Ernährung')) {
+          actions.push('Meal-Prep beginnen und Zuckerkonsum reduzieren');
+        } else if (weakestCategory.title.includes('Training')) {
+          actions.push('Mit 2-3 Trainingseinheiten pro Woche starten');
+        } else if (weakestCategory.title.includes('Mindset')) {
+          actions.push('Tägliche 10-Minuten Meditation einführen');
+        } else if (weakestCategory.title.includes('Lifestyle')) {
+          actions.push('Schädliche Gewohnheiten schrittweise eliminieren');
+        }
+        
+        return actions.slice(0, 4); // Limit to 4 items for space
+      }
+
+      // Generate motivation tip based on score
+      getMotivationTip(percentage) {
+        const tips = {
+          high: [
+            'Sie sind bereits Vorbild für andere - teilen Sie Ihre Erfolgsgeheimnisse!',
+            'Perfektion ist das Ziel - Sie sind schon sehr nah dran!',
+            'Ihre Disziplin zahlt sich aus - bleiben Sie konsequent!'
+          ],
+          medium: [
+            'Jede kleine Verbesserung bringt Sie dem Ziel näher!',
+            'Sie haben bereits eine gute Basis - bauen Sie darauf auf!',
+            'Konsistenz ist der Schlüssel - kleine Schritte führen zum Erfolg!'
+          ],
+          low: [
+            'Jeder Experte war einmal Anfänger - Sie schaffen das!',
+            'Große Reisen beginnen mit dem ersten Schritt!',
+            'Ihre Gesundheit ist die beste Investition in Ihre Zukunft!'
+          ]
+        };
+        
+        let category;
+        if (percentage >= 70) category = 'high';
+        else if (percentage >= 50) category = 'medium';
+        else category = 'low';
+        
+        const categoryTips = tips[category];
+        return categoryTips[Math.floor(Math.random() * categoryTips.length)];
+      }
+
+      // Debounced UI updates for better performance
+      scheduleUIUpdate() {
+        if (this.updateTimer) {
+          clearTimeout(this.updateTimer);
+        }
+        
+        this.updateTimer = setTimeout(() => {
+          this.updateUI();
+          this.updateTimer = null;
+        }, 50);
+      }
+
+      // Smart focus management
       focusNextQuestion(catIdx, qIdx) {
         // Find next unanswered question
-        for (let c = catIdx; c < this.categories.length; c++) {
+        for (let c = catIdx; c < HealthAssessment.CATEGORIES.length; c++) {
           const startQ = (c === catIdx) ? qIdx + 1 : 0;
-          for (let q = startQ; q < this.categories[c].questions.length; q++) {
-            if (this.answers[c][q] === null) {
+          const questions = HealthAssessment.CATEGORIES[c].questions;
+          
+          for (let q = startQ; q < questions.length; q++) {
+            if (this.state.answers[c][q] === null) {
               const nextQuestion = document.getElementById(`question-${c}-${q}`);
               if (nextQuestion) {
-                nextQuestion.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                // Focus first radio button
-                const firstRadio = nextQuestion.querySelector('input[type="radio"]');
-                if (firstRadio) firstRadio.focus();
+                nextQuestion.scrollIntoView(HealthAssessment.CONFIG.SCROLL_BEHAVIOR);
+                // Focus first radio button with delay
+                setTimeout(() => {
+                  const firstRadio = nextQuestion.querySelector('input[type="radio"]');
+                  firstRadio?.focus();
+                }, 200);
               }
               return;
             }
           }
         }
       }
-      
+
+      // Comprehensive UI update with caching
       updateUI() {
-        this.updateProgress();
-        this.updateScorePanel();
+        const stats = this.calculateStats();
+        
+        this.updateProgress(stats);
+        this.updateScorePanel(stats);
         this.updateCategoryNav();
         this.updateCategoryStates();
       }
-      
-      updateProgress() {
-        const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
-        const answeredQuestions = this.answers.flat().filter(answer => answer !== null).length;
-        const progress = (answeredQuestions / totalQuestions) * 100;
+
+      // Update progress with smooth animations
+      updateProgress(stats) {
+        const progress = (stats.answeredQuestions / stats.totalQuestions) * 100;
         
-        document.getElementById('progressBar').style.width = `${progress}%`;
-        document.getElementById('progressText').textContent = `Frage ${answeredQuestions} von ${totalQuestions}`;
+        if (this.elements.progressBar) {
+          this.elements.progressBar.style.width = `${progress}%`;
+        }
+        
+        if (this.elements.progressText) {
+          this.elements.progressText.textContent = `Frage ${stats.answeredQuestions} von ${stats.totalQuestions}`;
+        }
       }
-      
-      updateScorePanel() {
-        const totalScore = this.calculateTotalScore();
-        const maxScore = this.categories.reduce((sum, cat) => sum + cat.questions.length * 2, 0);
-        const percentage = maxScore > 0 ? Math.round((totalScore / maxScore) * 100) : 0;
-        const answeredCount = this.answers.flat().filter(answer => answer !== null).length;
-        const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
-        const completedCategories = this.answers.filter(catAnswers => 
-          catAnswers.every(answer => answer !== null)
-        ).length;
-        
-        // Update score circle
-        const scoreCircle = document.getElementById('scoreCircle');
-        const degrees = (percentage / 100) * 360;
-        scoreCircle.style.background = `conic-gradient(var(--primary) ${degrees}deg, var(--gray-700) ${degrees}deg)`;
-        
-        // Update values
-        document.getElementById('totalScore').textContent = totalScore;
-        document.getElementById('scorePercentage').textContent = `${percentage}%`;
-        document.getElementById('answeredCount').textContent = `${answeredCount}/${totalQuestions}`;
-        document.getElementById('completedCategories').textContent = `${completedCategories}/5`;
-        document.getElementById('averageScore').textContent = `${percentage}%`;
-        document.getElementById('scoreDate').textContent = `Stand: ${new Date().toLocaleDateString('de-DE')}`;
+
+      // Update score panel with animated transitions
+      updateScorePanel(stats) {
+        // Update score circle with smooth transition
+        if (this.elements.scoreCircle) {
+          const degrees = (stats.percentage / 100) * 360;
+          this.elements.scoreCircle.style.background = 
+            `conic-gradient(var(--primary) ${degrees}deg, var(--gray-700) ${degrees}deg)`;
+        }
+
+        // Update all score values
+        const updates = [
+          [this.elements.totalScore, stats.totalScore],
+          [this.elements.scorePercentage, `${stats.percentage}%`],
+          [this.elements.answeredCount, `${stats.answeredQuestions}/${stats.totalQuestions}`],
+          [this.elements.completedCategories, `${stats.completedCategories}/5`],
+          [this.elements.averageScore, `${stats.percentage}%`]
+        ];
+
+        updates.forEach(([element, value]) => {
+          if (element && element.textContent !== String(value)) {
+            element.textContent = value;
+          }
+        });
+
+        // Update date
+        if (this.elements.scoreDate) {
+          this.elements.scoreDate.textContent = `Stand: ${new Date().toLocaleDateString('de-DE')}`;
+        }
+
+        // Update time spent
+        if (this.elements.timeSpent) {
+          const elapsed = Math.floor((Date.now() - this.state.startTime) / 60000);
+          this.elements.timeSpent.textContent = `${elapsed}m`;
+        }
       }
-      
+
+      // Update category navigation dots
       updateCategoryNav() {
-        const dots = document.querySelectorAll('.category-dot');
-        this.answers.forEach((categoryAnswers, idx) => {
+        const dots = this.elements.categoryNav?.querySelectorAll('.category-dot');
+        if (!dots) return;
+
+        this.state.answers.forEach((categoryAnswers, idx) => {
+          const dot = dots[idx];
+          if (!dot) return;
+
           const isCompleted = categoryAnswers.every(answer => answer !== null);
           const hasAnswers = categoryAnswers.some(answer => answer !== null);
-          
-          dots[idx].classList.toggle('completed', isCompleted);
-          dots[idx].classList.toggle('active', hasAnswers && !isCompleted);
+
+          dot.classList.toggle('completed', isCompleted);
+          dot.classList.toggle('active', hasAnswers && !isCompleted);
         });
       }
-      
+
+      // Update individual category states
       updateCategoryStates() {
-        this.categories.forEach((category, catIdx) => {
-          const categoryEl = document.getElementById(`category-${catIdx}`);
-          const categoryAnswers = this.answers[catIdx];
+        HealthAssessment.CATEGORIES.forEach((category, catIdx) => {
+          const categoryAnswers = this.state.answers[catIdx];
           const answered = categoryAnswers.filter(answer => answer !== null).length;
           const score = categoryAnswers.reduce((sum, answer) => sum + (answer || 0), 0);
           const progress = (answered / category.questions.length) * 100;
-          
-          // Update category score and progress
-          document.getElementById(`score-${catIdx}`).textContent = `${score} / 20`;
-          document.getElementById(`progress-${catIdx}`).style.width = `${progress}%`;
-          
+
+          // Update category score
+          const scoreEl = document.getElementById(`score-${catIdx}`);
+          if (scoreEl) {
+            scoreEl.textContent = `${score} / 20`;
+          }
+
+          // Update category progress
+          const progressEl = document.getElementById(`progress-${catIdx}`);
+          if (progressEl) {
+            progressEl.style.width = `${progress}%`;
+            progressEl.parentElement?.setAttribute('aria-valuenow', progress);
+          }
+
           // Update category visual state
-          const isCompleted = answered === category.questions.length;
-          categoryEl.classList.toggle('active', answered > 0 && !isCompleted);
+          const categoryEl = document.getElementById(`category-${catIdx}`);
+          if (categoryEl) {
+            const isCompleted = answered === category.questions.length;
+            categoryEl.classList.toggle('active', answered > 0 && !isCompleted);
+          }
         });
       }
-      
-      calculateTotalScore() {
-        return this.answers.flat().reduce((sum, answer) => sum + (answer || 0), 0);
+
+      // Update active category dot based on scroll
+      updateActiveCategoryDot(activeIndex) {
+        const dots = this.elements.categoryNav?.querySelectorAll('.category-dot');
+        if (!dots) return;
+
+        dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === activeIndex);
+        });
       }
-      
+
+      // Smooth scroll to category
       scrollToCategory(index) {
         const categoryEl = document.getElementById(`category-${index}`);
-        if (categoryEl) {
-          categoryEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        categoryEl?.scrollIntoView(HealthAssessment.CONFIG.SCROLL_BEHAVIOR);
+      }
+
+      // Enhanced keyboard navigation
+      handleKeydown(event) {
+        // Handle radio button navigation
+        if (event.target.type === 'radio') {
+          this.handleRadioNavigation(event);
+        }
+        
+        // Global shortcuts
+        if (event.ctrlKey || event.metaKey) {
+          this.handleGlobalShortcuts(event);
+        }
+
+        // Modal shortcuts
+        if (this.elements.completionModal?.classList.contains('show')) {
+          if (event.key === 'Escape') {
+            this.closeCompletionModal();
+          }
         }
       }
-      
-      setupKeyboardNavigation() {
-        document.addEventListener('keydown', (e) => {
-          if (e.target.type === 'radio') {
-            const name = e.target.name;
-            const radios = document.querySelectorAll(`input[name="${name}"]`);
-            const currentIndex = Array.from(radios).indexOf(e.target);
-            
-            switch(e.key) {
-              case 'ArrowLeft':
-              case 'ArrowUp':
-                e.preventDefault();
-                if (currentIndex > 0) radios[currentIndex - 1].focus();
-                break;
-              case 'ArrowRight':
-              case 'ArrowDown':
-                e.preventDefault();
-                if (currentIndex < radios.length - 1) radios[currentIndex + 1].focus();
-                break;
-              case 'Enter':
-              case ' ':
-                e.preventDefault();
-                e.target.checked = true;
-                e.target.onchange();
-                break;
-            }
-          }
-          
-          // Global shortcuts
-          if (e.ctrlKey || e.metaKey) {
-            switch(e.key) {
-              case 's':
-                e.preventDefault();
-                this.exportData();
-                break;
-              case 'r':
-                e.preventDefault();
-                this.resetData();
-                break;
-            }
-          }
-        });
+
+      // Radio button keyboard navigation
+      handleRadioNavigation(event) {
+        const name = event.target.name;
+        const radios = document.querySelectorAll(`input[name="${name}"]`);
+        const currentIndex = Array.from(radios).indexOf(event.target);
+        
+        let newIndex = currentIndex;
+        
+        switch(event.key) {
+          case 'ArrowLeft':
+          case 'ArrowUp':
+            event.preventDefault();
+            newIndex = Math.max(0, currentIndex - 1);
+            break;
+          case 'ArrowRight':
+          case 'ArrowDown':
+            event.preventDefault();
+            newIndex = Math.min(radios.length - 1, currentIndex + 1);
+            break;
+          case 'Enter':
+          case ' ':
+            event.preventDefault();
+            event.target.checked = true;
+            this.handleAnswer(event);
+            return;
+        }
+        
+        if (newIndex !== currentIndex) {
+          radios[newIndex]?.focus();
+        }
       }
-      
+
+      // Global keyboard shortcuts
+      handleGlobalShortcuts(event) {
+        switch(event.key) {
+          case 's':
+            event.preventDefault();
+            this.handleExport();
+            break;
+          case 'r':
+            event.preventDefault();
+            this.handleReset();
+            break;
+        }
+      }
+
+      // Start all timers
+      startTimers() {
+        this.startAutosave();
+        this.startTimeUpdater();
+      }
+
+      // Auto-save functionality
       startAutosave() {
-        this.autosaveInterval = setInterval(() => {
+        this.state.autosaveTimer = setInterval(() => {
           this.saveData();
           this.showAutosaveIndicator('saved');
-        }, 30000); // Save every 30 seconds
+        }, HealthAssessment.CONFIG.AUTOSAVE_INTERVAL);
       }
-      
-      updateTimeSpent() {
-        setInterval(() => {
-          const elapsed = Math.floor((Date.now() - this.startTime) / 60000);
-          document.getElementById('timeSpent').textContent = `${elapsed}m`;
-        }, 60000); // Update every minute
+
+      // Time tracker
+      startTimeUpdater() {
+        this.state.timeUpdateTimer = setInterval(() => {
+          const elapsed = Math.floor((Date.now() - this.state.startTime) / 60000);
+          if (this.elements.timeSpent) {
+            this.elements.timeSpent.textContent = `${elapsed}m`;
+          }
+        }, 60000);
       }
-      
+
+      // Enhanced autosave indicator
       showAutosaveIndicator(state) {
-        const indicator = document.getElementById('autosaveIndicator');
+        const indicator = this.elements.autosaveIndicator;
+        if (!indicator) return;
+
         indicator.className = `autosave-indicator ${state}`;
         
+        const messages = {
+          saving: '<div class="dot"></div><span>Speichere...</span>',
+          saved: '<div class="dot"></div><span>Automatisch gespeichert</span>',
+          error: '<div class="dot"></div><span>Speicherfehler</span>'
+        };
+
+        indicator.innerHTML = messages[state] || messages.saved;
+
         if (state === 'saving') {
-          indicator.innerHTML = '<span>●</span><span>Speichere...</span>';
           setTimeout(() => this.showAutosaveIndicator('saved'), 1000);
-        } else if (state === 'saved') {
-          indicator.innerHTML = '<span>●</span><span>Automatisch gespeichert</span>';
         }
       }
-      
+
+      // Optimized data persistence
       saveData() {
-        const data = {
-          answers: this.answers,
-          timestamp: Date.now(),
-          version: '3.0',
-          startTime: this.startTime
-        };
-        localStorage.setItem('nh-score-data', JSON.stringify(data));
+        try {
+          const data = {
+            answers: this.state.answers,
+            timestamp: Date.now(),
+            version: HealthAssessment.CONFIG.VERSION,
+            startTime: this.state.startTime,
+            wasCompleted: this.state.wasCompleted
+          };
+          
+          localStorage.setItem(HealthAssessment.CONFIG.STORAGE_KEY, JSON.stringify(data));
+          return true;
+        } catch (error) {
+          console.error('Failed to save data:', error);
+          this.showAutosaveIndicator('error');
+          return false;
+        }
       }
-      
+
+      // Load data with version checking
       loadData() {
         try {
-          const saved = localStorage.getItem('nh-score-data');
-          if (saved) {
-            const data = JSON.parse(saved);
-            if (data.version === '3.0' && data.answers) {
-              this.startTime = data.startTime || Date.now();
-              return data.answers;
-            }
+          const saved = localStorage.getItem(HealthAssessment.CONFIG.STORAGE_KEY);
+          if (!saved) return null;
+
+          const data = JSON.parse(saved);
+          if (data.version === HealthAssessment.CONFIG.VERSION && data.answers) {
+            return data;
           }
-        } catch (e) {
-          console.warn('Failed to load saved data:', e);
+        } catch (error) {
+          console.warn('Failed to load saved data:', error);
         }
         return null;
       }
-      
-      exportData() {
-        const totalScore = this.calculateTotalScore();
-        const maxScore = this.categories.reduce((sum, cat) => sum + cat.questions.length * 2, 0);
-        const percentage = Math.round((totalScore / maxScore) * 100);
-        const date = new Date().toLocaleDateString('de-DE');
-        const answeredQuestions = this.answers.flat().filter(answer => answer !== null).length;
-        const totalQuestions = this.categories.reduce((sum, cat) => sum + cat.questions.length, 0);
-        
-        // Generate category breakdown
-        const categoryBreakdown = this.categories.map((cat, idx) => {
-          const score = this.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0);
-          const answered = this.answers[idx].filter(answer => answer !== null).length;
-          const catPercentage = answered > 0 ? Math.round((score / (cat.questions.length * 2)) * 100) : 0;
-          return `
-            <tr>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd;">${cat.title}</td>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${score}/20</td>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${catPercentage}%</td>
-              <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: center;">${answered}/${cat.questions.length}</td>
-            </tr>
-          `;
-        }).join('');
-        
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>NH Score Auswertung</title>
-            <meta charset="UTF-8">
-            <style>
-              body { 
-                font-family: Arial, sans-serif; 
-                margin: 40px; 
-                color: #333; 
-                line-height: 1.6;
-              }
-              .header { 
-                text-align: center; 
-                margin-bottom: 40px; 
-                border-bottom: 3px solid #6366f1; 
-                padding-bottom: 20px; 
-              }
-              .score-circle {
-                width: 150px;
-                height: 150px;
-                border-radius: 50%;
-                background: conic-gradient(#6366f1 ${(percentage/100)*360}deg, #e5e7eb ${(percentage/100)*360}deg);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 20px auto;
-                position: relative;
-              }
-              .score-circle::before {
-                content: '';
-                width: 100px;
-                height: 100px;
-                background: white;
-                border-radius: 50%;
-                position: absolute;
-              }
-              .score-text {
-                position: relative;
-                z-index: 1;
-                text-align: center;
-                font-weight: bold;
-              }
-              table { 
-                width: 100%; 
-                border-collapse: collapse; 
-                margin-top: 30px; 
-              }
-              th { 
-                background: #f8f9fa; 
-                padding: 12px; 
-                border-bottom: 2px solid #6366f1; 
-                text-align: left; 
-              }
-              .summary {
-                background: #f8f9fa;
-                padding: 20px;
-                border-radius: 8px;
-                margin: 20px 0;
-              }
-              .recommendation {
-                background: #e0e7ff;
-                padding: 15px;
-                border-left: 4px solid #6366f1;
-                margin: 20px 0;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="header">
-              <h1>NH Score Gesundheitsauswertung</h1>
-              <p><strong>Datum:</strong> ${date}</p>
-              <div class="score-circle">
-                <div class="score-text">
-                  <div style="font-size: 24px;">${totalScore}</div>
-                  <div style="font-size: 14px; color: #666;">${percentage}%</div>
-                </div>
-              </div>
-              <h2>Gesamtergebnis: ${totalScore} von 100 Punkten</h2>
-            </div>
-            
-            <div class="summary">
-              <h3>Zusammenfassung</h3>
-              <p><strong>Beantwortete Fragen:</strong> ${answeredQuestions} von ${totalQuestions}</p>
-              <p><strong>Gesamtscore:</strong> ${percentage}% (${totalScore}/100 Punkte)</p>
-              <p><strong>Bewertung:</strong> ${
-                percentage >= 85 ? 'Ausgezeichnet - Vorbildlicher Gesundheitsstatus' :
-                percentage >= 70 ? 'Sehr gut - Solide Gesundheitsbasis' :
-                percentage >= 55 ? 'Gut - Optimierungspotential vorhanden' :
-                percentage >= 40 ? 'Verbesserungswürdig - Fokus auf Schlüsselbereiche' :
-                'Handlungsbedarf - Professionelle Beratung empfohlen'
-              }</p>
-            </div>
-            
-            <h3>Detailauswertung nach Kategorien</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Kategorie</th>
-                  <th style="text-align: center;">Punkte</th>
-                  <th style="text-align: center;">Prozent</th>
-                  <th style="text-align: center;">Beantwortet</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${categoryBreakdown}
-              </tbody>
-            </table>
-            
-            <div class="recommendation">
-              <h3>Empfehlung</h3>
-              <p>${
-                percentage >= 70 ? 'Großartig! Halten Sie Ihre guten Gewohnheiten bei und optimieren Sie gezielt die schwächeren Bereiche.' :
-                percentage >= 40 ? 'Sie haben eine gute Basis. Konzentrieren Sie sich auf 1-2 Bereiche und implementieren Sie schrittweise Verbesserungen.' :
-                'Beginnen Sie mit den Grundlagen: Regelmäßiger Schlaf und ausgewogene Ernährung bilden das Fundament für alle anderen Verbesserungen.'
-              }</p>
-            </div>
-            
-            <div style="margin-top: 40px; text-align: center; color: #666; font-size: 12px;">
-              <p>NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</p>
-              <p>Erstellt am ${date}</p>
-            </div>
-          </body>
-          </html>
-        `);
-        printWindow.document.close();
-        
-        // Wait a moment for content to load, then print
-        setTimeout(() => {
-          printWindow.print();
-        }, 500);
-        
-        this.showNotification('PDF wird erstellt...', 'success');
+
+      // Reset functionality with confirmation
+      handleReset() {
+        if (this.state.isLoading) return;
+
+        const message = 'Möchten Sie wirklich alle Antworten zurücksetzen?\n\nDiese Aktion kann nicht rückgängig gemacht werden.';
+        if (!confirm(message)) return;
+
+        this.performReset();
       }
-      
-      importData() {
-        // Removed - Import functionality not needed
-      }
-      
-      resetData() {
-        if (confirm('Möchten Sie wirklich alle Antworten zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden.')) {
-          // Reset answers array
-          this.answers = this.initializeAnswers();
-          this.startTime = Date.now();
+
+      // Perform complete reset
+      async performReset() {
+        this.state.isLoading = true;
+        this.updateLoadingState();
+
+        try {
+          // Reset state
+          this.state.answers = this.initializeAnswers();
+          this.state.startTime = Date.now();
+          this.state.wasCompleted = false;
+
+          // Clear storage
+          localStorage.removeItem(HealthAssessment.CONFIG.STORAGE_KEY);
+
+          // Close modal if open
+          this.closeCompletionModal();
+
+          // Re-render everything
+          await this.render();
           
-          // Clear localStorage
-          localStorage.removeItem('nh-score-data');
-          
-          // Completely re-render everything from scratch
-          this.renderCategories();
-          this.renderCategoryNav();
-          this.updateUI();
-          
-          this.showNotification('Alle Daten wurden zurückgesetzt', 'success');
+          this.showNotification('Alle Daten wurden erfolgreich zurückgesetzt', 'success');
+        } catch (error) {
+          console.error('Reset failed:', error);
+          this.showNotification('Fehler beim Zurücksetzen', 'error');
+        } finally {
+          this.state.isLoading = false;
+          this.updateLoadingState();
         }
       }
-      
+
+      // Update loading state visual indicators
+      updateLoadingState() {
+        const loadingClass = 'loading';
+        const elements = [this.elements.categories, this.elements.exportBtn, this.elements.resetBtn];
+        
+        elements.forEach(el => {
+          if (el) {
+            el.classList.toggle(loadingClass, this.state.isLoading);
+          }
+        });
+
+        // Update button states
+        if (this.elements.exportBtn) {
+          this.elements.exportBtn.disabled = this.state.isLoading;
+        }
+        if (this.elements.resetBtn) {
+          this.elements.resetBtn.disabled = this.state.isLoading;
+        }
+      }
+
+      // Enhanced notification system
       showNotification(message, type = 'success') {
-        const notification = document.getElementById('notification');
+        const notification = this.elements.notification;
+        if (!notification) return;
+
+        // Clear any existing timeout
+        if (this.notificationTimeout) {
+          clearTimeout(this.notificationTimeout);
+        }
+
+        // Set message and type
         notification.textContent = message;
         notification.className = `notification ${type}`;
+        
+        // Show notification
         notification.classList.add('show');
         
-        setTimeout(() => {
+        // Hide after delay
+        this.notificationTimeout = setTimeout(() => {
           notification.classList.remove('show');
-        }, 3000);
+          this.notificationTimeout = null;
+        }, HealthAssessment.CONFIG.NOTIFICATION_DURATION);
+      }
+
+      // Cleanup resources
+      cleanup() {
+        // Clear timers
+        if (this.state.autosaveTimer) {
+          clearInterval(this.state.autosaveTimer);
+        }
+        if (this.state.timeUpdateTimer) {
+          clearInterval(this.state.timeUpdateTimer);
+        }
+        if (this.updateTimer) {
+          clearTimeout(this.updateTimer);
+        }
+        if (this.notificationTimeout) {
+          clearTimeout(this.notificationTimeout);
+        }
+
+        // Disconnect observer
+        if (this.observer) {
+          this.observer.disconnect();
+        }
+
+        // Final save
+        this.saveData();
+      }
+
+      // Public API methods
+      getProgress() {
+        const stats = this.calculateStats();
+        return {
+          percentage: stats.percentage,
+          answeredQuestions: stats.answeredQuestions,
+          totalQuestions: stats.totalQuestions,
+          completedCategories: stats.completedCategories
+        };
+      }
+
+      getCategoryScores() {
+        return HealthAssessment.CATEGORIES.map((cat, idx) => ({
+          title: cat.title,
+          score: this.state.answers[idx].reduce((sum, answer) => sum + (answer || 0), 0),
+          maxScore: cat.questions.length * 2,
+          answered: this.state.answers[idx].filter(answer => answer !== null).length,
+          totalQuestions: cat.questions.length
+        }));
       }
     }
-    
-    // Global functions that work properly
+
+    // Global functions for modal interactions
+    function closeCompletionModal() {
+      if (window.healthApp) {
+        window.healthApp.closeCompletionModal();
+      }
+    }
+
+    function exportCompletionPDF() {
+      if (window.healthApp) {
+        window.healthApp.handleExport();
+        window.healthApp.closeCompletionModal();
+      }
+    }
+
+    function shareResults() {
+      if (navigator.share && window.healthApp) {
+        const stats = window.healthApp.calculateStats();
+        navigator.share({
+          title: 'Mein NH Score Ergebnis',
+          text: `Ich habe ${stats.percentage}% (${stats.totalScore}/100 Punkte) im NH Score Assessment erreicht! 🎯`,
+          url: window.location.href
+        }).catch(console.error);
+      } else {
+        // Fallback: Copy to clipboard
+        if (window.healthApp) {
+          const stats = window.healthApp.calculateStats();
+          const text = `Mein NH Score Ergebnis: ${stats.percentage}% (${stats.totalScore}/100 Punkte) 🎯`;
+          
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(text).then(() => {
+              window.healthApp.showNotification('Ergebnis in Zwischenablage kopiert!', 'success');
+            });
+          } else {
+            // Ultra-fallback
+            window.healthApp.showNotification('Teilen-Funktion nicht verfügbar', 'warning');
+          }
+        }
+      }
+    }
+
+    // Enhanced initialization with error handling
+    class AppInitializer {
+      static async init() {
+        try {
+          // Check for required features
+          if (!AppInitializer.checkCompatibility()) {
+            throw new Error('Browser nicht kompatibel');
+          }
+
+          // Wait for DOM
+          if (document.readyState === 'loading') {
+            await new Promise(resolve => {
+              document.addEventListener('DOMContentLoaded', resolve, { once: true });
+            });
+          }
+
+          // Initialize app
+          window.healthApp = new HealthAssessment();
+          
+          // Setup event delegation for better performance
+          AppInitializer.setupEventDelegation();
+          
+          // Setup global error handling
+          AppInitializer.setupErrorHandling();
+
+        } catch (error) {
+          console.error('App initialization failed:', error);
+          AppInitializer.showFallbackMessage(error.message);
+        }
+      }
+
+      static checkCompatibility() {
+        const required = [
+          'localStorage',
+          'JSON',
+          'Promise',
+          'requestAnimationFrame'
+        ];
+
+        return required.every(feature => feature in window);
+      }
+
+      static setupEventDelegation() {
+        // Delegate radio button events for better performance
+        document.addEventListener('change', (event) => {
+          if (event.target.type === 'radio' && window.healthApp) {
+            window.healthApp.handleAnswer(event);
+          }
+        });
+
+        // Handle modal close on overlay click
+        document.addEventListener('click', (event) => {
+          if (event.target.classList.contains('modal-overlay')) {
+            closeCompletionModal();
+          }
+        });
+      }
+
+      static setupErrorHandling() {
+        window.addEventListener('error', (event) => {
+          console.error('Global error:', event.error);
+          if (window.healthApp) {
+            window.healthApp.showNotification('Ein unerwarteter Fehler ist aufgetreten', 'error');
+          }
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+          console.error('Unhandled promise rejection:', event.reason);
+          if (window.healthApp) {
+            window.healthApp.showNotification('Ein Fehler bei der Datenverarbeitung ist aufgetreten', 'error');
+          }
+        });
+      }
+
+      static showFallbackMessage(error) {
+        document.body.innerHTML = `
+          <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; text-align: center; background: var(--bg-primary); color: var(--text-primary);">
+            <div style="max-width: 500px;">
+              <h1 style="color: var(--error); margin-bottom: 1rem;">⚠️ Fehler beim Laden</h1>
+              <p style="margin-bottom: 1rem;">Die Anwendung konnte nicht geladen werden.</p>
+              <p style="font-size: 0.9rem; color: var(--text-secondary);">Fehler: ${error}</p>
+              <button onclick="location.reload()" style="
+                margin-top: 1.5rem;
+                padding: 0.75rem 1.5rem;
+                background: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 1rem;
+              ">
+                Seite neu laden
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Initialize app
+    AppInitializer.init();
+
+    // Expose global functions for backward compatibility
     window.exportPDF = function() {
-      if (window.healthApp) {
-        window.healthApp.exportData();
-      }
+      window.healthApp?.handleExport();
     };
-    
+
     window.resetAll = function() {
-      if (window.healthApp) {
-        window.healthApp.resetData();
-      }
+      window.healthApp?.handleReset();
     };
-    
-    // Initialize app when DOM is ready
-    document.addEventListener('DOMContentLoaded', () => {
-      window.healthApp = new HealthAssessment();
-    });
+
+    // Development helper functions (only in dev mode)
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      window.devTools = {
+        getState: () => window.healthApp?.state,
+        getProgress: () => window.healthApp?.getProgress(),
+        getCategoryScores: () => window.healthApp?.getCategoryScores(),
+        setAnswer: (cat, q, val) => window.healthApp?.updateAnswer(cat, q, val),
+        exportData: () => JSON.stringify(window.healthApp?.state),
+        importData: (data) => {
+          try {
+            const parsed = JSON.parse(data);
+            if (window.healthApp) {
+              window.healthApp.state.answers = parsed.answers || window.healthApp.initializeAnswers();
+              window.healthApp.render();
+            }
+          } catch (e) {
+            console.error('Import failed:', e);
+          }
+        },
+        showModal: () => window.healthApp?.showCompletionModal(),
+        completeAll: () => {
+          if (window.healthApp) {
+            // Fill all answers with random values for testing
+            window.healthApp.state.answers = window.healthApp.state.answers.map(cat => 
+              cat.map(() => Math.floor(Math.random() * 3))
+            );
+            window.healthApp.render();
+          }
+        }
+      };
+      console.log('🔧 Development tools available: window.devTools');
+    }
+
   </script>
 </body>
 </html>
