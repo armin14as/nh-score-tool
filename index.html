@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem" />
-<title>NH SCORE – Professional Health Assessment</title>
+<meta name="description" content="Checkbox/NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem" />
+<title>CHECKBOX/NH SCORE – Professional Health Assessment</title>
 <style>
   :root {
     --primary: #6366f1;
@@ -890,7 +890,7 @@
       <div class="modal-body">
         <div class="completion-score" id="completionScore">0%</div>
         <div class="completion-message" id="completionMessage">
-          Herzlichen Glückwunsch! Sie haben das NH Score Assessment erfolgreich abgeschlossen.
+          Herzlichen Glückwunsch! Sie haben das Checkbox/NH Score Assessment erfolgreich abgeschlossen.
         </div>
         
         <div class="completion-stats">
@@ -950,7 +950,7 @@
     <div class="main-content">
       <!-- Hero Section -->
       <header class="hero-section">
-        <h1 class="main-title">NH Score</h1>
+        <h1 class="main-title">Checkbox/NH Score</h1>
         <p class="subtitle">Wissenschaftlich fundiertes 100-Punkte-System für umfassende Gesundheit & Leistungsfähigkeit</p>
       </header>
 
@@ -1002,7 +1002,7 @@
     class HealthAssessment {
       // Static configuration
       static CONFIG = {
-        STORAGE_KEY: 'nh-score-data',
+        STORAGE_KEY: 'checkbox-nh-score-data',
         VERSION: '4.1',
         AUTOSAVE_INTERVAL: 30000,
         ANIMATION_DELAY: 100,
@@ -1126,7 +1126,7 @@
           this.setupEventListeners();
           await this.render();
           this.startTimers();
-          this.showNotification('Willkommen beim NH Score Assessment!', 'success');
+          this.showNotification('Willkommen beim Checkbox/NH Score Assessment!', 'success');
         } catch (error) {
           console.error('Initialization failed:', error);
           this.showNotification('Fehler beim Laden der Anwendung', 'error');
@@ -1610,7 +1610,7 @@
           <!DOCTYPE html>
           <html lang="de">
           <head>
-            <title>NH Score Gesundheitsauswertung - ${date}</title>
+            <title>Checkbox/NH Score Gesundheitsauswertung - ${date}</title>
             <meta charset="UTF-8">
             <style>
               @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
@@ -1994,7 +1994,7 @@
               <header class="header">
                 <div class="report-date">Erstellt am ${date}</div>
                 <div class="logo-section">
-                  <h1 class="main-title">NH Score</h1>
+                  <h1 class="main-title">Checkbox/NH Score</h1>
                 </div>
                 <p class="subtitle">Wissenschaftlich fundierte Gesundheitsauswertung • Personalisierter Bericht</p>
               </header>
@@ -2057,7 +2057,7 @@
               </section>
               
               <footer class="footer">
-                <div class="footer-title">NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</div>
+                <div class="footer-title">Checkbox/NH Score - Wissenschaftlich fundiertes Gesundheitsbewertungssystem</div>
                 <div class="footer-details">
                   Version ${HealthAssessment.CONFIG.VERSION} • ${stats.answeredQuestions} von ${stats.totalQuestions} Fragen beantwortet
                 </div>
@@ -2603,15 +2603,15 @@
       if (navigator.share && window.healthApp) {
         const stats = window.healthApp.calculateStats();
         navigator.share({
-          title: 'Mein NH Score Ergebnis',
-          text: `Ich habe ${stats.percentage}% (${stats.totalScore}/100 Punkte) im NH Score Assessment erreicht! 🎯`,
+          title: 'Mein Checkbox/NH Score Ergebnis',
+          text: `Ich habe ${stats.percentage}% (${stats.totalScore}/100 Punkte) im Checkbox/NH Score Assessment erreicht! 🎯`,
           url: window.location.href
         }).catch(console.error);
       } else {
         // Fallback: Copy to clipboard
         if (window.healthApp) {
           const stats = window.healthApp.calculateStats();
-          const text = `Mein NH Score Ergebnis: ${stats.percentage}% (${stats.totalScore}/100 Punkte) 🎯`;
+          const text = `Mein Checkbox/NH Score Ergebnis: ${stats.percentage}% (${stats.totalScore}/100 Punkte) 🎯`;
           
           if (navigator.clipboard) {
             navigator.clipboard.writeText(text).then(() => {
