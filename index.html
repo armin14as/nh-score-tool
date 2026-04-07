@@ -79,16 +79,21 @@ body {
 .app {
   min-height: 100vh; padding-top: 56px;
   display: flex; align-items: center; justify-content: center;
+  padding-left: 1rem; padding-right: 1rem;
 }
 
 /* ── INTRO ───────────────────────────────────────── */
 .screen-intro { max-width: 540px; width: 100%; padding: 4rem 2rem; text-align: center; }
 .intro-badge {
-  display: inline-block;
+  display: inline-flex; align-items: center; gap: 6px;
   background: var(--penn); color: var(--peri);
   font-size: 11px; font-weight: 800; letter-spacing: 0.14em;
-  text-transform: uppercase; padding: 6px 16px; border-radius: 20px;
+  text-transform: uppercase; padding: 7px 18px; border-radius: 20px;
   margin-bottom: 1.5rem;
+}
+.intro-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--neon); flex-shrink: 0;
 }
 .intro-eyebrow {
   font-size: 11px; font-weight: 800; text-transform: uppercase;
@@ -123,7 +128,7 @@ body {
 .intro-meta { font-size: 12px; color: var(--subtle); margin-top: 1rem; font-weight: 500; }
 
 /* ── QUESTION ────────────────────────────────────── */
-.screen-question { width: 100%; max-width: 660px; padding: 3rem 2rem; }
+.screen-question { width: 100%; max-width: 640px; padding: 3rem 2rem 2rem; }
 
 .q-header {
   display: flex; align-items: flex-start;
@@ -263,7 +268,7 @@ input[type=range].q-range::-moz-range-thumb {
 .q-next:disabled { opacity: 0.3; cursor: default; pointer-events: none; box-shadow: none; }
 
 /* ── RESULTS ─────────────────────────────────────── */
-.screen-results { width: 100%; max-width: 580px; padding: 2rem 2rem 3rem; }
+.screen-results { width: 100%; max-width: 560px; padding: 2.5rem 1rem 3rem; }
 
 .r-hero {
   background: var(--penn); border-radius: 16px;
@@ -323,138 +328,194 @@ input[type=range].q-range::-moz-range-thumb {
 .r-btn.primary { background: var(--neon); border-color: var(--neon); color: #fff; box-shadow: 0 4px 16px rgba(0,25,255,0.25); flex: 1; }
 .r-btn:hover { opacity: 0.82; }
 
-/* ── RESPONSIVE ──────────────────────────────────── */
+/* ══════════════════════════════════════════════════
+   RESPONSIVE — all breakpoints
+   320px  iPhone SE
+   390px  iPhone 14
+   430px  iPhone 14 Pro Max
+   768px  iPad Mini / portrait tablet
+   1024px iPad / small laptop
+   1280px+ Desktop
+   ══════════════════════════════════════════════════ */
 
-/* Tablet */
-@media (max-width: 768px) {
-  .screen-question { padding: 2rem 1.5rem; }
-  .screen-intro     { padding: 3rem 1.5rem; }
-  .screen-results   { padding: 1.5rem 1.5rem 2rem; }
-  .q-text { font-size: 21px; }
+/* ── Large desktop (1280+) ── */
+@media (min-width: 1280px) {
+  .screen-intro    { padding: 5rem 2rem; }
+  .screen-question { padding: 4rem 2rem 2.5rem; max-width: 680px; }
+  .screen-results  { padding: 3rem 1rem 4rem; max-width: 600px; }
+  .intro-title     { font-size: 52px; }
+  .q-text          { font-size: 26px; }
 }
 
-/* Mobile */
+/* ── Tablet portrait (768-1023) ── */
+@media (max-width: 1023px) and (min-width: 601px) {
+  .app { align-items: flex-start; padding-top: 56px; }
+  .screen-intro    { padding: 3rem 2rem; max-width: 520px; }
+  .screen-question { padding: 2.5rem 2rem; }
+  .screen-results  { padding: 2rem 1rem 3rem; }
+  .q-text          { font-size: 22px; }
+  .intro-title     { font-size: 40px; }
+}
+
+/* ── Mobile (≤600px) — primary mobile experience ── */
 @media (max-width: 600px) {
   /* Nav */
-  .nav { padding: 0 1rem; gap: 0.75rem; height: 52px; }
-  .nav-brand { font-size: 12px; }
+  .nav {
+    padding: 0 1rem; gap: 0.75rem; height: 52px;
+  }
+  .nav-brand   { font-size: 12px; letter-spacing: 0.06em; }
   .nav-counter { display: none; }
-  .nav-btn { height: 28px; padding: 0 10px; font-size: 10px; }
+  .nav-divider { display: none; }
+  .nav-btn     { height: 28px; padding: 0 10px; font-size: 10px; }
 
-  /* App: account for fixed bottom nav */
-  .app { padding-top: 52px; padding-bottom: 80px; align-items: flex-start; min-height: calc(100vh - 52px); }
+  /* App wrapper */
+  .app {
+    padding-top: 52px;
+    padding-bottom: 76px;   /* space for fixed bottom nav */
+    padding-left: 0;
+    padding-right: 0;
+    align-items: flex-start;
+    min-height: 100dvh;
+  }
 
-  /* Intro */
-  .screen-intro { padding: 2rem 1.25rem 1.5rem; text-align: center; }
-  .intro-badge { font-size: 10px; padding: 5px 14px; }
-  .intro-title { font-size: 36px; line-height: 1.05; margin-bottom: 1rem; }
-  .intro-sub { font-size: 15px; margin-bottom: 1.5rem; }
-  .intro-cats { gap: 6px; margin-bottom: 2rem; }
-  .intro-cat { font-size: 10px; padding: 5px 12px; }
-  .btn-start { max-width: 100%; height: 56px; font-size: 15px; border-radius: 12px; }
-  .intro-meta { font-size: 11px; }
+  /* ── INTRO ── */
+  .screen-intro {
+    padding: 2.25rem 1.25rem 2rem;
+    max-width: 100%;
+  }
+  .intro-badge     { font-size: 10px; padding: 6px 14px; margin-bottom: 1.25rem; }
+  .intro-title     { font-size: 38px; line-height: 1.0; margin-bottom: 1rem; }
+  .intro-sub       { font-size: 15px; margin-bottom: 1.5rem; max-width: 320px; }
+  .intro-cats      { gap: 6px; margin-bottom: 2rem; }
+  .intro-cat       { font-size: 10px; padding: 5px 12px; }
+  .btn-start       { max-width: 100%; height: 56px; font-size: 15px; border-radius: 12px; }
+  .intro-meta      { font-size: 11px; }
 
-  /* Question screen */
+  /* ── QUESTION ── */
   .screen-question {
     padding: 1.5rem 1.25rem 0;
-    display: flex; flex-direction: column;
-    min-height: calc(100dvh - 52px - 80px);
+    max-width: 100%;
+    min-height: calc(100dvh - 52px - 76px);
+    display: flex;
+    flex-direction: column;
   }
-  .q-header { margin-bottom: 1.5rem; gap: 1rem; }
-  .q-cat-name { font-size: 10px; }
-  .q-progress-label { font-size: 11px; }
-  .q-dot { width: 14px; }
-  .q-dot.active { width: 22px; }
-  .q-text { font-size: 20px; line-height: 1.28; margin-bottom: 1.25rem; flex: 1; }
+  .q-header        { margin-bottom: 1.5rem; gap: 0.75rem; align-items: center; }
+  .q-cat-name      { font-size: 10px; letter-spacing: 0.1em; }
+  .q-progress-label{ font-size: 11px; }
+  .q-dot           { width: 14px; }
+  .q-dot.active    { width: 22px; }
+  .q-text {
+    font-size: 20px; line-height: 1.3;
+    margin-bottom: 1.25rem;
+    /* Let text push options down naturally */
+  }
   .q-options { gap: 8px; }
+  .q-option  { padding: 15px 16px; border-radius: 14px; gap: 14px; min-height: 60px; }
+  .q-icon    { width: 40px; height: 40px; font-size: 16px; border-radius: 50%; }
+  .q-label   { font-size: 16px; }
 
-  /* Bigger touch targets on mobile */
-  .q-option { padding: 16px 16px; border-radius: 14px; gap: 14px; }
-  .q-icon { width: 40px; height: 40px; font-size: 16px; flex-shrink: 0; }
-  .q-label { font-size: 16px; }
-
-  /* Slider & calc */
+  /* Slider on mobile */
   .q-slider-wrap { padding: 18px; border-radius: 14px; }
-  .q-slider-val { font-size: 28px; }
-  input[type=range].q-range::-webkit-slider-thumb { width: 26px; height: 26px; }
+  .q-slider-val  { font-size: 26px; }
+  input[type=range].q-range::-webkit-slider-thumb { width: 28px; height: 28px; }
+  input[type=range].q-range { height: 6px; }
+
+  /* Calc on mobile */
   .q-calc-wrap { padding: 16px; border-radius: 14px; }
   .q-calc-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .q-calc-field input[type=number] { height: 44px; font-size: 16px; }
-  .q-calc-gender button { height: 44px; font-size: 14px; }
+  .q-calc-field input[type=number] { height: 46px; font-size: 16px; }
+  .q-calc-gender button { height: 46px; font-size: 14px; }
 
-  /* Fixed bottom nav bar on mobile */
+  /* Fixed bottom nav */
   .q-nav {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    margin: 0;
-    padding: 12px 1.25rem;
+    padding: 10px 1.25rem calc(10px + env(safe-area-inset-bottom, 0px));
     background: var(--white);
     border-top: 1px solid var(--border);
-    box-shadow: 0 -4px 16px rgba(9,19,79,0.08);
-    z-index: 50;
+    box-shadow: 0 -4px 20px rgba(9,19,79,0.1);
+    z-index: 200;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: 52px 1fr 1fr;
     align-items: center;
-    gap: 10px;
-    safe-area-inset-bottom: env(safe-area-inset-bottom);
-    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    gap: 8px;
   }
   .q-back {
-    height: 48px; width: 48px; padding: 0;
-    border-radius: 10px; font-size: 18px;
+    height: 52px; width: 52px; padding: 0;
+    border-radius: 12px; font-size: 20px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
-  .q-skip {
-    text-align: center; font-size: 11px;
-  }
+  /* Replace text with just arrow on small screens */
+  .q-back-text { display: none; }
+  .q-skip      { display: none; }   /* hide skip — redundant with just arrow back */
   .q-next {
-    height: 48px; border-radius: 10px;
-    font-size: 13px; padding: 0 20px;
-    box-shadow: 0 3px 12px rgba(0,25,255,0.3);
-    flex-shrink: 0;
+    height: 52px; border-radius: 12px;
+    font-size: 13px; padding: 0 16px;
+    letter-spacing: 0.05em;
+    box-shadow: 0 3px 14px rgba(0,25,255,0.3);
+    width: 100%;
   }
 
-  /* Results */
-  .screen-results { padding: 1.25rem 1.25rem 2rem; }
-  .r-hero { border-radius: 14px; padding: 1.5rem 1.25rem; }
-  .r-score { font-size: 72px; }
-  .r-score-max { font-size: 24px; }
-  .r-breakdown { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
-  .r-cat { padding: 14px; border-radius: 12px; }
-  .r-cat-score { font-size: 24px; }
-  .r-actions { flex-direction: column; gap: 8px; }
-  .r-btn { height: 52px; width: 100%; font-size: 13px; }
+  /* ── RESULTS ── */
+  .screen-results  { padding: 1.25rem 1.25rem 1.5rem; max-width: 100%; }
+  .r-hero          { border-radius: 14px; padding: 1.5rem 1.25rem 1.25rem; margin-bottom: 1.25rem; }
+  .r-score         { font-size: 68px; }
+  .r-score-max     { font-size: 22px; }
+  .r-sub           { font-size: 13px; margin-bottom: 1.25rem; }
+  .r-breakdown     { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
+  .r-cat           { padding: 14px; border-radius: 12px; gap: 8px; }
+  .r-cat-name      { font-size: 10px; }
+  .r-cat-score     { font-size: 22px; }
+  .r-actions       { flex-direction: column; gap: 8px; }
+  .r-btn           { height: 52px; width: 100%; font-size: 13px; }
 }
 
-/* Very small phones */
-@media (max-width: 380px) {
-  .intro-title { font-size: 30px; }
-  .q-text { font-size: 18px; }
-  .r-breakdown { grid-template-columns: 1fr; }
-  .q-option { padding: 14px 14px; }
-  .r-score { font-size: 60px; }
+/* ── iPhone SE / small phones (≤375px) ── */
+@media (max-width: 375px) {
+  .intro-title  { font-size: 32px; }
+  .intro-sub    { font-size: 14px; }
+  .q-text       { font-size: 18px; }
+  .q-option     { padding: 13px 14px; min-height: 56px; }
+  .q-label      { font-size: 15px; }
+  .q-icon       { width: 36px; height: 36px; font-size: 14px; }
+  .r-score      { font-size: 58px; }
+  .r-breakdown  { grid-template-columns: 1fr; gap: 8px; }
+  .r-cat-score  { font-size: 20px; }
+  .nav-btn      { display: none; }  /* hide reset on very small */
 }
 
-/* Landscape mobile */
-@media (max-width: 800px) and (orientation: landscape) and (max-height: 500px) {
-  .app { align-items: flex-start; padding-top: 52px; }
-  .screen-intro { padding: 1.5rem 2rem; }
-  .intro-title { font-size: 28px; }
-  .screen-question { padding: 1rem 2rem 0; }
-  .q-text { font-size: 18px; margin-bottom: 1rem; }
-  .q-options { gap: 6px; }
-  .q-option { padding: 12px 16px; }
-  .q-nav { padding: 10px 2rem; }
-}
-
-/* iOS safe area */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-  @media (max-width: 600px) {
-    .q-nav { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+/* ── Landscape mobile ── */
+@media (max-width: 900px) and (orientation: landscape) and (max-height: 430px) {
+  .app           { align-items: flex-start; padding-top: 52px; padding-bottom: 0; }
+  .screen-intro  { padding: 1.5rem 2rem; }
+  .intro-title   { font-size: 28px; line-height: 1.1; }
+  .intro-sub     { font-size: 14px; margin-bottom: 1rem; }
+  .intro-cats    { margin-bottom: 1rem; }
+  .screen-question { padding: 1rem 2rem 5rem; max-width: 600px; }
+  .q-header      { margin-bottom: 1rem; }
+  .q-text        { font-size: 17px; margin-bottom: 1rem; }
+  .q-options     { gap: 6px; }
+  .q-option      { padding: 10px 16px; min-height: 48px; }
+  .q-label       { font-size: 15px; }
+  .q-icon        { width: 32px; height: 32px; font-size: 13px; }
+  .q-nav         {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    padding: 8px 2rem;
+    background: var(--white); border-top: 1px solid var(--border);
+    z-index: 200;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
   }
+  .q-back { height: 40px; padding: 0 16px; width: auto; font-size: 13px; }
+  .q-skip { display: block; }
+  .q-next { height: 40px; }
+  .screen-results { padding: 1rem 2rem 2rem; }
+  .r-hero        { padding: 1.25rem; }
+  .r-score       { font-size: 52px; }
+  .r-breakdown   { grid-template-columns: repeat(3, 1fr); gap: 8px; }
 }
 
+/* ── Accessibility ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; }
 }
@@ -497,7 +558,7 @@ input[type=range].q-range::-moz-range-thumb {
     <div class="q-text" id="qText"></div>
     <div class="q-options" id="qOpts"></div>
     <div class="q-nav">
-      <button class="q-back" id="qBack">← Zurück</button>
+      <button class="q-back" id="qBack">←<span class="q-back-text"> Zurück</span></button>
       <button class="q-skip" id="qSkip">Überspringen</button>
       <button class="q-next" id="qNext">Weiter →</button>
     </div>
