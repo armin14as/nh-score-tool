@@ -268,65 +268,155 @@ input[type=range].q-range::-moz-range-thumb {
 .q-next:disabled { opacity: 0.3; cursor: default; pointer-events: none; box-shadow: none; }
 
 /* ── RESULTS ─────────────────────────────────────── */
-.screen-results { width: 100%; max-width: 560px; padding: 2.5rem 1rem 3rem; }
+.screen-results {
+  width: 100%; max-width: 860px;
+  padding: 2.5rem 1rem 4rem;
+}
 
+/* Hero row */
 .r-hero {
-  background: var(--penn); border-radius: 16px;
-  padding: 2rem 2rem 1.75rem; margin-bottom: 1.5rem;
-  text-align: center;
+  display: flex; align-items: center; gap: 2rem;
+  margin-bottom: 2rem;
 }
-.r-eyebrow {
+.r-ring-wrap { position: relative; flex-shrink: 0; }
+.r-ring-svg { display: block; overflow: visible; }
+.r-ring-text {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.r-ring-score {
+  font-size: 30px; font-weight: 900; color: var(--penn);
+  letter-spacing: -0.03em; line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.r-ring-max { font-size: 12px; color: var(--subtle); font-weight: 600; }
+.r-hero-eyebrow {
   font-size: 11px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 0.14em; color: var(--peri); margin-bottom: 1rem;
+  letter-spacing: 0.12em; color: var(--neon); margin-bottom: 6px;
 }
-.r-score-wrap { display: flex; align-items: baseline; justify-content: center; gap: 6px; margin-bottom: 4px; }
-.r-score {
-  font-size: 80px; font-weight: 900; color: var(--white);
-  letter-spacing: -0.04em; line-height: 1; font-variant-numeric: tabular-nums;
-}
-.r-score-max { font-size: 28px; font-weight: 700; color: rgba(255,255,255,0.35); letter-spacing: -0.02em; }
-.r-sub { font-size: 14px; color: rgba(255,255,255,0.55); margin-bottom: 1.5rem; font-weight: 500; }
-.r-gauge {
-  width: 100%; height: 6px; background: rgba(255,255,255,0.15);
-  border-radius: 3px; overflow: hidden;
-}
-.r-gauge-fill {
-  height: 100%; background: var(--neon); border-radius: 3px;
-  width: 0%; transition: width 1s cubic-bezier(0.4,0,0.2,1);
-}
-
-.r-breakdown {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 10px; margin-bottom: 1.5rem;
-}
-.r-cat {
-  background: var(--white); border: 1.5px solid var(--border);
-  border-radius: 12px; padding: 16px;
-  display: flex; flex-direction: column; gap: 10px;
-}
-.r-cat-name {
-  font-size: 11px; font-weight: 700; color: var(--subtle);
-  text-transform: uppercase; letter-spacing: 0.07em;
-}
-.r-cat-score {
+.r-hero-title {
   font-size: 28px; font-weight: 900; color: var(--penn);
-  letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
-  line-height: 1;
+  letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 6px;
+  text-transform: uppercase;
 }
-.r-cat-score span { font-size: 14px; font-weight: 500; color: var(--subtle); }
-.r-bar-track { width: 100%; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-.r-bar-fill { height: 100%; background: var(--neon); border-radius: 2px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
-.r-pct { font-size: 12px; color: var(--neon); font-weight: 700; font-variant-numeric: tabular-nums; }
+.r-hero-sub { font-size: 14px; color: var(--muted); line-height: 1.5; max-width: 340px; }
 
+/* Category rings row */
+.r-cats-row {
+  display: flex; gap: 0;
+  background: var(--penn); border-radius: 16px;
+  padding: 18px 16px; margin-bottom: 1.75rem;
+  overflow-x: auto; scrollbar-width: none;
+  justify-content: space-around;
+}
+.r-cats-row::-webkit-scrollbar { display: none; }
+.r-cat-ring {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px; flex-shrink: 0;
+  cursor: pointer; padding: 0 8px;
+  opacity: 0.7; transition: opacity 0.15s;
+}
+.r-cat-ring:hover, .r-cat-ring.active { opacity: 1; }
+.r-cat-ring-wrap { position: relative; }
+.r-cat-ring-icon {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.r-cat-ring-label {
+  font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.6);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  text-align: center; max-width: 70px; line-height: 1.2;
+}
+.r-cat-ring.active .r-cat-ring-label { color: var(--peri); }
+.r-cat-ring-score-lbl {
+  font-size: 11px; font-weight: 800; color: var(--white);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Two-column grid */
+.r-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 16px; margin-bottom: 1.5rem;
+}
+
+/* Left: improvement list */
+.r-improve {
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 14px; padding: 18px; overflow: hidden;
+}
+.r-improve-title {
+  font-size: 10px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--subtle); margin-bottom: 12px;
+}
+.r-improve-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: opacity 0.1s;
+}
+.r-improve-item:last-child { border-bottom: none; }
+.r-improve-item:hover { opacity: 0.75; }
+.r-improve-item.active .r-improve-name { color: var(--neon); }
+.r-improve-icon {
+  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+  background: var(--bg);
+}
+.r-improve-right { flex: 1; min-width: 0; }
+.r-improve-name {
+  font-size: 13px; font-weight: 600; color: var(--penn);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.r-improve-bar-track {
+  width: 100%; height: 3px; background: var(--border);
+  border-radius: 2px; overflow: hidden; margin-top: 4px;
+}
+.r-improve-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+
+/* Right: detail panel */
+.r-detail {
+  background: var(--penn); border-radius: 14px;
+  padding: 18px; display: flex; flex-direction: column; gap: 12px;
+  min-height: 320px;
+}
+.r-detail-header { display: flex; align-items: center; gap: 12px; }
+.r-detail-icon {
+  width: 40px; height: 40px; border-radius: 12px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.r-detail-title {
+  font-size: 15px; font-weight: 800; color: var(--white);
+  letter-spacing: -0.01em; line-height: 1.2;
+}
+.r-detail-sub { font-size: 10px; color: var(--peri); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+.r-detail-items { display: flex; flex-direction: column; gap: 7px; flex: 1; overflow-y: auto; max-height: 280px; }
+.r-detail-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12.5px; color: rgba(255,255,255,0.72); line-height: 1.4;
+}
+.r-detail-item strong { color: var(--white); font-weight: 700; }
+.r-detail-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--neon); flex-shrink: 0; margin-top: 6px;
+}
+
+
+/* Lock */
+
+
+/* Actions */
 .r-actions { display: flex; gap: 10px; }
 .r-btn {
   height: 48px; padding: 0 24px; font: 700 12px 'Barlow', sans-serif;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  border-radius: 8px; cursor: pointer;
-  border: 1.5px solid var(--border); background: var(--white); color: var(--penn); transition: opacity 0.1s;
+  letter-spacing: 0.06em; text-transform: uppercase; border-radius: 8px;
+  cursor: pointer; border: 1.5px solid var(--border);
+  background: var(--white); color: var(--penn); transition: opacity 0.1s;
 }
 .r-btn.primary { background: var(--neon); border-color: var(--neon); color: #fff; box-shadow: 0 4px 16px rgba(0,25,255,0.25); flex: 1; }
 .r-btn:hover { opacity: 0.82; }
+
 
 /* ══════════════════════════════════════════════════
    RESPONSIVE — all breakpoints
@@ -342,7 +432,7 @@ input[type=range].q-range::-moz-range-thumb {
 @media (min-width: 1280px) {
   .screen-intro    { padding: 5rem 2rem; }
   .screen-question { padding: 4rem 2rem 2.5rem; max-width: 680px; }
-  .screen-results  { padding: 3rem 1rem 4rem; max-width: 600px; }
+  .screen-results  { padding: 3rem 1rem 4rem; max-width: 900px; }
   .intro-title     { font-size: 52px; }
   .q-text          { font-size: 26px; }
 }
@@ -352,7 +442,7 @@ input[type=range].q-range::-moz-range-thumb {
   .app { align-items: flex-start; padding-top: 56px; }
   .screen-intro    { padding: 3rem 2rem; max-width: 520px; }
   .screen-question { padding: 2.5rem 2rem; }
-  .screen-results  { padding: 2rem 1rem 3rem; }
+  .screen-results  { padding: 2rem 1.5rem 3rem; }
   .q-text          { font-size: 22px; }
   .intro-title     { font-size: 40px; }
 }
@@ -436,19 +526,24 @@ input[type=range].q-range::-moz-range-thumb {
     box-shadow: 0 -4px 20px rgba(9,19,79,0.1);
     z-index: 200;
     display: grid;
-    grid-template-columns: 52px 1fr 1fr;
+    grid-template-columns: 48px 1fr 1fr;
     align-items: center;
     gap: 8px;
   }
   .q-back {
-    height: 52px; width: 52px; padding: 0;
+    height: 52px; width: 48px; padding: 0;
     border-radius: 12px; font-size: 20px;
     display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
   }
-  /* Replace text with just arrow on small screens */
   .q-back-text { display: none; }
-  .q-skip      { display: none; }   /* hide skip — redundant with just arrow back */
+  .q-skip {
+    display: flex; align-items: center; justify-content: center;
+    height: 52px; font-size: 12px; font-weight: 600;
+    color: var(--subtle); text-decoration: none;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 12px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
   .q-next {
     height: 52px; border-radius: 12px;
     font-size: 13px; padding: 0 16px;
@@ -458,15 +553,21 @@ input[type=range].q-range::-moz-range-thumb {
   }
 
   /* ── RESULTS ── */
-  .screen-results  { padding: 1.25rem 1.25rem 1.5rem; max-width: 100%; }
-  .r-hero          { border-radius: 14px; padding: 1.5rem 1.25rem 1.25rem; margin-bottom: 1.25rem; }
-  .r-score         { font-size: 68px; }
-  .r-score-max     { font-size: 22px; }
-  .r-sub           { font-size: 13px; margin-bottom: 1.25rem; }
-  .r-breakdown     { grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; }
-  .r-cat           { padding: 14px; border-radius: 12px; gap: 8px; }
-  .r-cat-name      { font-size: 10px; }
-  .r-cat-score     { font-size: 22px; }
+  .screen-results  { padding: 1.25rem 1rem 2rem; max-width: 100%; }
+  .r-hero          { gap: 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .r-hero-title    { font-size: 22px; }
+  .r-hero-sub      { font-size: 13px; max-width: 100%; }
+  .r-cats-row      { padding: 14px 10px; border-radius: 12px; margin-bottom: 1.25rem; }
+  .r-cat-ring      { padding: 0 4px; }
+  .r-cat-ring-icon { font-size: 15px; }
+  .r-cat-ring-score-lbl { font-size: 10px; }
+  .r-cat-ring-label { font-size: 7px; max-width: 58px; display: block; line-height: 1.2; color: rgba(255,255,255,0.55); }
+  .r-grid          { grid-template-columns: 1fr; gap: 10px; margin-bottom: 1.25rem; }
+  .r-improve       { padding: 14px 14px; border-radius: 12px; }
+  .r-detail        { padding: 14px; border-radius: 12px; }
+  .r-detail-title  { font-size: 13px; }
+  .r-detail-item   { font-size: 12px; }
+
   .r-actions       { flex-direction: column; gap: 8px; }
   .r-btn           { height: 52px; width: 100%; font-size: 13px; }
 }
@@ -479,10 +580,11 @@ input[type=range].q-range::-moz-range-thumb {
   .q-option     { padding: 13px 14px; min-height: 56px; }
   .q-label      { font-size: 15px; }
   .q-icon       { width: 36px; height: 36px; font-size: 14px; }
-  .r-score      { font-size: 58px; }
-  .r-breakdown  { grid-template-columns: 1fr; gap: 8px; }
-  .r-cat-score  { font-size: 20px; }
-  .nav-btn      { display: none; }  /* hide reset on very small */
+  .r-ring-score { font-size: 22px; }
+  .r-hero       { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .r-cats-row   { justify-content: flex-start; overflow-x: auto; }
+  .r-grid       { grid-template-columns: 1fr; }
+  .nav-btn      { display: none; }
 }
 
 /* ── Landscape mobile ── */
@@ -510,15 +612,17 @@ input[type=range].q-range::-moz-range-thumb {
   .q-skip { display: block; }
   .q-next { height: 40px; }
   .screen-results { padding: 1rem 2rem 2rem; }
-  .r-hero        { padding: 1.25rem; }
-  .r-score       { font-size: 52px; }
-  .r-breakdown   { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .r-hero        { gap: 1.5rem; }
+  .r-grid        { grid-template-columns: 1fr 1fr; }
 }
 
 /* ── Accessibility ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0.01ms !important; }
 }
+
+/* Old analysis CSS removed – replaced by new results design */
+
 </style>
 </head>
 <body>
@@ -566,18 +670,42 @@ input[type=range].q-range::-moz-range-thumb {
 
   <!-- RESULTS -->
   <div class="screen-results" id="sResults" style="display:none">
+    <!-- Hero: ring + title -->
     <div class="r-hero">
-      <p class="r-eyebrow">Dein NH Score</p>
-      <div class="r-score-wrap">
-        <div class="r-score" id="rScore">0</div>
-        <div class="r-score-max" id="rScoreMax">/100</div>
+      <div class="r-ring-wrap" id="rRingWrap">
+        <svg class="r-ring-svg" width="110" height="110" id="rRingSvg">
+          <circle cx="55" cy="55" r="46" fill="none" stroke="#D8DAEE" stroke-width="7"/>
+          <circle cx="55" cy="55" r="46" fill="none" stroke="var(--ring-color, var(--neon))" stroke-width="7"
+            stroke-linecap="round" stroke-dasharray="289.03" stroke-dashoffset="289.03"
+            id="rRingCircle" transform="rotate(-90 55 55)"
+            style="transition: stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)"/>
+        </svg>
+        <div class="r-ring-text">
+          <div class="r-ring-score" id="rScore">0</div>
+          <div class="r-ring-max" id="rScoreMax">/100</div>
+        </div>
       </div>
-      <div class="r-sub" id="rSub"></div>
-      <div class="r-gauge" id="rGauge">
-        <div class="r-gauge-fill" id="rGaugeFill"></div>
+      <div class="r-hero-text">
+        <div class="r-hero-eyebrow">Dein NH Score</div>
+        <div class="r-hero-title">Deine Ergebnisse</div>
+        <div class="r-hero-sub" id="rSub">Hier siehst du, wie du in fünf zentralen Gesundheitsbereichen abschneidest.</div>
       </div>
     </div>
-    <div class="r-breakdown" id="rBreakdown"></div>
+
+    <!-- Category rings -->
+    <div class="r-cats-row" id="rCatsRow"></div>
+
+    <!-- Two-col grid: improve list + detail panel -->
+    <div class="r-grid">
+      <div class="r-improve">
+        <div class="r-improve-title">Verbesserungsbereiche</div>
+        <div id="rImproveList"></div>
+      </div>
+      <div class="r-detail" id="rDetail">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
     <div class="r-actions">
       <button class="r-btn primary" id="rExport">PDF exportieren</button>
       <button class="r-btn" id="rRestart">Neu starten</button>
@@ -673,7 +801,17 @@ let S = (() => {
 function fresh() {
   return { screen:'intro', cur:0, ans:new Array(TOTAL).fill(null), sv:{}, cv:{} };
 }
-function save() { try { localStorage.setItem(SK, JSON.stringify(S)); } catch(e) {} }
+function save() {
+  try {
+    localStorage.setItem(SK, JSON.stringify(S));
+  } catch(e) {
+    // Storage full or unavailable — show one-time warning
+    if (!save._warned) {
+      save._warned = true;
+      console.warn('NH Score: Fortschritt konnte nicht gespeichert werden.', e);
+    }
+  }
+}
 
 // Screens
 function show(name) {
@@ -694,7 +832,7 @@ function initIntro() {
   document.getElementById('navCounter').textContent = '';
   document.getElementById('navExport').style.display = 'none';
   const meta = document.getElementById('introMeta');
-  if (meta) meta.textContent = `${TOTAL} Fragen · ca. 5 Minuten`;
+  if (meta) meta.textContent = 'ca. 5 Minuten';
 
   // If previous session exists, show resume option
   const done = S.ans.filter(a=>a!==null).length;
@@ -742,6 +880,9 @@ function renderQ() {
 
   const isLast = S.cur === TOTAL-1;
   next.textContent = isLast ? 'Ergebnis ansehen →' : 'Weiter →';
+  next.style.background = isLast ? 'var(--ok)' : 'var(--neon)';
+  next.style.borderColor = isLast ? 'var(--ok)' : 'var(--neon)';
+  next.style.boxShadow   = isLast ? '0 4px 16px rgba(22,163,74,0.35)' : '';
   next.disabled = S.ans[S.cur] === null && !['slider','ffmi','hrv'].includes(q.type);
   next.onclick = () => {
     if (isLast) { S.screen='results'; save(); show('results'); renderResults(); }
@@ -768,7 +909,7 @@ function buildOptions(q, container) {
       S.ans[S.cur] = idx; save();
       renderQ();
       setTimeout(() => {
-        if (S.cur < TOTAL-1) { S.cur++; save(); renderQ(); }
+        if (S.screen === 'question' && S.cur < TOTAL-1) { S.cur++; save(); renderQ(); }
       }, 280);
     };
     container.appendChild(row);
@@ -794,6 +935,7 @@ function buildSlider(q, container) {
   const inp = wrap.querySelector('#si');
   fillSlider(inp, q.min, q.max, val);
 
+  let sliderMoved = false;
   inp.addEventListener('input', () => {
     const v = parseInt(inp.value);
     S.sv[key] = v; const s2 = sScore(v,q.thresholds); const c2 = s2===2?'good':s2===1?'medium':'bad';
@@ -803,6 +945,14 @@ function buildSlider(q, container) {
     fillSlider(inp,q.min,q.max,v);
     S.ans[S.cur] = s2; save();
     document.getElementById('qNext').disabled = false;
+    sliderMoved = true;
+  });
+  inp.addEventListener('change', () => {
+    if (!sliderMoved) return;
+    sliderMoved = false;
+    setTimeout(() => {
+      if (S.screen === 'question' && S.cur < TOTAL-1) { S.cur++; save(); renderQ(); }
+    }, 600);
   });
   if (S.ans[S.cur] === null) { S.ans[S.cur] = sc; save(); }
   document.getElementById('qNext').disabled = false;
@@ -898,51 +1048,588 @@ function buildCalc(q, container, type) {
   else document.getElementById('qNext').disabled = false;
 }
 
+
+// ── ANALYSIS DATA ─────────────────────────────────────────────────────────────
+// Per-question analysis: for each answer (0=Nein, 1=Teilweise, 2=Ja) define feedback
+const ANALYSIS = {
+  cats: [
+    {
+      title: 'Schlaf & Erholung',
+      icon: '🌙',
+      questions: [
+        {
+          short: 'Schlafzeit & Rhythmus',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Kein fixer Schlafrhythmus</strong> — unregelmäßige Schlafzeiten stören deinen Circadianen Rhythmus erheblich. Definiere eine feste Schlafenszeit und halte sie auch am Wochenende ein.' },
+            { ans: 1, type: 'medium', text: '<strong>Schlafrhythmus teilweise vorhanden</strong> — versuche die Abweichung auf unter 15 Minuten zu reduzieren, auch an freien Tagen.' },
+            { ans: 2, type: 'good',   text: '<strong>Exzellenter Schlafrhythmus</strong> — ein konstanter Rhythmus ist die wichtigste Basis für Erholung.' },
+          ]
+        },
+        {
+          short: 'Durchschlafen',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Häufiges Aufwachen</strong> — mögliche Ursachen sind Cortisol, Blutzuckerschwankungen oder zu viel Flüssigkeit am Abend. Tracke wann du aufwachst.' },
+            { ans: 1, type: 'medium', text: '<strong>Gelegentliches Aufwachen</strong> — reduziere Flüssigkeit nach 19 Uhr und teste Magnesium Bisglycinat vor dem Schlafen.' },
+            { ans: 2, type: 'good',   text: '<strong>Gutes Durchschlafen</strong> — deine Schlafqualität in dieser Hinsicht ist stark.' },
+          ]
+        },
+        {
+          short: 'Natürliches Aufwachen',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Wecker abhängig & kein Energie-Boost</strong> — deutet auf Schlafschuld oder schlechte Schlafqualität. Priorisiere 7–8 Stunden und optimiere deine Schlafumgebung.' },
+            { ans: 1, type: 'medium', text: '<strong>Teilweise erholt</strong> — kleine Anpassungen bei Schlafzeiten oder Supplementen können hier viel bewirken.' },
+            { ans: 2, type: 'good',   text: '<strong>Natürlich erholt aufgewacht</strong> — exzellentes Zeichen für gesunden Schlaf.' },
+          ]
+        },
+        {
+          short: 'Magnesium Supplement',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Kein Magnesium</strong> — Magnesium Bisglycinat oder L-Threonat vor dem Schlafen verbessert nachweislich die Schlafqualität und reduziert Cortisol.' },
+            { ans: 1, type: 'medium', text: '<strong>Unregelmäßiges Magnesium</strong> — für beste Ergebnisse täglich 300–400mg Magnesium Bisglycinat ca. 30–60 Min vor dem Schlafen.' },
+            { ans: 2, type: 'good',   text: '<strong>Magnesium-Supplementierung aktiv</strong> — du nutzst einen der effektivsten Schlaf-Hacks.' },
+          ]
+        },
+        {
+          short: 'Schlafzimmer-Optimierung',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Schlafumgebung nicht optimiert</strong> — Elektronik im Zimmer stört Melatonin-Produktion. Ziel: unter 18°C, komplett dunkel, keine Geräte.' },
+            { ans: 1, type: 'medium', text: '<strong>Teilweise optimiert</strong> — Schritt für Schritt verbessern: erst Temperatur, dann Dunkelheit, dann Geräte raus.' },
+            { ans: 2, type: 'good',   text: '<strong>Optimale Schlafumgebung</strong> — exzellente Grundlage für Tiefschlaf-Phasen.' },
+          ]
+        },
+        {
+          short: 'Koffein-Timing',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Koffein zu spät</strong> — Koffein hat eine Halbwertszeit von ~6 Stunden. Kaffee um 16 Uhr bedeutet noch 50% Koffein um 22 Uhr im Blut.' },
+            { ans: 1, type: 'medium', text: '<strong>Koffein-Timing verbesserbar</strong> — versuche den Cut-off schrittweise vorzuziehen, um 14 Uhr als Ziel.' },
+            { ans: 2, type: 'good',   text: '<strong>Gutes Koffein-Timing</strong> — dein Schlaf wird nicht durch Koffein gestört.' },
+          ]
+        },
+        {
+          short: 'Letzte Mahlzeit',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Zu späte Mahlzeiten</strong> — Verdauung und Schlaf konkurrieren. Iss mindestens 3h vor dem Schlafen, damit die Körperkerntemperatur sinken kann.' },
+            { ans: 1, type: 'medium', text: '<strong>Mahlzeiten-Timing teilweise ok</strong> — an den Tagen wo du früher isst, wirst du besseren Schlaf bemerken.' },
+            { ans: 2, type: 'good',   text: '<strong>Optimales Mahlzeiten-Timing</strong> — dein Körper kann nachts voll regenerieren.' },
+          ]
+        },
+        {
+          short: 'Flüssigkeit & Arbeit am Abend',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Zu späte Flüssigkeit oder Arbeit</strong> — Arbeit aktiviert das Nervensystem. Setze eine klare "Feierabend"-Zeit und reduziere Trinken nach 19 Uhr.' },
+            { ans: 1, type: 'medium', text: '<strong>Teilweise umgesetzt</strong> — fokussiere auf das Thema das dir schwerer fällt: Arbeit oder Trinken.' },
+            { ans: 2, type: 'good',   text: '<strong>Abend-Routine gut strukturiert</strong> — dein Nervensystem kann sich optimal runterfahren.' },
+          ]
+        },
+        {
+          short: 'Elektronik-Karenz',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Kein Screen-Cutoff</strong> — Blaulicht und mentale Stimulation durch Bildschirme unterdrücken Melatonin um bis zu 3 Stunden. Nutze Blue-Light-Filter oder besser: gar keine Bildschirme.' },
+            { ans: 1, type: 'medium', text: '<strong>Teilweise umgesetzt</strong> — selbst 30 Minuten ohne Bildschirm vor dem Schlafen verbessern die Einschlafzeit messbar.' },
+            { ans: 2, type: 'good',   text: '<strong>Konsequente Elektronik-Karenz</strong> — einer der wichtigsten Schlaf-Optimierungsschritte konsequent umgesetzt.' },
+          ]
+        },
+        {
+          short: 'Morgenlicht',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Kein Morgenlicht</strong> — Sonnenlicht am Morgen setzt die interne Uhr zurück und erhöht Cortisol (positiv) für den Tag. 5 Min draußen direkt nach dem Aufstehen.' },
+            { ans: 1, type: 'medium', text: '<strong>Gelegentliches Morgenlicht</strong> — mache es zur täglichen Routine, idealerweise innerhalb der ersten 30 Minuten nach dem Aufwachen.' },
+            { ans: 2, type: 'good',   text: '<strong>Tägliches Morgenlicht</strong> — exzellent. Dein Circadianer Rhythmus wird täglich kalibriert.' },
+          ]
+        },
+      ]
+    },
+    {
+      title: 'Ernährung & Supplements',
+      icon: '🥗',
+      questions: [
+        {
+          short: 'Protein-Intake',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Protein unter 1,5g/kg</strong> — bei diesem Niveau ist Muskelaufbau kaum möglich und Muskelerhalt gefährdet. Erhöhe schrittweise auf mind. 1,8g/kg.' },
+            { ans: 1, type: 'medium', text: '<strong>Protein 1,5–2g/kg</strong> — gute Basis. Für optimalen Muskelaufbau und Sättigung strebe 2g/kg an.' },
+            { ans: 2, type: 'good',   text: '<strong>Optimaler Protein-Intake</strong> — exzellente Grundlage für Muskelwachstum, Sättigung und Regeneration.' },
+          ]
+        },
+        {
+          short: 'Blutbasierte Supplements',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Keine individuellen Supplements</strong> — generische Supplementierung ist ineffizient. Lass Blut- und Mikronährstoffwerte messen und supplementiere gezielt.' },
+            { ans: 1, type: 'medium', text: '<strong>Teilweise angepasst</strong> — lass zumindest Vitamin D, Ferritin, Magnesium und Zink messen. Das sind die häufigsten Defizite.' },
+            { ans: 2, type: 'good',   text: '<strong>Individuell angepasste Supplementierung</strong> — du supplementierst smart, nicht blind.' },
+          ]
+        },
+        {
+          short: 'Gluten-Konsum',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Regelmäßiger Gluten-Konsum</strong> — Gluten kann bei vielen Menschen subklinische Entzündungen und Darmpermeabilität erhöhen, auch ohne Zöliakie.' },
+            { ans: 1, type: 'medium', text: '<strong>Seltener Gluten-Konsum</strong> — guter Kompromiss. Beobachte wie du dich nach Gluten-Mahlzeiten fühlst.' },
+            { ans: 2, type: 'good',   text: '<strong>Gluten vermieden</strong> — reduziert potenzielle Entzündungsquellen.' },
+          ]
+        },
+        {
+          short: 'Milchprodukte',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Regelmäßige Milchprodukte</strong> — Dairy kann bei manchen Menschen Entzündungen, Insulinspitzen und Hautprobleme fördern. Teste einen 30-tägigen Verzicht.' },
+            { ans: 1, type: 'medium', text: '<strong>Eingeschränkte Milchprodukte</strong> — guter Mittelweg. Bevorzuge fermentierte Varianten (Kefir, Joghurt).' },
+            { ans: 2, type: 'good',   text: '<strong>Keine Milchprodukte</strong> — eliminierst eine häufige Entzündungsquelle.' },
+          ]
+        },
+        {
+          short: 'Kalorienmessung',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Kein Tracking</strong> — ohne Tracking weißt du nicht ob du unter- oder übst isst. Auch 1–2 Wochen tracken gibt wertvolle Referenzwerte.' },
+            { ans: 1, type: 'medium', text: '<strong>Teilweises Tracking</strong> — nutze es in Phasen wo du dein Körpergewicht aktiv steuern willst.' },
+            { ans: 2, type: 'good',   text: '<strong>Aktives Tracking</strong> — du hast volle Kontrolle über deine Energiebilanz.' },
+          ]
+        },
+        {
+          short: 'Verdauung & Sodbrennen',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Häufige Verdauungsprobleme</strong> — können auf Unverträglichkeiten, zu schnelles Essen oder Leaky Gut hinweisen. Führe ein Ernährungstagebuch.' },
+            { ans: 1, type: 'medium', text: '<strong>Gelegentliche Verdauungsprobleme</strong> — teste Eliminationsdiäten für häufige Trigger: Gluten, Dairy, Hülsenfrüchte.' },
+            { ans: 2, type: 'good',   text: '<strong>Gute Verdauung</strong> — ein gesundes Verdauungssystem ist die Basis für Nährstoffaufnahme.' },
+          ]
+        },
+        {
+          short: 'Undiagnostizierte Unverträglichkeiten',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Mögliche unerkannte Unverträglichkeiten</strong> — diese können subtile Entzündungen und Leistungseinbußen verursachen. Teste systematisch: 4 Wochen strikte Eliminationsdiät.' },
+            { ans: 1, type: 'medium', text: '<strong>Verdacht auf Unverträglichkeiten</strong> — systematische Elimination und Wiedereinführung gibt Klarheit.' },
+            { ans: 2, type: 'good',   text: '<strong>Keine bekannten Unverträglichkeiten</strong> — du isst für deinen Körper passend.' },
+          ]
+        },
+        {
+          short: 'Zuckergelüste',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Starke Zuckergelüste</strong> — deutet auf Blutzuckerschwankungen und/oder Insulinresistenz. Erhöhe Protein und gesunde Fette bei jeder Mahlzeit, reduziere einfache Kohlenhydrate.' },
+            { ans: 1, type: 'medium', text: '<strong>Gelegentliche Gelüste</strong> — optimiere deine Mahlzeiten-Zusammensetzung: mehr Protein und Ballaststoffe.' },
+            { ans: 2, type: 'good',   text: '<strong>Stabiler Blutzucker</strong> — kein Anzeichen auf Blutzuckerschwankungen. Sehr gut.' },
+          ]
+        },
+        {
+          short: 'Hautbild',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Unreine Haut</strong> — oft ein Spiegel von Darmgesundheit, Hormonen und Ernährung. Reduziere Zucker, Dairy und teste Omega-3-Supplementierung.' },
+            { ans: 1, type: 'medium', text: '<strong>Teilweise unreine Haut</strong> — identifiziere Trigger: was isst du an Tagen mit schlechterer Haut?' },
+            { ans: 2, type: 'good',   text: '<strong>Klares Hautbild</strong> — ein gutes Zeichen für hormonelles Gleichgewicht und Darmgesundheit.' },
+          ]
+        },
+        {
+          short: 'Energie nach dem Essen',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Müdigkeit nach Mahlzeiten</strong> — deutlicher Hinweis auf Blutzuckerspitzen. Reduziere Kohlenhydrate, erhöhe Protein und Ballaststoffe, iss langsamer.' },
+            { ans: 1, type: 'medium', text: '<strong>Gelegentliche Post-Meal Müdigkeit</strong> — teste niedrig-glykämische Mahlzeiten-Kombinationen.' },
+            { ans: 2, type: 'good',   text: '<strong>Stabile Energie nach dem Essen</strong> — deine Ernährung hält deinen Blutzucker stabil.' },
+          ]
+        },
+      ]
+    },
+    {
+      title: 'Training & Bewegung',
+      icon: '💪',
+      questions: [
+        {
+          short: 'Strukturiertes Krafttraining',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Kein strukturiertes Training</strong> — ohne progressives Überladungsprinzip kein Muskelwachstum. Starte mit einem einfachen 3-Tage Push/Pull/Legs Plan.' },
+            { ans: 1, type: 'medium', text: '<strong>Teilweise strukturiert</strong> — ergänze deinen Plan um progressive Überlastung: jede Woche etwas mehr Gewicht oder Wiederholungen.' },
+            { ans: 2, type: 'good',   text: '<strong>Strukturiertes Krafttraining</strong> — du trainierst mit Plan und Progression. Exzellent.' },
+          ]
+        },
+        {
+          short: 'Tägliche Schritte',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Zu wenige Schritte</strong> — unter 5.000 Schritte täglich erhöht Risiko für Stoffwechselerkrankungen signifikant. Starte mit einem täglichen 20-minütigen Spaziergang.' },
+            { ans: 1, type: 'medium', text: '<strong>Moderate Schrittzahl</strong> — 8.000–10.000 ist das Ziel. Nutze die Mittagspause für einen kurzen Spaziergang.' },
+            { ans: 2, type: 'good',   text: '<strong>Gute tägliche Bewegung</strong> — du hältst deinen Grundumsatz und NEAT auf hohem Niveau.' },
+          ]
+        },
+        {
+          short: 'Schmerzen & Verletzungen',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Aktuelle Schmerzen oder Verletzungen</strong> — lass diese professionell abklären. Unbehandelte Verletzungen werden chronisch und limitieren langfristig dein Training.' },
+            { ans: 1, type: 'medium', text: '<strong>Gelegentliche Beschwerden</strong> — investiere in Mobility-Arbeit und lass chronische Beschwerden durch einen Physiotherapeuten abklären.' },
+            { ans: 2, type: 'good',   text: '<strong>Schmerzfrei</strong> — eine wichtige Voraussetzung für konsistentes Training.' },
+          ]
+        },
+        {
+          short: 'FFMI',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Niedriger FFMI</strong> — du hast deutliches Potenzial für Muskelaufbau. Fokus auf strukturiertes Krafttraining und ausreichend Protein.' },
+            { ans: 1, type: 'medium', text: '<strong>Durchschnittlicher FFMI</strong> — du bist auf dem richtigen Weg. Konsistenz im Training und Ernährung bringt dich auf das nächste Level.' },
+            { ans: 2, type: 'good',   text: '<strong>Sehr guter FFMI</strong> — du hast eine ausgezeichnete Muskelmasse für deine Körpergröße aufgebaut.' },
+          ]
+        },
+        {
+          short: 'Körperbild',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Unzufrieden mit der Figur</strong> — definiere ein klares Ziel (Körperfettanteil) und erstelle einen konkreten Plan mit Training und Ernährung.' },
+            { ans: 1, type: 'medium', text: '<strong>Teilweise zufrieden</strong> — identifiziere die eine Stellschraube (meist Ernährung), die den größten Unterschied macht.' },
+            { ans: 2, type: 'good',   text: '<strong>Zufrieden mit der Figur</strong> — du hast deine Komposition auf ein Level gebracht, das dich befriedigt.' },
+          ]
+        },
+        {
+          short: 'Ausdauer (20 Min Laufen)',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Ausdauer ausbaufähig</strong> — Zone 2 Training (leichtes, nasenatembar-Cardio) ist die effektivste Methode. 3×30 Min/Woche reichen für deutliche Verbesserung.' },
+            { ans: 1, type: 'medium', text: '<strong>Moderate Ausdauer</strong> — steigere die Dauer deiner Zone 2-Einheiten schrittweise. Ziel: 45–60 Min ohne Probleme.' },
+            { ans: 2, type: 'good',   text: '<strong>Gute Ausdauer</strong> — exzellente kardiovaskuläre Basis. Dein Herz-Kreislauf-System ist gut trainiert.' },
+          ]
+        },
+        {
+          short: 'Oberkörper-Kraft',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Oberkörper-Kraft ausbaufähig</strong> — Klimmzüge, Dips und Liegestütze sind fundamentale Bewegungsmuster. Starte mit assistierten Varianten und baue auf.' },
+            { ans: 1, type: 'medium', text: '<strong>Moderate Oberkörper-Kraft</strong> — fokussiere auf progressive Überlastung. 5×5 Programm für Klimmzüge und Dips.' },
+            { ans: 2, type: 'good',   text: '<strong>Gute Oberkörper-Kraft</strong> — du bewegst dein Körpergewicht kompetent. Starke Basis.' },
+          ]
+        },
+        {
+          short: 'Unterkörper-Kraft',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Unterkörper-Kraft ausbaufähig</strong> — Kreuzheben und Kniebeugen sind die wichtigsten Kraft-Übungen überhaupt. Starte mit leichten Gewichten und perfektioniere die Technik.' },
+            { ans: 1, type: 'medium', text: '<strong>Moderate Unterkörper-Kraft</strong> — erhöhe das Trainingsvolumen für Beine und fokussiere auf Kniebeugen als Primärübung.' },
+            { ans: 2, type: 'good',   text: '<strong>Starker Unterkörper</strong> — exzellente Basis für Kraftentwicklung und Alltagsfitness.' },
+          ]
+        },
+        {
+          short: 'Grip Strength',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Schwache Griffkraft</strong> — Griffkraft korreliert stark mit Gesamtkörperkraft und Gesundheit. Trainiere täglich Dead Hangs und Farmer Carries.' },
+            { ans: 1, type: 'medium', text: '<strong>Moderate Griffkraft</strong> — steigere Dead Hang-Dauer wöchentlich. Ziel: 90+ Sekunden.' },
+            { ans: 2, type: 'good',   text: '<strong>Starke Griffkraft</strong> — exzellentes Zeichen für Gesamtkörperkraft und Gesundheit.' },
+          ]
+        },
+        {
+          short: 'Ruheherzfrequenz',
+          feedback: [
+            { ans: 0, type: 'bad',    text: '<strong>Hohe Ruheherzfrequenz</strong> — über 72 BPM deutet auf mangelndes Ausdauertraining oder hohen Stress. Füge 3×/Woche Zone 2 Cardio hinzu.' },
+            { ans: 1, type: 'medium', text: '<strong>Durchschnittliche Ruheherzfrequenz</strong> — regelmäßiges Ausdauertraining bringt dich in den athletischen Bereich unter 60 BPM.' },
+            { ans: 2, type: 'good',   text: '<strong>Athletische Ruheherzfrequenz</strong> — unter 60 BPM ist ein Zeichen für ein effizient arbeitendes Herz.' },
+          ]
+        },
+      ]
+    },
+    {
+      title: 'Mindset & Stressmanagement',
+      icon: '🧠',
+      questions: [
+        { short: 'Stresslevel', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Hoher Stress</strong> — chronischer Stress erhöht Cortisol, blockiert Muskelaufbau und Fettverlust, schädigt den Schlaf. Priorisiere Stressreduktion als Training.' },
+          { ans: 1, type: 'medium', text: '<strong>Moderater Stress</strong> — identifiziere die größten Stressquellen und arbeite gezielt an einer.' },
+          { ans: 2, type: 'good',   text: '<strong>Geringer Stress</strong> — ein niedriger Stresslevel ist eine der wichtigsten Voraussetzungen für Gesundheit und Performance.' },
+        ]},
+        { short: 'Klare Ziele', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Keine klaren Ziele</strong> — ohne Ziele kein Fokus, ohne Fokus keine konsistente Ausführung. Definiere 1–3 messbare Ziele für die nächsten 90 Tage.' },
+          { ans: 1, type: 'medium', text: '<strong>Ziele teilweise definiert</strong> — mache sie SMART: Spezifisch, Messbar, Attraktiv, Realistisch, Terminiert.' },
+          { ans: 2, type: 'good',   text: '<strong>Klare Ziele und Plan</strong> — du weißt wohin du willst und wie du dahin kommst.' },
+        ]},
+        { short: 'Achtsamkeit & Meditation', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Keine Achtsamkeitspraxis</strong> — bereits 10 Minuten täglich Meditation reduzieren nachweislich Cortisol und verbessern Fokus. Starte mit einer App wie Headspace.' },
+          { ans: 1, type: 'medium', text: '<strong>Gelegentliche Achtsamkeit</strong> — mache es zur täglichen Gewohnheit: morgens 10 Min Meditation als fixer Anker.' },
+          { ans: 2, type: 'good',   text: '<strong>Tägliche Achtsamkeitspraxis</strong> — du kultivierst mentale Stärke systematisch.' },
+        ]},
+        { short: 'Positive Selbstgespräche', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Negatives Selbstbild</strong> — dein innerer Dialog beeinflusst direkt deine Handlungen. Starte mit einem täglichen Gratitude Journal: 3 Dinge die gut liefen.' },
+          { ans: 1, type: 'medium', text: '<strong>Teilweise positiv</strong> — beobachte negative Gedankenmuster und hinterfrage sie aktiv.' },
+          { ans: 2, type: 'good',   text: '<strong>Positives Mindset aktiv</strong> — du nutzt deine mentale Stärke als Ressource.' },
+        ]},
+        { short: 'Stressvermeidung', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Keine systematische Stressvermeidung</strong> — identifiziere die Top 3 Stressquellen in deinem Leben und erstelle einen Plan sie zu eliminieren oder zu reduzieren.' },
+          { ans: 1, type: 'medium', text: '<strong>Teilweise umgesetzt</strong> — fokussiere auf die eine Stressquelle mit dem größten negativen Impact.' },
+          { ans: 2, type: 'good',   text: '<strong>Aktives Stress-Management</strong> — du schützt deine mentale Energie bewusst.' },
+        ]},
+        { short: 'Selbstwirksamkeit', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Niedrige Selbstwirksamkeit</strong> — das Gefühl keine Kontrolle zu haben ist ein Stress-Verstärker. Starte mit kleinen, sofort umsetzbaren Gewohnheiten um Kontrolle zurückzugewinnen.' },
+          { ans: 1, type: 'medium', text: '<strong>Teilweise vorhanden</strong> — jeder umgesetzte kleine Schritt stärkt dein Selbstwirksamkeitsgefühl.' },
+          { ans: 2, type: 'good',   text: '<strong>Hohe Selbstwirksamkeit</strong> — du weißt dass du dein Leben aktiv gestalten kannst. Kraftvolle Grundhaltung.' },
+        ]},
+        { short: 'Stress-Strategien', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Keine Stress-Strategien</strong> — baue ein konkretes Toolkit auf: Atmung (Box Breathing), Sport, Cold Exposure oder Meditation.' },
+          { ans: 1, type: 'medium', text: '<strong>Teilweise vorhanden</strong> — vertiefe eine Strategie die für dich gut funktioniert statt mehrere oberflächlich.' },
+          { ans: 2, type: 'good',   text: '<strong>Aktive Stress-Bewältigung</strong> — du hast Werkzeuge und nutzt sie.' },
+        ]},
+        { short: 'Emotionale Balance', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Mehr negative als positive Emotionen</strong> — chronische negative Emotionen sind ein Zeichen für systemischen Stress. Professionelle Unterstützung kann hier massiven Unterschied machen.' },
+          { ans: 1, type: 'medium', text: '<strong>Ausgeglichene Emotionen</strong> — fokussiere auf Aktivitäten die dir nachweislich Freude bringen und plane sie aktiv ein.' },
+          { ans: 2, type: 'good',   text: '<strong>Überwiegend positive Emotionen</strong> — du lebst in einem positiven emotionalen Grundzustand.' },
+        ]},
+        { short: 'Soziales Netzwerk', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Schwaches soziales Netzwerk</strong> — soziale Isolation erhöht Cortisol und Mortalitätsrisiko ähnlich wie Rauchen. Investiere aktiv in Beziehungen.' },
+          { ans: 1, type: 'medium', text: '<strong>Moderates Netzwerk</strong> — qualitativ statt quantitativ: 2–3 enge Beziehungen sind wertvoller als viele oberflächliche.' },
+          { ans: 2, type: 'good',   text: '<strong>Starkes soziales Netzwerk</strong> — einer der stärksten Resilienz-Faktoren.' },
+        ]},
+        { short: 'Allgemeines Wohlbefinden', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Unzufrieden</strong> — Glück ist trainierbar. Starte mit den Basics: Schlaf, Bewegung, Sonnenlicht, soziale Verbindung. Der Rest folgt.' },
+          { ans: 1, type: 'medium', text: '<strong>Teilweise glücklich</strong> — identifiziere was dir echte Freude bereitet und schaffe mehr Raum dafür.' },
+          { ans: 2, type: 'good',   text: '<strong>Glücklich und erfüllt</strong> — das wichtigste Ziel überhaupt.' },
+        ]},
+      ]
+    },
+    {
+      title: 'Lifestyle & Epigenetik',
+      icon: '🔬',
+      questions: [
+        { short: 'Alkohol', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Regelmäßiger Alkohol-Konsum</strong> — Alkohol stört Schlafqualität, Testosteron, Lebergesundheit und Fettverbrennung erheblich. Reduziere auf maximmal 1–2x/Monat.' },
+          { ans: 1, type: 'medium', text: '<strong>Gelegentlicher Alkohol</strong> — gute Reduktion. Beobachte den Einfluss auf deinen Schlaf in den Nächten danach.' },
+          { ans: 2, type: 'good',   text: '<strong>Kein Alkohol</strong> — einer der größten Lifestyle-Upgrades. Deine Schlaf- und Hormonqualität profitiert direkt.' },
+        ]},
+        { short: 'Plastik-Vermeidung', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Häufige Plastiknutzung</strong> — Weichmacher (BPA, Phthalate) aus Plastik wirken hormonell störend (EDC). Wechsle auf Glas- oder Edelstahlbehälter.' },
+          { ans: 1, type: 'medium', text: '<strong>Teilweise Plastik-Reduktion</strong> — priorisiere: kein Plastik für heiße Speisen/Getränke, kein Erhitzen in Plastik.' },
+          { ans: 2, type: 'good',   text: '<strong>Plastik weitgehend vermieden</strong> — du reduzierst deine endokrine Belastung aktiv.' },
+        ]},
+        { short: 'Sauna & Schwitzen', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Kein regelmäßiges Schwitzen</strong> — Sauna oder intensives Schwitzen durch Sport verbessert Kardiovaskuläre Gesundheit, fördert Ausscheidung und erhöht Wachstumshormon.' },
+          { ans: 1, type: 'medium', text: '<strong>Gelegentliches Schwitzen</strong> — mache 2–3x/Woche Sauna oder intensives Training zur Gewohnheit.' },
+          { ans: 2, type: 'good',   text: '<strong>Regelmäßiges Schwitzen</strong> — exzellente Gewohnheit für Gesundheit und Entgiftung.' },
+        ]},
+        { short: 'Medikamente', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Regelmäßige Medikamente</strong> — hinterfrage ob Lifestyle-Optimierung einige Medikamente obsolet machen könnte. Sprich mit deinem Arzt über Alternativen.' },
+          { ans: 1, type: 'medium', text: '<strong>Gelegentliche Medikamente</strong> — überprüfe ob Grundursachen angegangen werden oder nur Symptome behandelt werden.' },
+          { ans: 2, type: 'good',   text: '<strong>Keine regelmäßigen Medikamente</strong> — dein Körper funktioniert ohne pharmakologische Unterstützung.' },
+        ]},
+        { short: 'Blut- und Hormonwerte', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Keine regelmäßigen Checks</strong> — lass mindestens 1–2x/Jahr ein umfassendes Blutbild machen: Hormonstatus, Mikronährstoffe, Entzündungsmarker.' },
+          { ans: 1, type: 'medium', text: '<strong>Unregelmäßige Checks</strong> — mache es zur Routine: jährlich mindestens Vitamin D, Ferritin, Testosteron, CRP, Insulinresistenz.' },
+          { ans: 2, type: 'good',   text: '<strong>Regelmäßige Blut-Checks</strong> — du steuerst deine Gesundheit datenbasiert.' },
+        ]},
+        { short: 'Rauchen & Drogen', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Rauchen oder Drogen-Konsum</strong> — das größte Gesundheitsrisiko überhaupt. Professionelle Unterstützung beim Aufhören ist hier klar empfohlen.' },
+          { ans: 1, type: 'medium', text: '<strong>Gelegentlicher Konsum</strong> — jede Reduktion ist ein Gewinn. Setze dir ein konkretes Ausstiegsdatum.' },
+          { ans: 2, type: 'good',   text: '<strong>Kein Rauchen oder Drogen</strong> — du schützt deine Gesundheit konsequent.' },
+        ]},
+        { short: 'Wohnraum-Optimierung', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Wohnraum nicht optimiert</strong> — EMF-Belastung, Schimmel, schlechte Luftqualität können die Gesundheit subtil beeinträchtigen. Überprüfe Schlafzimmer als erstes.' },
+          { ans: 1, type: 'medium', text: '<strong>Teilweise optimiert</strong> — Schlafzimmer priorisieren: Luftreiniger, kein WLAN-Router im Schlafzimmer, schadstoffarme Materialien.' },
+          { ans: 2, type: 'good',   text: '<strong>Optimierter Wohnraum</strong> — deine Umgebung unterstützt deine Gesundheit aktiv.' },
+        ]},
+        { short: 'Gefiltertes Wasser', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Kein gefiltertes Wasser</strong> — Leitungswasser enthält oft Chlor, Fluorid, Schwermetalle und Mikroplastik. Investiere in einen hochwertigen Wasserfilter (Osmose oder Aktivkohle).' },
+          { ans: 1, type: 'medium', text: '<strong>Teilweise gefiltertes Wasser</strong> — mache es zur Routine: täglich ausschließlich gefiltertes Wasser trinken.' },
+          { ans: 2, type: 'good',   text: '<strong>Zugang zu sauberem Wasser</strong> — eine der einfachsten aber wichtigsten Gesundheitsmaßnahmen.' },
+        ]},
+        { short: 'Schadstoffarme Produkte', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Keine Kontrolle über Produktinhaltsstoffe</strong> — viele Körperpflege- und Haushaltsprodukte enthalten hormonell aktive Substanzen. Wechsle schrittweise auf EWG-verifizierte Produkte.' },
+          { ans: 1, type: 'medium', text: '<strong>Teilweise bewusst</strong> — priorisiere: Deos, Shampoos und Reinigungsmittel auf schadstoffarme Varianten umstellen.' },
+          { ans: 2, type: 'good',   text: '<strong>Schadstoffarme Produkte</strong> — du reduzierst deine tägliche Toxinbelastung aktiv.' },
+        ]},
+        { short: 'Täglicher Stuhlgang', feedback: [
+          { ans: 0, type: 'bad',    text: '<strong>Kein täglicher Stuhlgang</strong> — deutet auf schlechte Darmgesundheit, zu wenig Ballaststoffe oder Flüssigkeit. Erhöhe Ballaststoffe, Wasser und Bewegung.' },
+          { ans: 1, type: 'medium', text: '<strong>Unregelmäßiger Stuhlgang</strong> — erhöhe Ballaststoffe (30g/Tag Ziel), trinke mehr Wasser und etabliere eine Morgenroutine.' },
+          { ans: 2, type: 'good',   text: '<strong>Regelmäßiger Stuhlgang</strong> — ein wichtiger Indikator für gute Darmgesundheit.' },
+        ]},
+      ]
+    },
+  ]
+};
+
+function renderAnalysis(answers) {
+  // no-op: replaced by new renderResults
+}
+function toggleAnalysisCat(ci) {
+  // no-op
+}
+
 // ── RESULTS
+let activeRCat = 0; // currently selected category in detail panel
+
+function catColor(pct) {
+  if (pct >= 70) return '#22c55e';
+  if (pct >= 45) return '#f59e0b';
+  return '#ef4444';
+}
+
 function renderResults() {
-  const total = S.ans.reduce((s,a)=>s+(a||0),0);
-  const max   = TOTAL*2;
-  const pct   = Math.round(total/max*100);
+  const total    = S.ans.reduce((s,a) => s+(a||0), 0);
+  const totalMax = TOTAL * 2;
+  const pct      = Math.round(total / totalMax * 100);
 
   document.getElementById('navFill').style.width = '100%';
   document.getElementById('navCounter').textContent = 'Fertig';
   document.getElementById('navExport').style.display = 'block';
 
+  // Score ring
   document.getElementById('rScore').textContent = total;
-  document.getElementById('rScoreMax').textContent = '/' + max;
-  document.getElementById('rSub').textContent = scoreLabel(pct);
-
-  // Animate gauge after paint
+  document.getElementById('rScoreMax').textContent = '/' + totalMax;
+  const circumference = 289.03;
   setTimeout(() => {
-    const fill = document.getElementById('rGaugeFill');
-    if (fill) fill.style.width = pct + '%';
+    const circle = document.getElementById('rRingCircle');
+    if (circle) {
+      circle.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+      const rc = pct >= 70 ? '#22c55e' : pct >= 45 ? '#f59e0b' : '#ef4444';
+      circle.style.stroke = rc;
+    }
   }, 100);
 
-  const bd = document.getElementById('rBreakdown');
-  bd.innerHTML = '';
+  // Subtitle
+  document.getElementById('rSub').textContent = scoreLabel(pct);
+
+  // ── Category rings ────────────────────────────────────────────
+  const catsRow = document.getElementById('rCatsRow');
+  catsRow.innerHTML = '';
   let off = 0;
-  CATS.forEach(cat => {
-    const n  = cat.questions.length;
-    const sc = S.ans.slice(off,off+n).reduce((s,a)=>s+(a||0),0);
+  const catData = CATS.map((cat, ci) => {
+    const n      = cat.questions.length;
+    const sc     = S.ans.slice(off, off + n).reduce((s,a) => s+(a||0), 0);
     const catMax = n * 2;
-    const p  = Math.round(sc/catMax*100);
+    const p      = Math.round(sc / catMax * 100);
     off += n;
-    const card = document.createElement('div');
-    card.className = 'r-cat';
-    card.innerHTML = `
-      <span class="r-cat-name">${cat.title}</span>
-      <div class="r-cat-score">${sc}<span>/${catMax}</span></div>
-      <div class="r-bar-track"><div class="r-bar-fill" style="width:0%" data-w="${p}"></div></div>
-      <span class="r-pct">${p}%</span>`;
-    bd.appendChild(card);
+    return { ci, cat, sc, max: catMax, p };
   });
-  // Animate bars
+
+  // auto-select worst
+  activeRCat = catData.reduce((wi, d) => d.p < catData[wi].p ? d.ci : wi, 0);
+
+  catData.forEach(({ ci, cat, sc, max, p }) => {
+    const icon = ANALYSIS.cats[ci]?.icon || '📊';
+    const color = catColor(p);
+    const r = 30, cx = 36, cy = 36;
+    const circ = 2 * Math.PI * r;
+    const dash = (p / 100) * circ;
+    const div = document.createElement('div');
+    div.className = 'r-cat-ring' + (ci === activeRCat ? ' active' : '');
+    div.id = 'rCatRing-' + ci;
+    div.innerHTML = `
+      <div class="r-cat-ring-wrap">
+        <svg width="72" height="72" class="r-cat-ring-svg">
+          <circle cx="${cx}" cy="${cy}" r="${r}" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="5"/>
+          <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="5"
+            stroke-linecap="round" stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${circ.toFixed(1)}"
+            transform="rotate(-90 ${cx} ${cy})" id="rCatCircle-${ci}"
+            style="transition:stroke-dashoffset 0.8s ease"/>
+        </svg>
+        <div class="r-cat-ring-icon">${icon}</div>
+      </div>
+      <div class="r-cat-ring-score-lbl">${sc}/${max}</div>
+      <div class="r-cat-ring-label">${cat.title}</div>
+    `;
+    div.onclick = () => selectRCat(ci, catData);
+    catsRow.appendChild(div);
+  });
+
   setTimeout(() => {
-    bd.querySelectorAll('.r-bar-fill').forEach(el => el.style.width = el.dataset.w + '%');
-  }, 150);
+    catData.forEach(({ ci, p }) => {
+      const el = document.getElementById('rCatCircle-' + ci);
+      if (!el) return;
+      const r = 30, circ = 2 * Math.PI * r;
+      el.style.strokeDashoffset = circ - (p / 100) * circ;
+    });
+  }, 200);
+
+  // ── Improvement list ──────────────────────────────────────────
+  const list = document.getElementById('rImproveList');
+  list.innerHTML = '';
+  const sorted = [...catData].sort((a,b) => a.p - b.p);
+  sorted.forEach(({ ci, cat, p }) => {
+    const icon = ANALYSIS.cats[ci]?.icon || '📊';
+    const color = catColor(p);
+    const item = document.createElement('div');
+    item.className = 'r-improve-item' + (ci === activeRCat ? ' active' : '');
+    item.id = 'rImproveItem-' + ci;
+    item.innerHTML = `
+      <div class="r-improve-icon">${icon}</div>
+      <div class="r-improve-right">
+        <div class="r-improve-name">${cat.title}</div>
+        <div class="r-improve-bar-track">
+          <div class="r-improve-bar-fill" style="width:0%;background:${color}" data-w="${p}"></div>
+        </div>
+      </div>
+    `;
+    item.onclick = () => selectRCat(ci, catData);
+    list.appendChild(item);
+  });
+  setTimeout(() => {
+    list.querySelectorAll('.r-improve-bar-fill').forEach(el => el.style.width = el.dataset.w + '%');
+  }, 200);
+
+  // ── Detail panel ──────────────────────────────────────────────
+  renderDetailPanel(activeRCat, catData);
 
   document.getElementById('rExport').onclick = () => doPDF(total, pct);
   document.getElementById('rRestart').onclick = reset;
+}
+
+function selectRCat(ci, catData) {
+  activeRCat = ci;
+  // Update ring highlights
+  document.querySelectorAll('.r-cat-ring').forEach(el => el.classList.remove('active'));
+  const ring = document.getElementById('rCatRing-' + ci);
+  if (ring) ring.classList.add('active');
+  // Update list highlights
+  document.querySelectorAll('.r-improve-item').forEach(el => el.classList.remove('active'));
+  const item = document.getElementById('rImproveItem-' + ci);
+  if (item) item.classList.add('active');
+  // Update detail title
+  const titleEl = document.getElementById('rDetailTitle');
+  if (titleEl) {
+    const sorted = [...catData].sort((a,b) => a.p - b.p);
+    titleEl.textContent = ci === sorted[0].ci ? 'Der schwächste Punkt' : 'Analyse';
+  }
+  // Re-render detail
+  let off = 0;
+  const catData2 = CATS.map((cat, i) => {
+    const n      = cat.questions.length;
+    const sc     = S.ans.slice(off, off + n).reduce((s,a) => s+(a||0), 0);
+    const catMax = n * 2;
+    const p      = Math.round(sc / catMax * 100);
+    off += n;
+    return { ci: i, cat, sc, max: catMax, p };
+  });
+  renderDetailPanel(ci, catData2);
+}
+
+function renderDetailPanel(ci, catData) {
+  const panel = document.getElementById('rDetail');
+  if (!panel) return;
+  const { cat, sc, max, p } = catData[ci];
+  const icon = ANALYSIS.cats[ci]?.icon || '📊';
+  const analysisCat = ANALYSIS.cats[ci];
+  const color = catColor(p);
+  // Determine panel title based on rank
+  const sorted = [...catData].sort((a,b) => a.p - b.p);
+  const rank = sorted.findIndex(d => d.ci === ci);
+  const panelTitle = rank === 0 ? 'Schwächster Bereich'
+    : rank === catData.length-1 ? 'Stärkster Bereich'
+    : 'Analyse';
+
+  // Get feedback items for this category
+  let off = 0;
+  for (let i = 0; i < ci; i++) off += CATS[i].questions.length;
+  const catAnswers = S.ans.slice(off, off + cat.questions.length);
+
+  const bads = [], mediums = [], goods = [];
+  analysisCat?.questions.forEach((q, qi) => {
+    const ans = catAnswers[qi];
+    if (ans === null || ans === undefined) return;
+    const fb = q.feedback.find(f => f.ans === ans);
+    if (!fb) return;
+    if (fb.type === 'bad') bads.push(fb.text);
+    else if (fb.type === 'medium') mediums.push(fb.text);
+    else goods.push(fb.text);
+  });
+
+  // Show all items, no blur, no lock
+  const allItems = [...bads, ...mediums, ...goods];
+
+  const itemsHtml = allItems.map(t => `
+    <div class="r-detail-item">
+      <div class="r-detail-dot"></div>
+      <div>${t}</div>
+    </div>`).join('');
+
+  panel.innerHTML = `
+    <div class="r-detail-header">
+      <div class="r-detail-icon">${icon}</div>
+      <div>
+        <div class="r-detail-title" id="rDetailTitle">${panelTitle}</div>
+        <div class="r-detail-sub">${cat.title} · ${p}%</div>
+      </div>
+    </div>
+    <div class="r-detail-items">${itemsHtml || '<div style="color:rgba(255,255,255,0.4);font-size:13px;padding-top:8px;">Keine Daten vorhanden.</div>'}</div>
+  `;
 }
 
 function scoreLabel(pct) {
@@ -954,31 +1641,356 @@ function scoreLabel(pct) {
 }
 
 function doPDF(score, pct) {
-  const w = window.open('','_blank');
-  if (!w) return;
-  const date = new Date().toLocaleDateString('de-DE');
-  let off=0, rows='';
-  CATS.forEach(cat => {
-    const n=cat.questions.length;
-    const sc=S.ans.slice(off,off+n).reduce((s,a)=>s+(a||0),0);
-    rows += `<tr><td>${cat.title}</td><td>${sc} / ${n*2}</td><td>${Math.round(sc/(n*2)*100)}%</td></tr>`;
-    off+=n;
+  const win = window.open('', '_blank');
+  if (!win) { alert('Bitte Popup-Blocker deaktivieren und nochmal versuchen.'); return; }
+
+  const date     = new Date().toLocaleDateString('de-DE');
+  const totalMax = TOTAL * 2;
+  const label    = scoreLabel(pct);
+
+  // ── Category data ──────────────────────────────────────────────
+  let off = 0;
+  const catRows = CATS.map(cat => {
+    const n  = cat.questions.length;
+    const sc = S.ans.slice(off, off + n).reduce((s, a) => s + (a || 0), 0);
+    const p  = Math.round(sc / (n * 2) * 100);
+    const col = p >= 70 ? '#16a34a' : p >= 45 ? '#d97706' : '#dc2626';
+    off += n;
+    return { title: cat.title, sc, max: n * 2, p, col };
   });
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>NH Score Report</title>
-    <style>body{font-family:system-ui,sans-serif;padding:40px;color:#111;max-width:580px;margin:0 auto}
-    h1{font-size:24px;font-weight:700;margin-bottom:4px}p{color:#666;margin-bottom:28px;font-size:14px}
-    .sc{font-size:52px;font-weight:700;letter-spacing:-0.04em;margin:12px 0 4px}
-    .sub{font-size:14px;color:#666;margin-bottom:32px}
-    table{width:100%;border-collapse:collapse;font-size:14px}
-    th{text-align:left;padding:8px 0;border-bottom:2px solid #111;font-size:12px;text-transform:uppercase;letter-spacing:0.06em}
-    td{padding:10px 0;border-bottom:1px solid #eee}
-    @media print{body{padding:16px}}</style></head><body>
-    <h1>NH Score Report</h1><p>${date}</p>
-    <div class="sc">${score}</div>
-    <div class="sub">von ${TOTAL*2} Punkten · ${pct}%</div>
-    <table><tr><th>Bereich</th><th>Punkte</th><th>Score</th></tr>${rows}</table>
-    <script>window.print();<\/script></body></html>`);
-  w.document.close();
+
+  // ── Top 3 worst answers ────────────────────────────────────────
+  const actions = [];
+  let qOff = 0;
+  ANALYSIS.cats.forEach(cat => {
+    cat.questions.forEach((q, qi) => {
+      const ans = S.ans[qOff + qi];
+      if (ans === 0) {
+        const fb = q.feedback.find(f => f.ans === 0);
+        if (fb) actions.push(fb.text.replace(/<[^>]+>/g, ''));
+      }
+    });
+    qOff += cat.questions.length;
+  });
+  const top3 = actions.slice(0, 3);
+
+  // ── Score ring SVG ─────────────────────────────────────────────
+  const R = 46, CIRC = +(2 * Math.PI * R).toFixed(1);
+  const DASH_OFF = +(CIRC - (pct / 100) * CIRC).toFixed(1);
+  const ringStroke = pct >= 70 ? '#16a34a' : pct >= 45 ? '#d97706' : '#0019FF';
+
+  // ── Build HTML ─────────────────────────────────────────────────
+  const catCardsHtml = catRows.map(r => {
+    const barW = Math.min(Math.round(r.p * 1.4), 140); // max 140px
+    return `
+      <div class="cat-card">
+        <div class="cat-card-left">
+          <div class="cat-name">${r.title}</div>
+          <div class="cat-score">${r.sc}<span class="cat-score-max">/${r.max}</span></div>
+        </div>
+        <div class="cat-card-right">
+          <div class="cat-pct" style="color:${r.col}">${r.p}%</div>
+          <svg width="140" height="6">
+            <rect x="0" y="0" width="140" height="6" rx="3" fill="#DDE0F0"/>
+            <rect x="0" y="0" width="${barW}" height="6" rx="3" fill="${r.col}"/>
+          </svg>
+        </div>
+      </div>`;
+  }).join('');
+
+  const prioritiesHtml = top3.length > 0 ? `
+    <div class="section-title">Top Prioritäten</div>
+    <div class="priorities">
+      ${top3.map((t, i) => `
+        <div class="priority-item">
+          <div class="priority-num">${i + 1}</div>
+          <div class="priority-text">${t}</div>
+        </div>`).join('')}
+    </div>` : '';
+
+  const html = `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>NH Score Report · ${date}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', Arial, sans-serif;
+    background: #F0F1FA;
+    color: #09134F;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+  }
+
+  html, body { height: 100%; }
+  .page {
+    width: 210mm;
+    height: 277mm;
+    margin: 0 auto;
+    padding: 10mm 12mm 8mm;
+    background: #F0F1FA;
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: #09134F;
+    border-radius: 14px;
+    padding: 24px 24px 20px;
+    margin-bottom: 16px;
+    display: table;
+    width: 100%;
+  }
+  .header-left {
+    display: table-cell;
+    vertical-align: middle;
+    width: 70%;
+  }
+  .header-right {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+    width: 30%;
+  }
+  .eyebrow {
+    font-size: 9px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: #B5BCFF; margin-bottom: 6px;
+  }
+  .hero-title {
+    font-size: 28px; font-weight: 900;
+    color: #fff; text-transform: uppercase;
+    letter-spacing: -0.02em; line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .hero-label {
+    font-size: 13px; color: rgba(255,255,255,0.6);
+    font-style: italic; font-weight: 500;
+  }
+
+  /* ── Section title ── */
+  .section-title {
+    font-size: 9px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: #8890B8; margin: 16px 0 8px;
+  }
+
+  /* ── Category cards — table-based for print safety ── */
+  .cat-grid {
+    display: table;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 8px 0;
+    margin-bottom: 16px;
+  }
+  .cat-grid-row { display: table-row; }
+  .cat-card {
+    display: table-cell;
+    width: 50%;
+    background: #fff;
+    border: 1.5px solid #DDE0F0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    vertical-align: top;
+  }
+  .cat-card + .cat-card { padding-left: 12px; }
+  .cat-name {
+    font-size: 9px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: #8890B8; margin-bottom: 4px;
+  }
+  .cat-score {
+    font-size: 20px; font-weight: 900;
+    color: #09134F; letter-spacing: -0.02em; line-height: 1;
+    margin-bottom: 8px;
+  }
+  .cat-score-max { font-size: 13px; font-weight: 500; color: #8890B8; }
+  .cat-pct {
+    font-size: 13px; font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  /* ── Priorities ── */
+  .priorities {
+    background: #09134F;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+  .priority-item {
+    display: table;
+    width: 100%;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .priority-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .priority-num {
+    display: table-cell;
+    width: 26px;
+    vertical-align: top;
+    padding-top: 1px;
+  }
+  .priority-num-inner {
+    width: 20px; height: 20px;
+    background: #0019FF; color: #fff;
+    border-radius: 50%;
+    font-size: 10px; font-weight: 800;
+    text-align: center; line-height: 20px;
+  }
+  .priority-text {
+    display: table-cell;
+    font-size: 11px;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.45;
+    vertical-align: top;
+  }
+
+  /* ── CTA ── */
+  .cta {
+    background: #09134F;
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: table;
+    width: 100%;
+    margin-top: 4px;
+  }
+  .cta-left {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .cta-right {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+    white-space: nowrap;
+  }
+  .cta-title { font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 3px; }
+  .cta-sub   { font-size: 11px; color: rgba(255,255,255,0.5); }
+  .cta-btn {
+    display: inline-block;
+    background: #0019FF; color: #fff;
+    border-radius: 8px; padding: 9px 16px;
+    font-size: 10px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    text-decoration: none;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 9px; color: #8890B8;
+    border-top: 1px solid #DDE0F0;
+    padding-top: 12px;
+  }
+
+  /* ── Print ── */
+  @media print {
+    @page { size: A4; margin: 0; }
+    body  { background: #F0F1FA !important; }
+    .page { width: 100%; padding: 8mm 10mm; height: auto; overflow: visible; }
+    .header, .priorities { -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact; }
+    * { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="eyebrow">NH Score &middot; ${date}</div>
+      <div class="hero-title">Health<br>Assessment</div>
+      <div class="hero-label">${label}</div>
+    </div>
+    <div class="header-right">
+      <svg width="110" height="110" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="55" cy="55" r="${R}" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="7"/>
+        <circle cx="55" cy="55" r="${R}" fill="none" stroke="${ringStroke}" stroke-width="7"
+          stroke-linecap="round"
+          stroke-dasharray="${CIRC}" stroke-dashoffset="${DASH_OFF}"
+          transform="rotate(-90 55 55)"/>
+        <text x="55" y="51" text-anchor="middle"
+          font-family="Barlow,Arial,sans-serif" font-size="22" font-weight="900" fill="#ffffff">${score}</text>
+        <text x="55" y="66" text-anchor="middle"
+          font-family="Barlow,Arial,sans-serif" font-size="11" font-weight="500" fill="rgba(255,255,255,0.45)">von ${totalMax}</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="section-title">Ergebnisse nach Bereich</div>
+  <div class="cat-grid">
+    <div class="cat-grid-row">
+      ${catRows.slice(0, 2).map(r => {
+        const bw = Math.min(Math.round(r.p * 1.4), 140);
+        return `<div class="cat-card">
+          <div class="cat-name">${r.title}</div>
+          <div class="cat-score">${r.sc}<span class="cat-score-max">/${r.max}</span></div>
+          <div class="cat-pct" style="color:${r.col}">${r.p}%</div>
+          <svg width="140" height="6"><rect x="0" y="0" width="140" height="6" rx="3" fill="#DDE0F0"/>
+          <rect x="0" y="0" width="${bw}" height="6" rx="3" fill="${r.col}"/></svg>
+        </div>`;
+      }).join('')}
+    </div>
+    <br>
+    <div class="cat-grid-row">
+      ${catRows.slice(2, 4).map(r => {
+        const bw = Math.min(Math.round(r.p * 1.4), 140);
+        return `<div class="cat-card">
+          <div class="cat-name">${r.title}</div>
+          <div class="cat-score">${r.sc}<span class="cat-score-max">/${r.max}</span></div>
+          <div class="cat-pct" style="color:${r.col}">${r.p}%</div>
+          <svg width="140" height="6"><rect x="0" y="0" width="140" height="6" rx="3" fill="#DDE0F0"/>
+          <rect x="0" y="0" width="${bw}" height="6" rx="3" fill="${r.col}"/></svg>
+        </div>`;
+      }).join('')}
+    </div>
+    <br>
+    <div class="cat-grid-row">
+      ${(() => {
+        const r = catRows[4];
+        const bw = Math.min(Math.round(r.p * 1.4), 140);
+        return `<div class="cat-card" style="width:50%">
+          <div class="cat-name">${r.title}</div>
+          <div class="cat-score">${r.sc}<span class="cat-score-max">/${r.max}</span></div>
+          <div class="cat-pct" style="color:${r.col}">${r.p}%</div>
+          <svg width="140" height="6"><rect x="0" y="0" width="140" height="6" rx="3" fill="#DDE0F0"/>
+          <rect x="0" y="0" width="${bw}" height="6" rx="3" fill="${r.col}"/></svg>
+        </div><td></td>`;
+      })()}
+    </div>
+  </div>
+
+  <!-- PRIORITIES -->
+  ${top3.length > 0 ? `
+  <div class="section-title">Top Prioritäten</div>
+  <div class="priorities">
+    ${top3.map((t, i) => `
+      <div class="priority-item">
+        <div class="priority-num"><div class="priority-num-inner">${i+1}</div></div>
+        <div class="priority-text">${t}</div>
+      </div>`).join('')}
+  </div>` : ''}
+
+  <!-- FOOTER -->
+  <div class="footer">NH Score &middot; ${date}</div>
+
+</div>
+<script>
+  document.fonts.ready.then(() => setTimeout(() => window.print(), 300));
+<\/script>
+</body>
+</html>`;
+
+  win.document.write(html);
+  win.document.close();
 }
 
 function reset() {
@@ -1023,8 +2035,14 @@ document.addEventListener('keydown', e => {
 // Init
 initIntro();
 show(S.screen);
-if (S.screen === 'question') renderQ();
-if (S.screen === 'results')  renderResults();
+if (S.screen === 'question') {
+  renderQ();
+  document.getElementById('navExport').style.display = 'none';
+}
+if (S.screen === 'results') {
+  renderResults();
+  document.getElementById('navExport').style.display = 'block';
+}
 </script>
 </body>
 </html>
